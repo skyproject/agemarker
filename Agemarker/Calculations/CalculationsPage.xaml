@@ -1,0 +1,17 @@
+﻿<UserControl
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Agemarker.Calculations" x:Class="Agemarker.Calculations.CalculationsPage" 
+      mc:Ignorable="d" 
+      d:DesignHeight="550" d:DesignWidth="800">
+
+    <Grid>
+        <Button x:Name="buttonAdd" Content="Add new calculation" Margin="0,0,134,10" Height="31" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" Click="addCalculation"/>
+        <ScrollViewer x:Name="scrollTable" Height="504" Margin="0,0,0,46">
+            <StackPanel x:Name="panelLayout" Margin="0,0,0,46" />
+        </ScrollViewer>
+        <Button x:Name="buttonShowAbout" Content="About Agemarker" Margin="0,0,10,10" Click="showAbout" Height="31" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="119"/>
+    </Grid>
+</UserControl>

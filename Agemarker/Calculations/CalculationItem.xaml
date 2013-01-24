@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="Agemarker.Calculations.CalculationItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="500" Width="780">
+    <Grid Background="#FFF3F3F3">
+        <Label x:Name="labelFileName" Content="Results file name" Margin="10,5,90,60" FontSize="18"/>
+        <Label x:Name="labelStatus" Content="Running" Margin="0,16,10,58" HorizontalAlignment="Right" Width="75" HorizontalContentAlignment="Center"/>
+        <Label x:Name="labelStarted" Content="" Margin="10,45,90,29"/>
+        <Label x:Name="labelFinished" Content="" Margin="10,71,90,3"/>
+        <Button x:Name="butttonPause" Background="{x:Null}" BorderThickness="0" Visibility="Hidden" HorizontalAlignment="Left" Margin="706,50,0,0" VerticalAlignment="Top" Width="20" Height="23" Click="pauseCalculations">
+            <Path Stroke="Black" StrokeThickness="3">
+                <Path.Data>
+                    <GeometryGroup>
+                        <LineGeometry StartPoint="1,0" EndPoint="1,9.5"/>
+                        <LineGeometry StartPoint="7,0" EndPoint="7,9.5"/>
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+        </Button>
+        <Button x:Name="butttonResume" Background="{x:Null}" BorderThickness="0" Visibility="Hidden" HorizontalAlignment="Left" Margin="706,50,0,0" VerticalAlignment="Top" Width="20" Height="21" Click="resumeCalculations">
+            <Path Data="M 6 2 L 10 8 2 8 Z"
+                StrokeThickness="2" 
+                StrokeLineJoin="Round"
+                Stroke="Black" 
+                Fill="Black" RenderTransformOrigin="0.5,0.5" >
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+        </Button>
+        <Button x:Name="butttonRemove" Background="{x:Null}" BorderThickness="0" HorizontalAlignment="Left" Margin="740,50,0,0" VerticalAlignment="Top" Width="20" Height="23" Click="removeCalculations">
+            <Path Stroke="Black" StrokeThickness="2">
+                <Path.Data>
+                    <GeometryGroup>
+                        <LineGeometry StartPoint="1.5,0.5" EndPoint="9.5,8.5"/>
+                        <LineGeometry StartPoint="0.5,1.5" EndPoint="8.5,9.5"/>
+                        <LineGeometry StartPoint="1.5,1.5" EndPoint="8.5,8.5"/>
+                        <LineGeometry StartPoint="8.5,0.5" EndPoint="0.5,8.5"/>
+                        <LineGeometry StartPoint="9.5,1.5" EndPoint="1.5,9.5"/>
+                        <LineGeometry StartPoint="8.5,1.5" EndPoint="1.5,8.5"/>
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+        </Button>
+    </Grid>
+</UserControl>

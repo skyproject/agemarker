@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="Agemarker.About.AboutPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="550" d:DesignWidth="800">
+    <Grid>
+        <Label x:Name="labelLogo" Content="Agemarker" Margin="10,10,10,460" HorizontalContentAlignment="Center" FontSize="45"/>
+        <RichTextBox Margin="10,95,10,46" IsReadOnly="True" IsReadOnlyCaretVisible="True" HorizontalContentAlignment="Center" IsDocumentEnabled="True" Background="Transparent" BorderThickness="0">
+            <FlowDocument>
+                <Paragraph FontSize="15" TextAlignment="Center">
+                    Agemarker is an open-source software distributed under The MIT License:
+                </Paragraph>
+                <Paragraph FontSize="12" TextAlignment="Center">
+                    Copyright © 2012-2013 Mikhail Labushev
+                </Paragraph>
+                <Paragraph FontSize="12" TextAlignment="Center">
+                    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+                </Paragraph>
+                <Paragraph FontSize="12" TextAlignment="Center">
+                    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+                </Paragraph>
+                <Paragraph FontSize="12" TextAlignment="Center">
+                    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+                </Paragraph>
+                <Paragraph FontSize="15" TextAlignment="Center">
+                    For more information about Agemarker visit our website
+                    <Hyperlink NavigateUri="http://www.skyproject.org" RequestNavigate="navigateLink">skyproject.org</Hyperlink>
+                </Paragraph>
+                <Paragraph FontSize="15" TextAlignment="Center">
+                    You can help to improve Agemarker by
+                    <Hyperlink NavigateUri="http://www.skyproject.org/About/Donate" RequestNavigate="navigateLink">donating to us</Hyperlink> or
+                    <Hyperlink NavigateUri="https://github.com/greatvote/agemarker" RequestNavigate="navigateLink">contributing to Agemarker project on GitHub</Hyperlink>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <Button x:Name="buttonNavigateBack" Content="Back" Margin="0,0,10,10" Click="navigateBack" Height="31" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="80"/>
+
+    </Grid>
+</UserControl>
