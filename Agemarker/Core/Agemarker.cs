@@ -13,18 +13,18 @@ namespace Agemarker.Core
     {
         public event EventHandler<AgemarkerCore.Events.CalculationsCompletedEventArgs> CalculationsCompletedEvent;
         private AgemarkerCore.Calculations calculations;
-        private Core.Results results;
+        private IO.SaveResults results;
 
-        public Agemarker(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, AgemarkerCore.Data.Logarithm log, string resultsFilePath, FileStream fs)
+        public Agemarker(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, AgemarkerCore.Data.Logarithm log, string resultsFilePath)
         {
             calculations = new AgemarkerCore.Calculations(oxidesContent, elementsContent, elementsWeight, multiplier, log);
             calculations.CalculationsCompletedEvent += calculationsCompleted;
-            results = new Results(fs);
+            results = new IO.SaveResults(resultsFilePath);
         }
 
         private void calculationsCompleted(object sender, AgemarkerCore.Events.CalculationsCompletedEventArgs e)
         {
-            results.SaveResults(e.Results);
+            results.Save(e.Results);
             raiseCalculationsCompletedEvent(e.Results);
         }
 

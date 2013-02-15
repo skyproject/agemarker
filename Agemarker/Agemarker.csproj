@@ -32,7 +32,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>9</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -115,15 +115,19 @@
     <Compile Include="Calculations\CalculationsPage.xaml.cs">
       <DependentUpon>CalculationsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Core\ResultsLoading.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Core\Agemarker.cs" />
     <Compile Include="Core\Mathematics.cs" />
-    <Compile Include="Core\Results.cs" />
     <Compile Include="Core\Validation.cs" />
+    <Compile Include="Events\CalculationFileLoadedEventArgs.cs" />
     <Compile Include="Events\CalculationsEventArgs.cs" />
     <Compile Include="Events\InputCompletedEventArgs.cs" />
     <Compile Include="Events\ResultsFileLoadedEventArgs.cs" />
+    <Compile Include="IO\LoadCalculationInput.cs" />
+    <Compile Include="IO\LoadCalculationInputFromResults.cs" />
+    <Compile Include="IO\RemoveCalculationInput.cs" />
+    <Compile Include="IO\SaveCalculationInput.cs" />
+    <Compile Include="IO\SaveResults.cs" />
     <Compile Include="Wizard\Elements.xaml.cs">
       <DependentUpon>Elements.xaml</DependentUpon>
     </Compile>

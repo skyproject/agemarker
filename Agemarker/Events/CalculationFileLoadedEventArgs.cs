@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 
 namespace Agemarker.Events
 {
-    public partial class InputCompletedEventArgs : EventArgs
+    public partial class CalculationFileLoadedEventArgs : EventArgs
     {
         public double[] OxidesContent { get; set; }
         public double[] ElementsContent { get; set; }
@@ -16,7 +14,7 @@ namespace Agemarker.Events
         public AgemarkerCore.Data.Logarithm Log { get; set; }
         public string FilePath { get; set; }
 
-        public InputCompletedEventArgs(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, AgemarkerCore.Data.Logarithm log, string filePath)
+        public CalculationFileLoadedEventArgs(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, AgemarkerCore.Data.Logarithm log, string filePath)
         {
             this.OxidesContent = oxidesContent;
             this.ElementsContent = elementsContent;

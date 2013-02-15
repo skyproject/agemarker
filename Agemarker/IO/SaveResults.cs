@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
-namespace Agemarker.Core
+namespace Agemarker.IO
 {
-    public partial class Results
+    public partial class SaveResults
     {
-        private FileStream FS { get; set; }
+        private string filePath;
 
-        public Results(FileStream fs)
+        public SaveResults(string path)
         {
-            FS = fs;
+            filePath = path;
         }
 
-        public void SaveResults(AgemarkerCore.Data.Results r)
+        public void Save(AgemarkerCore.Data.Results r)
         {
             int iabCount = r.Ip.Count();
-            System.IO.StreamWriter sw = new System.IO.StreamWriter(FS);
+            System.IO.StreamWriter sw = new System.IO.StreamWriter(filePath, false);
             sw.WriteLine("Agemarker results file");
             sw.WriteLine();
             sw.WriteLine("Oxides table");
@@ -104,7 +103,6 @@ namespace Agemarker.Core
             }
             sw.Flush();
             sw.Close();
-            FS.Close();
         }
     }
 }

@@ -22,6 +22,7 @@ namespace Agemarker.Calculations
     {
         int calculationCores = -1;
         int currentCore = -1;
+        int lastCore = -1;
         MainWindow mainWindow;
 
         public CalculationsPage(MainWindow main)
@@ -30,6 +31,7 @@ namespace Agemarker.Calculations
             mainWindow = main;
             mainWindow.InputCompletedEvent += addCalculationItem;
             mainWindow.SizeChanged += changeSize;
+            loadCalculations();
         }
 
         private void changeSize(object sender, SizeChangedEventArgs e)
@@ -37,14 +39,48 @@ namespace Agemarker.Calculations
             scrollTable.Height = (e.NewSize.Height - 96);
         }
 
+        private void loadCalculations()
+        {
+            string[] files = System.IO.Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Agemarker\\Calculations");
+            if (files.Length != 0)
+            {
+                Array.Sort(files);
+                foreach (string file in files)
+                {
+                    int calculationID;
+                    int.TryParse(System.IO.Path.GetFileNameWithoutExtension(file), out calculationID);
+                    Data.CalculationCoreID coreID = new Data.CalculationCoreID();
+                    coreID.LayoutID = panelLayout.Children.Count;
+                    coreID.InputFileID = calculationID;
+                    calculationCores++;
+                    lastCore = calculationID;
+                    CalculationItem ci = new CalculationItem(coreID, file);
+                    ci.CalculationsFinishedEvent += calculationsFinished;
+                    ci.CalculationItemRemovedEvent += calculationItemRemoved;
+                    ci.Margin = new Thickness(0, 0, 0, 2 + (1 * calculationCores));
+                    panelLayout.Children.Add(ci);
+                }
+                CalculationItem ci1 = panelLayout.Children[0] as CalculationItem;
+                currentCore = ci1.CoreID.InputFileID;
+                ci1.StartCalculations();
+            }
+        }
+
         private void addCalculationItem(object sender, Events.InputCompletedEventArgs e)
         {
             calculationCores++;
-            CalculationItem ci = new CalculationItem(calculationCores, e.OxidesContent, e.ElementsContent, e.ElementsWeight, e.Multiplier, e.Log, e.FilePath, e.FS);
+            lastCore++;
+            IO.SaveCalculationInput sci = new IO.SaveCalculationInput(lastCore);
+            sci.SaveToFile(e.OxidesContent, e.ElementsContent, e.ElementsWeight, e.Multiplier, e.Log, e.FilePath);
+            Data.CalculationCoreID coreID = new Data.CalculationCoreID();
+            coreID.LayoutID = panelLayout.Children.Count;
+            coreID.InputFileID = lastCore;
+            CalculationItem ci = new CalculationItem(coreID, (Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Agemarker\\Calculations\\" + lastCore + ".txt"));
             ci.CalculationsFinishedEvent += calculationsFinished;
             ci.CalculationItemRemovedEvent += calculationItemRemoved;
             ci.Margin = new Thickness(0, 0, 0, 2 + (1 * calculationCores));
             panelLayout.Children.Add(ci);
+
             if (currentCore == -1)
             {
                 currentCore = calculationCores;
@@ -57,34 +93,37 @@ namespace Agemarker.Calculations
             if (e.CalculationState == Data.CalculationStatus.Running || e.CalculationState == Data.CalculationStatus.Paused)
             {
                 currentCore = -1;
-                if (calculationCores > e.CoreID)
+                if (panelLayout.Children.Count > (e.CoreID.LayoutID + 1))
                 {
-                    currentCore = (e.CoreID + 1);
-                    CalculationItem ci1 = panelLayout.Children[currentCore] as CalculationItem;
+                    currentCore = (e.CoreID.InputFileID + 1);
+                    CalculationItem ci1 = panelLayout.Children[(e.CoreID.LayoutID + 1)] as CalculationItem;
                     ci1.StartCalculations();
                 }
             }
-            CalculationItem ci2 = panelLayout.Children[e.CoreID] as CalculationItem;
+            CalculationItem ci2 = panelLayout.Children[(e.CoreID.LayoutID)] as CalculationItem;
             panelLayout.Children.Remove(ci2);
             calculationCores--;
-            for (int x = calculationCores; x >= e.CoreID; x--)
+            for (int x = (panelLayout.Children.Count - 1); x >= e.CoreID.LayoutID; x--)
             {
                 CalculationItem ci3 = panelLayout.Children[x] as CalculationItem;
                 Thickness t = ci3.Margin;
                 t.Bottom -= 1;
                 ci3.Margin = t;
-                ci3.CoreID--;
+                ci3.CoreID.LayoutID--;
             }
+            IO.RemoveCalculationInput rci = new IO.RemoveCalculationInput(e.CoreID.InputFileID);
+            rci.RemoveFile();
         }
 
         private void calculationsFinished(object sender, Events.CalculationsEventArgs e)
         {
+            IO.RemoveCalculationInput rci = new IO.RemoveCalculationInput(e.CoreID.InputFileID);
+            rci.RemoveFile();
             currentCore = -1;
-            if (calculationCores > e.CoreID)
+            if (panelLayout.Children.Count > (e.CoreID.LayoutID + 1))
             {
-                currentCore = (e.CoreID + 1);
-                CalculationItem ci = panelLayout.Children[currentCore] as CalculationItem;
-                ci.CoreID = currentCore;
+                currentCore = (e.CoreID.InputFileID + 1);
+                CalculationItem ci = panelLayout.Children[(e.CoreID.LayoutID + 1)] as CalculationItem;
                 ci.StartCalculations();
             }
         }

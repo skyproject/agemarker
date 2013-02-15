@@ -10,6 +10,12 @@ namespace Agemarker
     {
         public enum CalculationStatus { Waiting, Running, Paused, Finished }
 
+        public struct CalculationCoreID
+        {
+            public int LayoutID { get; set; }
+            public int InputFileID { get; set; }
+        }
+
         public static string[,] ElementsName = new string[118, 2];
         public static double[] ElementsWeight = new double[118];
         public static string[,] OxidesName = new string[53, 2];

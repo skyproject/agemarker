@@ -8,10 +8,10 @@ namespace Agemarker.Events
 {
     public class CalculationsEventArgs : EventArgs
     {
-        public int CoreID { get; set; }
+        public Data.CalculationCoreID CoreID { get; set; }
         public Data.CalculationStatus CalculationState { get; set; }
 
-        public CalculationsEventArgs(int coreID, Data.CalculationStatus state)
+        public CalculationsEventArgs(Data.CalculationCoreID coreID, Data.CalculationStatus state)
         {
             this.CoreID = coreID;
             this.CalculationState = state;

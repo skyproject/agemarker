@@ -22,24 +22,24 @@ namespace Agemarker.Calculations
     {
         public event EventHandler<Events.CalculationsEventArgs> CalculationsFinishedEvent;
         public event EventHandler<Events.CalculationsEventArgs> CalculationItemRemovedEvent;
-        public Data.CalculationStatus CalculationState { get; private set; }
-        public int CoreID { get; set; }
-        private Core.Agemarker Calculations { get; set; }
+        public Data.CalculationStatus CalculationState;
+        public Data.CalculationCoreID CoreID;
+        private Core.Agemarker calculations;
         private System.Threading.SynchronizationContext context = new System.Threading.SynchronizationContext();
 
-        public CalculationItem(int coreID, double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, AgemarkerCore.Data.Logarithm log, string resultsFilePath, System.IO.FileStream fs)
+        public CalculationItem(Data.CalculationCoreID coreID, string filePath)
         {
             InitializeComponent();
             CoreID = coreID;
             context = System.Threading.SynchronizationContext.Current;
-            Calculations = new Core.Agemarker(oxidesContent, elementsContent, elementsWeight, multiplier, log, resultsFilePath, fs);
-            Calculations.CalculationsCompletedEvent += calculationsCompleted;
-            labelFileName.Content = System.IO.Path.GetFileName(resultsFilePath);
-            ToolTip tt = new ToolTip();
-            tt.Content = resultsFilePath;
-            labelFileName.ToolTip = tt;
+            labelFileName.Content = System.IO.Path.GetFileName(filePath);
             CalculationState = Data.CalculationStatus.Waiting;
             updateCalculationState();
+            ToolTip tt = new ToolTip();
+            IO.LoadCalculationInput lci = new IO.LoadCalculationInput(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Agemarker\\Calculations\\" + CoreID.InputFileID + ".txt");
+            tt.Content = lci.LoadFilePathFromCalculationFile();
+            labelFileName.Content = System.IO.Path.GetFileName(tt.Content.ToString());
+            labelFileName.ToolTip = tt;
         }
 
         private void calculationsCompleted(object sender, EventArgs e)
@@ -88,25 +88,33 @@ namespace Agemarker.Calculations
 
         private void pauseCalculations(object sender, RoutedEventArgs e)
         {
-            Calculations.PauseCalculations();
+            calculations.PauseCalculations();
             CalculationState = Data.CalculationStatus.Paused;
             updateCalculationState();
         }
 
         public void resumeCalculations(object sender, RoutedEventArgs e)
         {
-            Calculations.StartCalculations();
+            calculations.StartCalculations();
             CalculationState = Data.CalculationStatus.Running;
             updateCalculationState();
         }
 
         public void StartCalculations()
         {
-            Calculations.StartCalculations();
-            CalculationState = Data.CalculationStatus.Running;
-            updateCalculationState();            
-            butttonPause.Visibility = System.Windows.Visibility.Visible;
-            labelStarted.Content = "Started at " + DateTime.Now.ToString();
+            string path = (Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Agemarker\\Calculations\\" + CoreID.InputFileID + ".txt");
+            IO.LoadCalculationInput lci = new IO.LoadCalculationInput(path);
+            lci.CalculationFileLoadedEvent += (s, e) =>
+            {
+                calculations = new Core.Agemarker(e.OxidesContent, e.ElementsContent, e.ElementsWeight, e.Multiplier, e.Log, e.FilePath);
+                calculations.CalculationsCompletedEvent += calculationsCompleted;
+                calculations.StartCalculations();
+                CalculationState = Data.CalculationStatus.Running;
+                updateCalculationState();
+                butttonPause.Visibility = System.Windows.Visibility.Visible;
+                labelStarted.Content = "Started at " + DateTime.Now.ToString();
+            };
+            lci.LoadFromCalculationFile();
         }
 
         private void removeCalculations(object sender, RoutedEventArgs e)

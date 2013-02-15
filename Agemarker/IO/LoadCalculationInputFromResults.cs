@@ -4,24 +4,16 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Agemarker.Core
+namespace Agemarker.IO
 {
-    public partial class ResultsLoading
+    public partial class LoadCalculationInputFromResults
     {
         public event EventHandler<Events.ResultsFileLoadedEventArgs> ResultsFileLoadedEvent;
         private string filePath;
 
-        public ResultsLoading(string path)
+        public LoadCalculationInputFromResults(string path)
         {
             filePath = path;
-        }
-
-        protected virtual void raiseResultsFileLoadedEvent(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, AgemarkerCore.Data.Logarithm log)
-        {
-            if (ResultsFileLoadedEvent != null)
-            {
-                ResultsFileLoadedEvent(this, new Events.ResultsFileLoadedEventArgs(oxidesContent, elementsContent, elementsWeight, multiplier, log));
-            }
         }
 
         public void LoadFromFile()
@@ -31,8 +23,7 @@ namespace Agemarker.Core
             double[] elementsWeight = new double[118];
             int multiplier = 0;
             AgemarkerCore.Data.Logarithm log = AgemarkerCore.Data.Logarithm.Natural;
-            FileInfo fi = new FileInfo(filePath);
-            StreamReader sr = fi.OpenText();
+            StreamReader sr = new StreamReader(filePath);
             string line;
             for (int x = 0; x < 184; x++)
             {
@@ -70,7 +61,11 @@ namespace Agemarker.Core
                     }
                 }
             }
-            raiseResultsFileLoadedEvent(oxidesContent, elementsContent, elementsWeight, multiplier, log);
+            sr.Close();
+            if (ResultsFileLoadedEvent != null)
+            {
+                ResultsFileLoadedEvent(this, new Events.ResultsFileLoadedEventArgs(oxidesContent, elementsContent, elementsWeight, multiplier, log));
+            }
         }
     }
 }

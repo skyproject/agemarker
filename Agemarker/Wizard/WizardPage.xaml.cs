@@ -29,7 +29,6 @@ namespace Agemarker.Wizard
         Oxides oxides;
         Elements elements;
         Settings settings;
-        System.IO.FileStream fs;
 
         public WizardPage()
         {
@@ -64,7 +63,7 @@ namespace Agemarker.Wizard
 
         public void ResetWizard()
         {
-            fs = null;
+            file = "";
             currentStep = 0;
             for (int x = 0; x < 118; x++)
             {
@@ -87,7 +86,7 @@ namespace Agemarker.Wizard
         {
             if (InputCompletedEvent != null)
             {
-                InputCompletedEvent(this, new Events.InputCompletedEventArgs(oxidesContent, elementsContent, elementsWeight, multiplier, log, file, fs));
+                InputCompletedEvent(this, new Events.InputCompletedEventArgs(oxidesContent, elementsContent, elementsWeight, multiplier, log, file));
             }
         }
 
@@ -103,9 +102,9 @@ namespace Agemarker.Wizard
                 {
                     try
                     {
-                        Core.ResultsLoading rl = new Core.ResultsLoading(ofd.FileName);
-                        rl.ResultsFileLoadedEvent += resultsFileLoaded;
-                        rl.LoadFromFile();
+                        IO.LoadCalculationInputFromResults lcifr = new IO.LoadCalculationInputFromResults(ofd.FileName);
+                        lcifr.ResultsFileLoadedEvent += resultsFileLoaded;
+                        lcifr.LoadFromFile();
                         buttonNext.IsEnabled = true;
                         currentStep++;
                         switchControls();
@@ -197,7 +196,7 @@ namespace Agemarker.Wizard
                     elements.Visibility = System.Windows.Visibility.Collapsed;
                     settings.Visibility = System.Windows.Visibility.Visible;
                     buttonBack.Visibility = System.Windows.Visibility.Visible;
-                    if (fs == null)
+                    if (file == "")
                     {
                         buttonNext.IsEnabled = false;
                     }
@@ -247,7 +246,8 @@ namespace Agemarker.Wizard
                 try
                 {
                     file = sfd.FileName;
-                    fs = (System.IO.FileStream)sfd.OpenFile();
+                    FileStream fs = (System.IO.FileStream)sfd.OpenFile();
+                    fs.Close();
                     buttonNext.IsEnabled = true;
                 }
                 catch

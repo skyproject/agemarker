@@ -29,6 +29,11 @@ namespace Agemarker
         {
             InitializeComponent();
             Data.LoadData();
+            string path = (Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Agemarker\\Calculations");
+            if (System.IO.Directory.Exists(path) == false)
+            {
+                System.IO.Directory.CreateDirectory(path);
+            }
             calculations = new Calculations.CalculationsPage(this);
             layoutGrid.Children.Add(calculations);
             about = new About.AboutPage(this);
