@@ -21,6 +21,7 @@ namespace Agemarker.Wizard
     public partial class Settings : UserControl
     {
         public TextBox Multiplier;
+        public TextBox IntervalsCount;
         public ComboBox LogBase;
         public Button SelectFile;
 
@@ -43,8 +44,19 @@ namespace Agemarker.Wizard
             Multiplier.Text = "0";
             Multiplier.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
             panelLayout.Children.Add(Multiplier);
+            IntervalsCount = new TextBox();
+            IntervalsCount.SetValue(Grid.RowProperty, 1);
+            IntervalsCount.SetValue(Grid.ColumnProperty, 1);
+            IntervalsCount.Height = 26;
+            IntervalsCount.Width = 100;
+            IntervalsCount.FontSize = 12;            
+            IntervalsCount.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+            IntervalsCount.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+            IntervalsCount.Text = "7";
+            IntervalsCount.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+            panelLayout.Children.Add(IntervalsCount);
             LogBase = new ComboBox();
-            LogBase.SetValue(Grid.RowProperty, 1);
+            LogBase.SetValue(Grid.RowProperty, 2);
             LogBase.SetValue(Grid.ColumnProperty, 1);
             LogBase.Height = 26;
             LogBase.Width = 100;
@@ -61,7 +73,7 @@ namespace Agemarker.Wizard
             LogBase.Items.Add(cbiDecimal);
             panelLayout.Children.Add(LogBase);
             SelectFile = new Button();
-            SelectFile.SetValue(Grid.RowProperty, 2);
+            SelectFile.SetValue(Grid.RowProperty, 3);
             SelectFile.SetValue(Grid.ColumnProperty, 1);
             SelectFile.Height = 26;
             SelectFile.Width = 100;

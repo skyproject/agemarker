@@ -32,7 +32,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationRevision>10</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -117,7 +117,6 @@
     </Compile>
     <Compile Include="Data.cs" />
     <Compile Include="Core\Agemarker.cs" />
-    <Compile Include="Core\Mathematics.cs" />
     <Compile Include="Core\Validation.cs" />
     <Compile Include="Events\CalculationFileLoadedEventArgs.cs" />
     <Compile Include="Events\CalculationsEventArgs.cs" />

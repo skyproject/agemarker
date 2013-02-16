@@ -22,10 +22,11 @@ namespace Agemarker.IO
             double[] elementsContent = new double[118];
             double[] elementsWeight = new double[118];
             int multiplier = 0;
+            int intervalsCount = 0;
             AgemarkerCore.Data.Logarithm log = AgemarkerCore.Data.Logarithm.Natural;
             StreamReader sr = new StreamReader(filePath);
             string line;
-            for (int x = 0; x < 182; x++)
+            for (int x = 0; x < 184; x++)
             {
                 line = sr.ReadLine();
                 string[] data = line.Split('\t');
@@ -44,6 +45,10 @@ namespace Agemarker.IO
                 }
                 else if (x == 179)
                 {
+                    int.TryParse(data[0], out intervalsCount);
+                }
+                else if (x == 181)
+                {
                     if (data[0] == "Natural")
                     {
                         log = AgemarkerCore.Data.Logarithm.Natural;
@@ -53,11 +58,11 @@ namespace Agemarker.IO
                         log = AgemarkerCore.Data.Logarithm.Decimal;
                     }
                 }
-                else if (x == 181)
+                else if (x == 183)
                 {
                     if (CalculationFileLoadedEvent != null)
                     {
-                        CalculationFileLoadedEvent(this, new Events.CalculationFileLoadedEventArgs(oxidesContent, elementsContent, elementsWeight, multiplier, log, data[0]));
+                        CalculationFileLoadedEvent(this, new Events.CalculationFileLoadedEventArgs(oxidesContent, elementsContent, elementsWeight, multiplier, intervalsCount, log, data[0]));
                     }
                 }
             }
@@ -68,11 +73,11 @@ namespace Agemarker.IO
         {
             StreamReader sr = new StreamReader(filePath);
             string line;
-            for (int x = 0; x < 182; x++)
+            for (int x = 0; x < 184; x++)
             {
                 line = sr.ReadLine();
                 string[] data = line.Split('\t');
-                if (x == 181)
+                if (x == 183)
                 {
                     sr.Close();
                     return data[0];

@@ -106,7 +106,7 @@ namespace Agemarker.Calculations
             IO.LoadCalculationInput lci = new IO.LoadCalculationInput(path);
             lci.CalculationFileLoadedEvent += (s, e) =>
             {
-                calculations = new Core.Agemarker(e.OxidesContent, e.ElementsContent, e.ElementsWeight, e.Multiplier, e.Log, e.FilePath);
+                calculations = new Core.Agemarker(e.OxidesContent, e.ElementsContent, e.ElementsWeight, e.Multiplier, e.IntervalsCount, e.Log, e.FilePath);
                 calculations.CalculationsCompletedEvent += calculationsCompleted;
                 calculations.StartCalculations();
                 CalculationState = Data.CalculationStatus.Running;

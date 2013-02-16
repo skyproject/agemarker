@@ -45,7 +45,9 @@ namespace Agemarker.IO
             }
             sw.WriteLine();
             sw.WriteLine("Multiplier:\t" + r.Multiplier);
-            sw.WriteLine();
+            sw.WriteLine();         
+            sw.WriteLine("Intervals count:\t" + r.IntervalsCount);            
+            sw.WriteLine();   
             sw.WriteLine("Logarithmic base:\t" + r.Logarithm);
             sw.WriteLine();
             sw.WriteLine("Atomic weights (total)");
@@ -70,16 +72,16 @@ namespace Agemarker.IO
             sw.WriteLine();
             sw.WriteLine("Variance:\t" + Math.Round(r.IpVariance, 10));
             sw.WriteLine();
-            sw.WriteLine("Standart deviation:\t" + Math.Round(r.IpStandartDeviation, 10));
+            sw.WriteLine("Standard deviation:\t" + Math.Round(r.IpStandardDeviation, 10));
             sw.WriteLine();
             sw.WriteLine("Ip Squareroot (Average):\t" + Math.Round(r.IpSqrtAverage, 10));
             sw.WriteLine();
             sw.WriteLine("Variance (Ip Squareroot):\t" + Math.Round(r.IpSqrtVariance, 10));
             sw.WriteLine();
-            sw.WriteLine("Standart deviation (Ip Squareroot):\t" + Math.Round(r.IpSqrtStandartDeviation, 10));
+            sw.WriteLine("Standard deviation (Ip Squareroot):\t" + Math.Round(r.IpSqrtStandardDeviation, 10));
             sw.WriteLine();
             sw.WriteLine("Unimodality check");
-            sw.WriteLine();
+            sw.WriteLine();         
             sw.WriteLine("Ip range:\t" + Math.Round(r.IpRange, 10));
             sw.WriteLine();
             sw.WriteLine("Ip range (Squareroot):\t" + Math.Round(r.IpSqrtRange, 10));
@@ -90,14 +92,14 @@ namespace Agemarker.IO
             sw.WriteLine();
             sw.WriteLine("[Interval minimum] [Interval maximum] [Interval center] [Frequency]");
             sw.WriteLine();
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < r.IntervalsCount; x++)
             {
                 sw.WriteLine(Math.Round(r.IpIntervalMinimum[x], 10) + "\t" + Math.Round(r.IpIntervalMaximum[x], 10) + "\t" + Math.Round(r.IpIntervalCenter[x], 10) + "\t" + r.IpIntervalCount[x]);
             }
             sw.WriteLine();
             sw.WriteLine("[Interval minimum (Squareroot)] [Interval maximum (Squareroot)] [Interval center (Squareroot)] [Frequency (Squareroot)]");
             sw.WriteLine();
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < r.IntervalsCount; x++)
             {
                 sw.WriteLine(Math.Round(r.IpSqrtIntervalMinimum[x], 10) + "\t" + Math.Round(r.IpSqrtIntervalMaximum[x], 10) + "\t" + Math.Round(r.IpSqrtIntervalCenter[x], 10) + "\t" + r.IpSqrtIntervalCount[x]);
             }

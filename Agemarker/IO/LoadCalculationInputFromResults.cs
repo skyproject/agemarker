@@ -22,10 +22,11 @@ namespace Agemarker.IO
             double[] elementsContent = new double[118];
             double[] elementsWeight = new double[118];
             int multiplier = 0;
+            int intervalsCount = 0;
             AgemarkerCore.Data.Logarithm log = AgemarkerCore.Data.Logarithm.Natural;
             StreamReader sr = new StreamReader(filePath);
             string line;
-            for (int x = 0; x < 184; x++)
+            for (int x = 0; x < 186; x++)
             {
                 line = sr.ReadLine();
                 string[] data = line.Split('\t');
@@ -51,6 +52,26 @@ namespace Agemarker.IO
                 }
                 else if (x == 183)
                 {
+                    if (data[0] == "Intervals count:")
+                    {
+                        int.TryParse(data[1], out intervalsCount);
+                    }
+                    else
+                    {
+                        intervalsCount = 7;
+                        if (data[1] == "Natural")
+                        {
+                            log = AgemarkerCore.Data.Logarithm.Natural;
+                        }
+                        else if (data[1] == "Decimal")
+                        {
+                            log = AgemarkerCore.Data.Logarithm.Decimal;
+                        }
+                        break;
+                    }
+                }
+                else if (x == 185)
+                {
                     if (data[1] == "Natural")
                     {
                         log = AgemarkerCore.Data.Logarithm.Natural;
@@ -64,7 +85,7 @@ namespace Agemarker.IO
             sr.Close();
             if (ResultsFileLoadedEvent != null)
             {
-                ResultsFileLoadedEvent(this, new Events.ResultsFileLoadedEventArgs(oxidesContent, elementsContent, elementsWeight, multiplier, log));
+                ResultsFileLoadedEvent(this, new Events.ResultsFileLoadedEventArgs(oxidesContent, elementsContent, elementsWeight, multiplier, intervalsCount, log));
             }
         }
     }

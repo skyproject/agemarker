@@ -71,7 +71,7 @@ namespace Agemarker.Calculations
             calculationCores++;
             lastCore++;
             IO.SaveCalculationInput sci = new IO.SaveCalculationInput(lastCore);
-            sci.SaveToFile(e.OxidesContent, e.ElementsContent, e.ElementsWeight, e.Multiplier, e.Log, e.FilePath);
+            sci.SaveToFile(e.OxidesContent, e.ElementsContent, e.ElementsWeight, e.Multiplier, e.IntervalsCount, e.Log, e.FilePath);
             Data.CalculationCoreID coreID = new Data.CalculationCoreID();
             coreID.LayoutID = panelLayout.Children.Count;
             coreID.InputFileID = lastCore;
@@ -80,7 +80,6 @@ namespace Agemarker.Calculations
             ci.CalculationItemRemovedEvent += calculationItemRemoved;
             ci.Margin = new Thickness(0, 0, 0, 2 + (1 * calculationCores));
             panelLayout.Children.Add(ci);
-
             if (currentCore == -1)
             {
                 currentCore = calculationCores;
