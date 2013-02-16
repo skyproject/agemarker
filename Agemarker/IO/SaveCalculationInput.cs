@@ -14,7 +14,7 @@ namespace Agemarker.IO
             path = (Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Agemarker\\Calculations\\" + calculationID + ".txt");
         }
 
-        public void SaveToFile(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, int intervalsCount, AgemarkerCore.Data.Logarithm log, string fullPath)
+        public void SaveToFile(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, int intervalsNumber, AgemarkerCore.Data.Logarithm log, string fullPath)
         {
             System.IO.StreamWriter sw = new System.IO.StreamWriter(path, false);
             sw.WriteLine("Agemarker calculation file");
@@ -33,7 +33,7 @@ namespace Agemarker.IO
             sw.WriteLine();
             sw.WriteLine(multiplier);
             sw.WriteLine();
-            sw.WriteLine(intervalsCount);
+            sw.WriteLine(intervalsNumber);
             sw.WriteLine();
             sw.WriteLine(log);
             sw.WriteLine();

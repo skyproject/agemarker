@@ -13,17 +13,17 @@ namespace Agemarker.Events
         public double[] ElementsContent { get; set; }
         public double[] ElementsWeight { get; set; }
         public int Multiplier { get; set; }
-        public int IntervalsCount { get; set; }
+        public int IntervalsNumber { get; set; }
         public AgemarkerCore.Data.Logarithm Log { get; set; }
         public string FilePath { get; set; }
 
-        public InputCompletedEventArgs(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, int intervalsCount, AgemarkerCore.Data.Logarithm log, string filePath)
+        public InputCompletedEventArgs(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, int intervalsNumber, AgemarkerCore.Data.Logarithm log, string filePath)
         {
             this.OxidesContent = oxidesContent;
             this.ElementsContent = elementsContent;
             this.ElementsWeight = elementsWeight;
             this.Multiplier = multiplier;
-            this.IntervalsCount = intervalsCount;
+            this.IntervalsNumber = intervalsNumber;
             this.Log = log;
             this.FilePath = filePath;
         }

@@ -22,7 +22,7 @@ namespace Agemarker.IO
             double[] elementsContent = new double[118];
             double[] elementsWeight = new double[118];
             int multiplier = 0;
-            int intervalsCount = 0;
+            int intervalsNumber = 0;
             AgemarkerCore.Data.Logarithm log = AgemarkerCore.Data.Logarithm.Natural;
             StreamReader sr = new StreamReader(filePath);
             string line;
@@ -45,7 +45,7 @@ namespace Agemarker.IO
                 }
                 else if (x == 179)
                 {
-                    int.TryParse(data[0], out intervalsCount);
+                    int.TryParse(data[0], out intervalsNumber);
                 }
                 else if (x == 181)
                 {
@@ -62,7 +62,7 @@ namespace Agemarker.IO
                 {
                     if (CalculationFileLoadedEvent != null)
                     {
-                        CalculationFileLoadedEvent(this, new Events.CalculationFileLoadedEventArgs(oxidesContent, elementsContent, elementsWeight, multiplier, intervalsCount, log, data[0]));
+                        CalculationFileLoadedEvent(this, new Events.CalculationFileLoadedEventArgs(oxidesContent, elementsContent, elementsWeight, multiplier, intervalsNumber, log, data[0]));
                     }
                 }
             }

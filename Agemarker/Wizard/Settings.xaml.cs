@@ -21,7 +21,7 @@ namespace Agemarker.Wizard
     public partial class Settings : UserControl
     {
         public TextBox Multiplier;
-        public TextBox IntervalsCount;
+        public TextBox IntervalsNumber;
         public ComboBox LogBase;
         public Button SelectFile;
 
@@ -44,17 +44,17 @@ namespace Agemarker.Wizard
             Multiplier.Text = "0";
             Multiplier.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
             panelLayout.Children.Add(Multiplier);
-            IntervalsCount = new TextBox();
-            IntervalsCount.SetValue(Grid.RowProperty, 1);
-            IntervalsCount.SetValue(Grid.ColumnProperty, 1);
-            IntervalsCount.Height = 26;
-            IntervalsCount.Width = 100;
-            IntervalsCount.FontSize = 12;            
-            IntervalsCount.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            IntervalsCount.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
-            IntervalsCount.Text = "7";
-            IntervalsCount.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
-            panelLayout.Children.Add(IntervalsCount);
+            IntervalsNumber = new TextBox();
+            IntervalsNumber.SetValue(Grid.RowProperty, 1);
+            IntervalsNumber.SetValue(Grid.ColumnProperty, 1);
+            IntervalsNumber.Height = 26;
+            IntervalsNumber.Width = 100;
+            IntervalsNumber.FontSize = 12;            
+            IntervalsNumber.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+            IntervalsNumber.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+            IntervalsNumber.Text = "7";
+            IntervalsNumber.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+            panelLayout.Children.Add(IntervalsNumber);
             LogBase = new ComboBox();
             LogBase.SetValue(Grid.RowProperty, 2);
             LogBase.SetValue(Grid.ColumnProperty, 1);

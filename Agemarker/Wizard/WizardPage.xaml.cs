@@ -57,9 +57,9 @@ namespace Agemarker.Wizard
             settings.Multiplier.LostFocus += new RoutedEventHandler(checkNullInputValue);
             settings.Multiplier.GotFocus += new RoutedEventHandler(setLastValue);
             settings.Multiplier.TextChanged += new TextChangedEventHandler(checkInputValue);
-            settings.IntervalsCount.LostFocus += new RoutedEventHandler(checkNullInputValue);
-            settings.IntervalsCount.GotFocus += new RoutedEventHandler(setLastValue);
-            settings.IntervalsCount.TextChanged += new TextChangedEventHandler(checkInputValue);
+            settings.IntervalsNumber.LostFocus += new RoutedEventHandler(checkNullInputValue);
+            settings.IntervalsNumber.GotFocus += new RoutedEventHandler(setLastValue);
+            settings.IntervalsNumber.TextChanged += new TextChangedEventHandler(checkInputValue);
             settings.SelectFile.Click += selectResultsFile;
             switchControls();
         }
@@ -78,7 +78,7 @@ namespace Agemarker.Wizard
                 elements.TextContents[(x + 1)].Text = "0";
             }
             settings.Multiplier.Text = "1";
-            settings.IntervalsCount.Text = "7";
+            settings.IntervalsNumber.Text = "7";
             ComboBoxItem cbiNatural = settings.LogBase.Items[0] as ComboBoxItem;
             ComboBoxItem cbiDecimal = settings.LogBase.Items[1] as ComboBoxItem;
             cbiNatural.IsSelected = true;
@@ -86,11 +86,11 @@ namespace Agemarker.Wizard
             switchControls();
         }
 
-        protected virtual void raiseInputCompletedEvent(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, int intervalsCount, AgemarkerCore.Data.Logarithm log)
+        protected virtual void raiseInputCompletedEvent(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, int intervalsNumber, AgemarkerCore.Data.Logarithm log)
         {
             if (InputCompletedEvent != null)
             {
-                InputCompletedEvent(this, new Events.InputCompletedEventArgs(oxidesContent, elementsContent, elementsWeight, multiplier, intervalsCount, log, file));
+                InputCompletedEvent(this, new Events.InputCompletedEventArgs(oxidesContent, elementsContent, elementsWeight, multiplier, intervalsNumber, log, file));
             }
         }
 
@@ -152,7 +152,7 @@ namespace Agemarker.Wizard
                 elements.TextWeight[(x + 1)].Text = e.ElementsWeight[x].ToString();
             }
             settings.Multiplier.Text = e.Multiplier.ToString();
-            settings.IntervalsCount.Text = e.IntervalsCount.ToString();
+            settings.IntervalsNumber.Text = e.IntervalsNumber.ToString();
             ComboBoxItem cbiNatural = settings.LogBase.Items[0] as ComboBoxItem;
             ComboBoxItem cbiDecimal = settings.LogBase.Items[1] as ComboBoxItem;
             if (e.Log == AgemarkerCore.Data.Logarithm.Natural)
@@ -219,7 +219,7 @@ namespace Agemarker.Wizard
             double[] ElementsWeight = new double[118];
             double[] OxidesContent = new double[53];
             int AtomMultiplier;
-            int IntervalsCount;
+            int IntervalsNumber;
             for (int x = 1; x < 54; x++)
             {
                 double.TryParse(oxides.TextContents[x].Text, out OxidesContent[(x - 1)]);
@@ -230,15 +230,15 @@ namespace Agemarker.Wizard
                 double.TryParse(elements.TextWeight[x].Text, out ElementsWeight[(x - 1)]);
             }
             int.TryParse(settings.Multiplier.Text, out AtomMultiplier);
-            int.TryParse(settings.IntervalsCount.Text, out IntervalsCount);
+            int.TryParse(settings.IntervalsNumber.Text, out IntervalsNumber);
             ComboBoxItem cbi = settings.LogBase.Items[0] as ComboBoxItem;
             if (cbi.IsSelected == true)
             {
-                raiseInputCompletedEvent(OxidesContent, ElementsContent, ElementsWeight, AtomMultiplier, IntervalsCount, AgemarkerCore.Data.Logarithm.Natural);
+                raiseInputCompletedEvent(OxidesContent, ElementsContent, ElementsWeight, AtomMultiplier, IntervalsNumber, AgemarkerCore.Data.Logarithm.Natural);
             }
             else
             {
-                raiseInputCompletedEvent(OxidesContent, ElementsContent, ElementsWeight, AtomMultiplier, IntervalsCount, AgemarkerCore.Data.Logarithm.Decimal);
+                raiseInputCompletedEvent(OxidesContent, ElementsContent, ElementsWeight, AtomMultiplier, IntervalsNumber, AgemarkerCore.Data.Logarithm.Decimal);
             }
         }
 

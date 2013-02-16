@@ -15,9 +15,9 @@ namespace Agemarker.Core
         private AgemarkerCore.Calculations calculations;
         private IO.SaveResults results;
 
-        public Agemarker(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, int intervalsCount, AgemarkerCore.Data.Logarithm log, string resultsFilePath)
+        public Agemarker(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, int intervalsNumber, AgemarkerCore.Data.Logarithm log, string resultsFilePath)
         {
-            calculations = new AgemarkerCore.Calculations(oxidesContent, elementsContent, elementsWeight, multiplier, intervalsCount, log);
+            calculations = new AgemarkerCore.Calculations(oxidesContent, elementsContent, elementsWeight, multiplier, intervalsNumber, log);
             calculations.CalculationsCompletedEvent += calculationsCompleted;
             results = new IO.SaveResults(resultsFilePath);
         }

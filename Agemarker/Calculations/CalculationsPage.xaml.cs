@@ -71,7 +71,7 @@ namespace Agemarker.Calculations
             calculationCores++;
             lastCore++;
             IO.SaveCalculationInput sci = new IO.SaveCalculationInput(lastCore);
-            sci.SaveToFile(e.OxidesContent, e.ElementsContent, e.ElementsWeight, e.Multiplier, e.IntervalsCount, e.Log, e.FilePath);
+            sci.SaveToFile(e.OxidesContent, e.ElementsContent, e.ElementsWeight, e.Multiplier, e.IntervalsNumber, e.Log, e.FilePath);
             Data.CalculationCoreID coreID = new Data.CalculationCoreID();
             coreID.LayoutID = panelLayout.Children.Count;
             coreID.InputFileID = lastCore;
