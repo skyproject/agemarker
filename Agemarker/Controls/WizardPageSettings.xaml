@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Agemarker.Wizard.Settings"
+﻿<UserControl x:Class="Agemarker.Controls.WizardPageSettings"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -16,9 +16,9 @@
             <RowDefinition MinHeight="70"/>
             <RowDefinition MinHeight="70"/>
         </Grid.RowDefinitions>
-        <Label Content="Multiplier" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" Width="110"/>
-        <Label Content="Number of grouping intervals" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Width="190"/>
-        <Label Content="Logarithmic base" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Width="110"/>
-        <Label Content="Results file" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" Width="110"/>
+        <Label Content="Multiplier" FontSize="14" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+        <Label Content="Number of grouping intervals" FontSize="14" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+        <Label Content="Logarithmic base" FontSize="14" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+        <Label Content="Results file" FontSize="14" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

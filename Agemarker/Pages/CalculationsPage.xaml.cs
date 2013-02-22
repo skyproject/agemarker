@@ -12,8 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Agemarker.Controls;
 
-namespace Agemarker.Calculations
+namespace Agemarker.Pages
 {
     /// <summary>
     /// Interaction logic for CalculationsPage.xaml
@@ -29,7 +30,6 @@ namespace Agemarker.Calculations
         {
             InitializeComponent();
             mainWindow = main;
-            mainWindow.InputCompletedEvent += addCalculationItem;
             mainWindow.SizeChanged += changeSize;
             loadCalculations();
         }
@@ -54,19 +54,19 @@ namespace Agemarker.Calculations
                     coreID.InputFileID = calculationID;
                     calculationCores++;
                     lastCore = calculationID;
-                    CalculationItem ci = new CalculationItem(coreID, file);
+                    CalculationsPageItem ci = new CalculationsPageItem(coreID, file);
                     ci.CalculationsFinishedEvent += calculationsFinished;
                     ci.CalculationItemRemovedEvent += calculationItemRemoved;
                     ci.Margin = new Thickness(0, 0, 0, 2 + (1 * calculationCores));
                     panelLayout.Children.Add(ci);
                 }
-                CalculationItem ci1 = panelLayout.Children[0] as CalculationItem;
+                CalculationsPageItem ci1 = panelLayout.Children[0] as CalculationsPageItem;
                 currentCore = ci1.CoreID.InputFileID;
                 ci1.StartCalculations();
             }
         }
 
-        private void addCalculationItem(object sender, Events.InputCompletedEventArgs e)
+        public void AddCalculationItem(Events.InputCompletedEventArgs e)
         {
             calculationCores++;
             lastCore++;
@@ -75,7 +75,7 @@ namespace Agemarker.Calculations
             Data.CalculationCoreID coreID = new Data.CalculationCoreID();
             coreID.LayoutID = panelLayout.Children.Count;
             coreID.InputFileID = lastCore;
-            CalculationItem ci = new CalculationItem(coreID, (Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Agemarker\\Calculations\\" + lastCore + ".txt"));
+            CalculationsPageItem ci = new CalculationsPageItem(coreID, (Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Agemarker\\Calculations\\" + lastCore + ".txt"));
             ci.CalculationsFinishedEvent += calculationsFinished;
             ci.CalculationItemRemovedEvent += calculationItemRemoved;
             ci.Margin = new Thickness(0, 0, 0, 2 + (1 * calculationCores));
@@ -95,16 +95,16 @@ namespace Agemarker.Calculations
                 if (panelLayout.Children.Count > (e.CoreID.LayoutID + 1))
                 {
                     currentCore = (e.CoreID.InputFileID + 1);
-                    CalculationItem ci1 = panelLayout.Children[(e.CoreID.LayoutID + 1)] as CalculationItem;
+                    CalculationsPageItem ci1 = panelLayout.Children[(e.CoreID.LayoutID + 1)] as CalculationsPageItem;
                     ci1.StartCalculations();
                 }
             }
-            CalculationItem ci2 = panelLayout.Children[(e.CoreID.LayoutID)] as CalculationItem;
+            CalculationsPageItem ci2 = panelLayout.Children[(e.CoreID.LayoutID)] as CalculationsPageItem;
             panelLayout.Children.Remove(ci2);
             calculationCores--;
             for (int x = (panelLayout.Children.Count - 1); x >= e.CoreID.LayoutID; x--)
             {
-                CalculationItem ci3 = panelLayout.Children[x] as CalculationItem;
+                CalculationsPageItem ci3 = panelLayout.Children[x] as CalculationsPageItem;
                 Thickness t = ci3.Margin;
                 t.Bottom -= 1;
                 ci3.Margin = t;
@@ -122,19 +122,9 @@ namespace Agemarker.Calculations
             if (panelLayout.Children.Count > (e.CoreID.LayoutID + 1))
             {
                 currentCore = (e.CoreID.InputFileID + 1);
-                CalculationItem ci = panelLayout.Children[(e.CoreID.LayoutID + 1)] as CalculationItem;
+                CalculationsPageItem ci = panelLayout.Children[(e.CoreID.LayoutID + 1)] as CalculationsPageItem;
                 ci.StartCalculations();
             }
-        }
-
-        private void addCalculation(object sender, RoutedEventArgs e)
-        {
-            mainWindow.ShowWizard();
-        }
-
-        private void showAbout(object sender, RoutedEventArgs e)
-        {
-            mainWindow.ShowAbout();
         }
     }
 }

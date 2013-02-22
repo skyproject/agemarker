@@ -14,8 +14,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.IO;
+using Agemarker.Controls;
 
-namespace Agemarker.Wizard
+namespace Agemarker.Pages
 {
     /// <summary>
     /// Interaction logic for WizardPage.xaml
@@ -26,40 +27,19 @@ namespace Agemarker.Wizard
         private short currentStep = 0;
         string lastInput = "";
         string file = "";
-        Oxides oxides;
-        Elements elements;
-        Settings settings;
+        WizardPageOxides oxides;
+        WizardPageElements elements;
+        WizardPageSettings settings;
 
         public WizardPage()
         {
             InitializeComponent();
-            oxides = new Oxides();
-            elements = new Elements();
-            settings = new Settings();
+            oxides = new WizardPageOxides();
+            elements = new WizardPageElements();
+            settings = new WizardPageSettings();
             panelLayout.Children.Add(oxides);
             panelLayout.Children.Add(elements);
             panelLayout.Children.Add(settings);
-            for (int x = 1; x < 54; x++)
-            {
-                oxides.TextContents[x].LostFocus += new RoutedEventHandler(checkNullInputValue);
-                oxides.TextContents[x].GotFocus += new RoutedEventHandler(setLastValue);
-                oxides.TextContents[x].TextChanged += new TextChangedEventHandler(checkInputValue);
-            }
-            for (int x = 1; x < 119; x++)
-            {
-                elements.TextContents[x].LostFocus += new RoutedEventHandler(checkNullInputValue);
-                elements.TextContents[x].GotFocus += new RoutedEventHandler(setLastValue);
-                elements.TextContents[x].TextChanged += new TextChangedEventHandler(checkInputValue);
-                elements.TextWeight[x].LostFocus += new RoutedEventHandler(checkNullInputValue);
-                elements.TextWeight[x].GotFocus += new RoutedEventHandler(setLastValue);
-                elements.TextWeight[x].TextChanged += new TextChangedEventHandler(checkInputValue);
-            }
-            settings.Multiplier.LostFocus += new RoutedEventHandler(checkNullInputValue);
-            settings.Multiplier.GotFocus += new RoutedEventHandler(setLastValue);
-            settings.Multiplier.TextChanged += new TextChangedEventHandler(checkInputValue);
-            settings.IntervalsNumber.LostFocus += new RoutedEventHandler(checkNullInputValue);
-            settings.IntervalsNumber.GotFocus += new RoutedEventHandler(setLastValue);
-            settings.IntervalsNumber.TextChanged += new TextChangedEventHandler(checkInputValue);
             settings.SelectFile.Click += selectResultsFile;
             switchControls();
         }
@@ -262,64 +242,6 @@ namespace Agemarker.Wizard
                     MessageBox.Show("This file is already used by another program. Close programs that use this file and retry or select another file", "Error", MessageBoxButton.OK);
                 }
             }
-        }
-
-        private void checkNullInputValue(object sender, RoutedEventArgs e)
-        {
-            lastInput = "";
-            TextBox s = sender as TextBox;
-            if (!(s.Equals(settings.Multiplier)))
-            {
-                if (s.Text == "")
-                {
-                    s.Text = "0";
-                }
-            }
-            else
-            {
-                if (s.Text == "" || s.Text == "0")
-                {
-                    s.Text = "1";
-                }
-            }
-        }
-
-        private void checkInputValue(object sender, TextChangedEventArgs e)
-        {
-            TextBox s = sender as TextBox;
-            if (s.Text != "")
-            {
-                if (!(s.Equals(settings.Multiplier)))
-                {
-                    if (!(Core.Validation.IsNumber(s.Text, 0, 1000)))
-                    {
-                        s.Text = lastInput;
-                        s.SelectionStart = s.Text.Length;
-                    }
-                    else
-                    {
-                        lastInput = s.Text;
-                    }
-                }
-                else
-                {
-                    if (!(Core.Validation.IsNumber(s.Text, 1, 100000000)))
-                    {
-                        s.Text = lastInput;
-                        s.SelectionStart = s.Text.Length;
-                    }
-                    else
-                    {
-                        lastInput = s.Text;
-                    }
-                }
-            }
-        }
-
-        private void setLastValue(object sender, RoutedEventArgs e)
-        {
-            TextBox s = sender as TextBox;
-            lastInput = s.Text;
         }
     }
 }

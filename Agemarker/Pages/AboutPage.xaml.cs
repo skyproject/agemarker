@@ -15,25 +15,22 @@ using System.Windows.Shapes;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Agemarker.About
+namespace Agemarker.Pages
 {
     /// <summary>
     /// Interaction logic for AboutPage.xaml
     /// </summary>
     public partial class AboutPage : UserControl
     {
-        MainWindow mainWindow;
-
-        public AboutPage(MainWindow main)
+        public AboutPage()
         {
             InitializeComponent();
-            mainWindow = main;
             labelLogo.Content += (" (" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + ")");
         }
 
         private void navigateBack(object sender, RoutedEventArgs e)
         {
-            mainWindow.CloseAbout();
+            PageNavigation.NavigateToCalculationsPage();
         }
 
         private void navigateLink(object sender, RequestNavigateEventArgs e)

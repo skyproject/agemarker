@@ -13,12 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Agemarker.Wizard
+namespace Agemarker.Controls
 {
     /// <summary>
     /// Interaction logic for Elements.xaml
     /// </summary>
-    public partial class Elements : UserControl
+    public partial class WizardPageElements : UserControl
     {
         public TextBox[] TextNumber = new TextBox[119];
         public TextBox[] TextShortName = new TextBox[119];
@@ -26,7 +26,7 @@ namespace Agemarker.Wizard
         public TextBox[] TextWeight = new TextBox[119];
         public TextBox[] TextContents = new TextBox[119];
 
-        public Elements()
+        public WizardPageElements()
         {
             InitializeComponent();
             InitializeTable();
@@ -37,7 +37,7 @@ namespace Agemarker.Wizard
             for (int x = 0; x < 119; x++)
             {
                 TextNumber[x] = new TextBox();
-                TextNumber[x].FontSize = 12;
+                TextNumber[x].FontSize = 14;
                 TextNumber[x].HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
                 TextNumber[x].IsReadOnly = true;
                 TextNumber[x].BorderThickness = new Thickness(0, 0, 0, 0);
@@ -57,7 +57,7 @@ namespace Agemarker.Wizard
             for (int x = 0; x < 119; x++)
             {
                 TextShortName[x] = new TextBox();
-                TextShortName[x].FontSize = 12;
+                TextShortName[x].FontSize = 14;
                 TextShortName[x].HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
                 TextShortName[x].IsReadOnly = true;
                 TextShortName[x].BorderThickness = new Thickness(0, 0, 0, 0);
@@ -77,7 +77,7 @@ namespace Agemarker.Wizard
             for (int x = 0; x < 119; x++)
             {
                 TextFullName[x] = new TextBox();
-                TextFullName[x].FontSize = 12;
+                TextFullName[x].FontSize = 14;
                 TextFullName[x].HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
                 TextFullName[x].IsReadOnly = true;
                 TextFullName[x].BorderThickness = new Thickness(0, 0, 0, 0);
@@ -96,8 +96,15 @@ namespace Agemarker.Wizard
             }
             for (int x = 0; x < 119; x++)
             {
-                TextWeight[x] = new TextBox();
-                TextWeight[x].FontSize = 12;
+                if (x == 0)
+                {
+                    TextWeight[x] = new TextBox();
+                }
+                else
+                {
+                    TextWeight[x] = new Controls.NumericalTextBox((double)0, (double)100000);
+                }
+                TextWeight[x].FontSize = 14;
                 TextWeight[x].HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;                    
                 TextWeight[x].BorderThickness = new Thickness(0, 0, 0, 0);
                 if (x == 0)
@@ -116,8 +123,15 @@ namespace Agemarker.Wizard
             }
             for (int x = 0; x < 119; x++)
             {
-                TextContents[x] = new TextBox();
-                TextContents[x].FontSize = 12;
+                if (x == 0)
+                {
+                    TextContents[x] = new TextBox();
+                }
+                else
+                {
+                    TextContents[x] = new Controls.NumericalTextBox((double)0, (double)100000);
+                }
+                TextContents[x].FontSize = 14;
                 TextContents[x].HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
                 TextContents[x].BorderThickness = new Thickness(0, 0, 0, 0);
                 if (x == 0)

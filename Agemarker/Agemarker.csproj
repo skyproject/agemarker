@@ -32,7 +32,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationRevision>14</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -83,7 +83,7 @@
   <ItemGroup>
     <Reference Include="AgemarkerCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\AgemarkerCore.dll</HintPath>
+      <HintPath>bin\Release\AgemarkerCore.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -106,18 +106,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="About\AboutPage.xaml.cs">
+    <Compile Include="Pages\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Calculations\CalculationItem.xaml.cs">
-      <DependentUpon>CalculationItem.xaml</DependentUpon>
+    <Compile Include="Controls\CalculationsPageItem.xaml.cs">
+      <DependentUpon>CalculationsPageItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Calculations\CalculationsPage.xaml.cs">
+    <Compile Include="Pages\CalculationsPage.xaml.cs">
       <DependentUpon>CalculationsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CalculationsPageMenu.xaml.cs">
+      <DependentUpon>CalculationsPageMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NumericalTextBox.xaml.cs">
+      <DependentUpon>NumericalTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Data.cs" />
-    <Compile Include="Core\Agemarker.cs" />
-    <Compile Include="Core\Validation.cs" />
     <Compile Include="Events\CalculationFileLoadedEventArgs.cs" />
     <Compile Include="Events\CalculationsEventArgs.cs" />
     <Compile Include="Events\InputCompletedEventArgs.cs" />
@@ -127,27 +131,39 @@
     <Compile Include="IO\RemoveCalculationInput.cs" />
     <Compile Include="IO\SaveCalculationInput.cs" />
     <Compile Include="IO\SaveResults.cs" />
-    <Compile Include="Wizard\Elements.xaml.cs">
-      <DependentUpon>Elements.xaml</DependentUpon>
+    <Compile Include="PageNavigation.cs" />
+    <Compile Include="Pages\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\Oxides.xaml.cs">
-      <DependentUpon>Oxides.xaml</DependentUpon>
+    <Compile Include="Controls\WizardPageElements.xaml.cs">
+      <DependentUpon>WizardPageElements.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
+    <Compile Include="Controls\WizardPageOxides.xaml.cs">
+      <DependentUpon>WizardPageOxides.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\WizardPage.xaml.cs">
+    <Compile Include="Controls\WizardPageSettings.xaml.cs">
+      <DependentUpon>WizardPageSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\WizardPage.xaml.cs">
       <DependentUpon>WizardPage.xaml</DependentUpon>
     </Compile>
-    <Page Include="About\AboutPage.xaml">
+    <Page Include="Pages\AboutPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Calculations\CalculationItem.xaml">
+    <Page Include="Controls\CalculationsPageItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Calculations\CalculationsPage.xaml">
+    <Page Include="Pages\CalculationsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CalculationsPageMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NumericalTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -163,19 +179,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Wizard\Elements.xaml">
+    <Page Include="Pages\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wizard\Oxides.xaml">
+    <Page Include="Controls\WizardPageElements.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wizard\Settings.xaml">
+    <Page Include="Controls\WizardPageOxides.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wizard\WizardPage.xaml">
+    <Page Include="Controls\WizardPageSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\WizardPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

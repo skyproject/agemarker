@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="Agemarker.Controls.CalculationsPageMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Agemarker.Controls"
+             mc:Ignorable="d" Width="813" Height="30">
+    <Grid>
+        <Menu Height="30" VerticalAlignment="Top" Background="Transparent">
+            <MenuItem Header="Calculations" FontSize="14" VerticalContentAlignment="Stretch">
+                <MenuItem Header="Add new calculation" Height="30" Click="addCalculation"/>
+            </MenuItem>
+            <MenuItem Header="Tools" Height="30" FontSize="14" VerticalContentAlignment="Stretch">
+                <MenuItem Header="Settings" Height="30" Click="showSettings"/>
+            </MenuItem>
+            <MenuItem Header="Help" FontSize="14" VerticalContentAlignment="Stretch">
+                <MenuItem Header="About Agemarker" Height="30" Click="showAbout" />
+            </MenuItem>
+        </Menu>
+    </Grid>
+</UserControl>

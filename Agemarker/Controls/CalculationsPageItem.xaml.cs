@@ -13,21 +13,22 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Agemarker.Calculations
+namespace Agemarker.Controls
 {
     /// <summary>
     /// Interaction logic for CalculationItem.xaml
     /// </summary>
-    public partial class CalculationItem : UserControl
+    public partial class CalculationsPageItem : UserControl
     {
         public event EventHandler<Events.CalculationsEventArgs> CalculationsFinishedEvent;
         public event EventHandler<Events.CalculationsEventArgs> CalculationItemRemovedEvent;
         public Data.CalculationStatus CalculationState;
         public Data.CalculationCoreID CoreID;
-        private Core.Agemarker calculations;
+        private AgemarkerCore.Calculations calculations;
+        private IO.SaveResults results;
         private System.Threading.SynchronizationContext context = new System.Threading.SynchronizationContext();
 
-        public CalculationItem(Data.CalculationCoreID coreID, string filePath)
+        public CalculationsPageItem(Data.CalculationCoreID coreID, string filePath)
         {
             InitializeComponent();
             CoreID = coreID;
@@ -42,8 +43,9 @@ namespace Agemarker.Calculations
             labelFileName.ToolTip = tt;
         }
 
-        private void calculationsCompleted(object sender, EventArgs e)
+        private void calculationsCompleted(object sender, AgemarkerCore.Events.CalculationsCompletedEventArgs e)
         {
+            results.Save(e.Results);
             CalculationState = Data.CalculationStatus.Finished;
             context.Post(o => updateCalculationState(), null);
         }
@@ -88,14 +90,14 @@ namespace Agemarker.Calculations
 
         private void pauseCalculations(object sender, RoutedEventArgs e)
         {
-            calculations.PauseCalculations();
+            calculations.Pause();
             CalculationState = Data.CalculationStatus.Paused;
             updateCalculationState();
         }
 
         public void resumeCalculations(object sender, RoutedEventArgs e)
         {
-            calculations.StartCalculations();
+            calculations.Start();
             CalculationState = Data.CalculationStatus.Running;
             updateCalculationState();
         }
@@ -106,9 +108,10 @@ namespace Agemarker.Calculations
             IO.LoadCalculationInput lci = new IO.LoadCalculationInput(path);
             lci.CalculationFileLoadedEvent += (s, e) =>
             {
-                calculations = new Core.Agemarker(e.OxidesContent, e.ElementsContent, e.ElementsWeight, e.Multiplier, e.IntervalsNumber, e.Log, e.FilePath);
+                calculations = new AgemarkerCore.Calculations(e.OxidesContent, e.ElementsContent, e.ElementsWeight, e.Multiplier, e.IntervalsNumber, e.Log, int.Parse(Properties.Settings.Default["ThreadsNumber"].ToString()));
                 calculations.CalculationsCompletedEvent += calculationsCompleted;
-                calculations.StartCalculations();
+                results = new IO.SaveResults(e.FilePath);
+                calculations.Start();
                 CalculationState = Data.CalculationStatus.Running;
                 updateCalculationState();
                 butttonPause.Visibility = System.Windows.Visibility.Visible;
