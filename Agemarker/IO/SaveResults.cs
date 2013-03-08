@@ -81,7 +81,7 @@ namespace Agemarker.IO
             sw.WriteLine("Standard deviation (Ip Squareroot):\t" + Math.Round(r.IpSqrtStandardDeviation, 10));
             sw.WriteLine();
             sw.WriteLine("Unimodality check");
-            sw.WriteLine();         
+            sw.WriteLine();
             sw.WriteLine("Ip range:\t" + Math.Round(r.IpRange, 10));
             sw.WriteLine();
             sw.WriteLine("Ip range (Squareroot):\t" + Math.Round(r.IpSqrtRange, 10));

@@ -21,7 +21,7 @@ namespace Agemarker.IO
             double[] oxidesContent = new double[53];
             double[] elementsContent = new double[118];
             double[] elementsWeight = new double[118];
-            int multiplier = 0;
+            long multiplier = 0;
             int intervalsNumber = 0;
             AgemarkerCore.Data.Logarithm log = AgemarkerCore.Data.Logarithm.Natural;
             StreamReader sr = new StreamReader(filePath);
@@ -48,7 +48,7 @@ namespace Agemarker.IO
                 }
                 else if (x == 181)
                 {
-                    int.TryParse(data[1], out multiplier);
+                    long.TryParse(data[1], out multiplier);
                 }
                 else if (x == 183)
                 {

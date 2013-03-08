@@ -20,7 +20,7 @@ namespace Agemarker.Controls
     /// </summary>
     public partial class WizardPageSettings : UserControl
     {
-        public Controls.NumericalTextBox Multiplier;
+        public Controls.MultiplierBox Multiplier;
         public Controls.NumericalTextBox IntervalsNumber;
         public ComboBox LogBase;
         public Button SelectFile;
@@ -33,16 +33,12 @@ namespace Agemarker.Controls
 
         private void InitializeTable()
         {
-            Multiplier = new Controls.NumericalTextBox((int)0, (int)1000000000);
+            Multiplier = new Controls.MultiplierBox();
             Multiplier.SetValue(Grid.RowProperty, 0);
             Multiplier.SetValue(Grid.ColumnProperty, 1);
             Multiplier.Height = 30;
-            Multiplier.Width = 100;
+            Multiplier.Width = 205;
             Multiplier.FontSize = 14;
-            Multiplier.VerticalAlignment = System.Windows.VerticalAlignment.Center;
-            Multiplier.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-            Multiplier.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
-            Multiplier.Text = "0";
             Multiplier.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
             panelLayout.Children.Add(Multiplier);
             IntervalsNumber = new Controls.NumericalTextBox((int)0, (int)1000);

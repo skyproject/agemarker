@@ -10,12 +10,12 @@ namespace Agemarker.Events
         public double[] OxidesContent { get; set; }
         public double[] ElementsContent { get; set; }
         public double[] ElementsWeight { get; set; }
-        public int Multiplier { get; set; }
+        public long Multiplier { get; set; }
         public int IntervalsNumber { get; set; }
         public AgemarkerCore.Data.Logarithm Log { get; set; }
         public string FilePath { get; set; }
 
-        public CalculationFileLoadedEventArgs(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, int intervalsNumber, AgemarkerCore.Data.Logarithm log, string filePath)
+        public CalculationFileLoadedEventArgs(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, long multiplier, int intervalsNumber, AgemarkerCore.Data.Logarithm log, string filePath)
         {
             this.OxidesContent = oxidesContent;
             this.ElementsContent = elementsContent;

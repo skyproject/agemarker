@@ -19,7 +19,7 @@ namespace Agemarker.Controls
     /// </summary>
     public partial class NumericalTextBox : TextBox
     {
-        enum TextBoxType { Double, Integer }
+        enum TextBoxType { Double, Integer, WithoutValueCheck }
 
         TextBoxType type;
         string lastCheckedValue = "";
@@ -48,9 +48,18 @@ namespace Agemarker.Controls
             this.minValue = minValue;
         }
 
+        public NumericalTextBox()
+        {
+            InitializeComponent();
+            type = TextBoxType.WithoutValueCheck;
+            this.LostFocus += CheckNullInput;
+            this.GotFocus += SaveLastInput;
+            this.TextChanged += CheckInput;
+        }
+
         private void CheckNullInput(object sender, RoutedEventArgs e)
         {
-            if (this.Text == "")
+            if (this.Text == "" && type != TextBoxType.WithoutValueCheck)
             {
                 this.Text = minValue.ToString();
             }
@@ -118,7 +127,7 @@ namespace Agemarker.Controls
                         }
                     }
                 }
-                if (isnum == true)
+                if (isnum == true && type != TextBoxType.WithoutValueCheck)
                 {
                     double d;
                     double.TryParse(this.Text, out d);

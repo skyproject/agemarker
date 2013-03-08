@@ -25,7 +25,6 @@ namespace Agemarker.Pages
     {
         public event EventHandler<Events.InputCompletedEventArgs> InputCompletedEvent;
         private short currentStep = 0;
-        string lastInput = "";
         string file = "";
         WizardPageOxides oxides;
         WizardPageElements elements;
@@ -57,7 +56,7 @@ namespace Agemarker.Pages
                 elements.TextWeight[(x + 1)].Text = Data.ElementsWeight[x].ToString();
                 elements.TextContents[(x + 1)].Text = "0";
             }
-            settings.Multiplier.Text = "1";
+            settings.Multiplier.UpdateMultiplier(0);
             settings.IntervalsNumber.Text = "7";
             ComboBoxItem cbiNatural = settings.LogBase.Items[0] as ComboBoxItem;
             ComboBoxItem cbiDecimal = settings.LogBase.Items[1] as ComboBoxItem;
@@ -66,7 +65,7 @@ namespace Agemarker.Pages
             switchControls();
         }
 
-        protected virtual void raiseInputCompletedEvent(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, int multiplier, int intervalsNumber, AgemarkerCore.Data.Logarithm log)
+        protected virtual void raiseInputCompletedEvent(double[] oxidesContent, double[] elementsContent, double[] elementsWeight, long multiplier, int intervalsNumber, AgemarkerCore.Data.Logarithm log)
         {
             if (InputCompletedEvent != null)
             {
@@ -131,7 +130,8 @@ namespace Agemarker.Pages
                 elements.TextContents[(x + 1)].Text = e.ElementsContent[x].ToString();
                 elements.TextWeight[(x + 1)].Text = e.ElementsWeight[x].ToString();
             }
-            settings.Multiplier.Text = e.Multiplier.ToString();
+            settings.Multiplier.UpdateInputData(e.OxidesContent, e.ElementsContent, e.ElementsWeight);
+            settings.Multiplier.UpdateMultiplier(e.Multiplier);
             settings.IntervalsNumber.Text = e.IntervalsNumber.ToString();
             ComboBoxItem cbiNatural = settings.LogBase.Items[0] as ComboBoxItem;
             ComboBoxItem cbiDecimal = settings.LogBase.Items[1] as ComboBoxItem;
@@ -180,6 +180,7 @@ namespace Agemarker.Pages
                     oxides.Visibility = System.Windows.Visibility.Collapsed;
                     elements.Visibility = System.Windows.Visibility.Collapsed;
                     settings.Visibility = System.Windows.Visibility.Visible;
+                    settings.Multiplier.UpdateInputData(GetOxidesContent(), GetElementsContent(), GetElementsWeight());
                     buttonBack.Visibility = System.Windows.Visibility.Visible;
                     if (file == "")
                     {
@@ -193,32 +194,48 @@ namespace Agemarker.Pages
             }
         }
 
-        private void save()
+        private double[] GetOxidesContent()
         {
-            double[] ElementsContent = new double[118];
-            double[] ElementsWeight = new double[118];
-            double[] OxidesContent = new double[53];
-            int AtomMultiplier;
-            int IntervalsNumber;
+            double[] oxidesContent = new double[53];
             for (int x = 1; x < 54; x++)
             {
-                double.TryParse(oxides.TextContents[x].Text, out OxidesContent[(x - 1)]);
+                double.TryParse(oxides.TextContents[x].Text, out oxidesContent[(x - 1)]);
             }
+            return oxidesContent;
+        }
+
+        private double[] GetElementsContent()
+        {
+            double[] elementsContent = new double[118];
             for (int x = 1; x < 119; x++)
             {
-                double.TryParse(elements.TextContents[x].Text, out ElementsContent[(x - 1)]);
-                double.TryParse(elements.TextWeight[x].Text, out ElementsWeight[(x - 1)]);
+                double.TryParse(elements.TextContents[x].Text, out elementsContent[(x - 1)]);
             }
-            int.TryParse(settings.Multiplier.Text, out AtomMultiplier);
+            return elementsContent;
+        }
+
+        private double[] GetElementsWeight()
+        {
+            double[] elementsWeight = new double[118];
+            for (int x = 1; x < 119; x++)
+            {
+                double.TryParse(elements.TextWeight[x].Text, out elementsWeight[(x - 1)]);
+            }
+            return elementsWeight;
+        }
+
+        private void save()
+        {
+            int IntervalsNumber;
             int.TryParse(settings.IntervalsNumber.Text, out IntervalsNumber);
             ComboBoxItem cbi = settings.LogBase.Items[0] as ComboBoxItem;
             if (cbi.IsSelected == true)
             {
-                raiseInputCompletedEvent(OxidesContent, ElementsContent, ElementsWeight, AtomMultiplier, IntervalsNumber, AgemarkerCore.Data.Logarithm.Natural);
+                raiseInputCompletedEvent(GetOxidesContent(), GetElementsContent(), GetElementsWeight(), settings.Multiplier.Multiplier, IntervalsNumber, AgemarkerCore.Data.Logarithm.Natural);
             }
             else
             {
-                raiseInputCompletedEvent(OxidesContent, ElementsContent, ElementsWeight, AtomMultiplier, IntervalsNumber, AgemarkerCore.Data.Logarithm.Decimal);
+                raiseInputCompletedEvent(GetOxidesContent(), GetElementsContent(), GetElementsWeight(), settings.Multiplier.Multiplier, IntervalsNumber, AgemarkerCore.Data.Logarithm.Decimal);
             }
         }
 
