@@ -57,13 +57,22 @@ namespace Agemarker.Pages
                     CalculationsPageItem ci = new CalculationsPageItem(coreID, file);
                     ci.CalculationsFinishedEvent += calculationsFinished;
                     ci.CalculationItemRemovedEvent += calculationItemRemoved;
-                    ci.Margin = new Thickness(0, 0, 0, 2 + (1 * calculationCores));
-                    panelLayout.Children.Add(ci);
+                    PlaceItem(ci);
                 }
                 CalculationsPageItem ci1 = panelLayout.Children[0] as CalculationsPageItem;
                 currentCore = ci1.CoreID.InputFileID;
                 ci1.StartCalculations();
             }
+        }
+
+        private void PlaceItem(CalculationsPageItem cpi)
+        {
+            RowDefinition rd = new RowDefinition();
+            rd.Height = new GridLength(102, GridUnitType.Pixel);
+            panelLayout.RowDefinitions.Add(rd);
+            cpi.SetValue(Grid.RowProperty, (panelLayout.RowDefinitions.Count - 1));
+            cpi.Height = 100;
+            panelLayout.Children.Add(cpi);
         }
 
         public void AddCalculationItem(Events.InputCompletedEventArgs e)
@@ -78,8 +87,7 @@ namespace Agemarker.Pages
             CalculationsPageItem ci = new CalculationsPageItem(coreID, (Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Agemarker\\Calculations\\" + lastCore + ".txt"));
             ci.CalculationsFinishedEvent += calculationsFinished;
             ci.CalculationItemRemovedEvent += calculationItemRemoved;
-            ci.Margin = new Thickness(0, 0, 0, 2 + (1 * calculationCores));
-            panelLayout.Children.Add(ci);
+            PlaceItem(ci);
             if (currentCore == -1)
             {
                 currentCore = calculationCores;
@@ -105,11 +113,11 @@ namespace Agemarker.Pages
             for (int x = (panelLayout.Children.Count - 1); x >= e.CoreID.LayoutID; x--)
             {
                 CalculationsPageItem ci3 = panelLayout.Children[x] as CalculationsPageItem;
-                Thickness t = ci3.Margin;
-                t.Bottom -= 1;
-                ci3.Margin = t;
+                int row = int.Parse(ci3.GetValue(Grid.RowProperty).ToString());
+                ci3.SetValue(Grid.RowProperty, (row - 1));
                 ci3.CoreID.LayoutID--;
             }
+            panelLayout.RowDefinitions.Remove(panelLayout.RowDefinitions[(panelLayout.RowDefinitions.Count - 1)]);
             IO.RemoveCalculationInput rci = new IO.RemoveCalculationInput(e.CoreID.InputFileID);
             rci.RemoveFile();
         }

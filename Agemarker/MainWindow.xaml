@@ -2,6 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Agemarker" x:Class="Agemarker.MainWindow"
-        Height="600" Width="830" MinWidth="830" MinHeight="600" Title="Agemarker" Icon="AgemarkerIcon.ico">
+        Height="600" Width="845" MinWidth="845" MinHeight="600" Title="Agemarker" Icon="AgemarkerIcon.ico">
     <Grid x:Name="layoutGrid"/>
 </Window>

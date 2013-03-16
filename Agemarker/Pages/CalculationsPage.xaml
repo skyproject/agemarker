@@ -8,8 +8,8 @@
       d:DesignHeight="550" d:DesignWidth="800">
     <Grid>
         <Controls:CalculationsPageMenu Height="30" Margin="10,10,0,0" VerticalAlignment="Top" Background="Transparent" HorizontalAlignment="Left" Width="780"/>
-        <ScrollViewer x:Name="scrollTable" Height="504" Margin="-10,45,10,1">
-            <StackPanel x:Name="panelLayout" Margin="0,0,0,46" />
+        <ScrollViewer x:Name="scrollTable" Height="504" Margin="0,45,10,1">
+            <Grid x:Name="panelLayout" />
         </ScrollViewer>
     </Grid>
 </UserControl>
