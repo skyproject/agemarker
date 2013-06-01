@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/new/icons">
+        <file>application-icon.ico</file>
+    </qresource>
+    <qresource prefix="/new">
+        <file>glyphicons/pause.ico</file>
+        <file>glyphicons/play.ico</file>
+        <file>glyphicons/remove.ico</file>
+    </qresource>
+</RCC>
