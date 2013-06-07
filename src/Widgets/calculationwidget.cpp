@@ -74,6 +74,7 @@ void CalculationWidget::start()
 void CalculationWidget::calculationFinished ( ACL::Data::CalculationResult result )
 {
     Results::saveResults ( result, ui->labelFile->toolTip() );
+    CalculationData::removeUserInput ( this->calculationId );
     this->status = Data::CalculationStatus::Finished;
     switchCalculationStatus();
     this->core->deleteLater();
