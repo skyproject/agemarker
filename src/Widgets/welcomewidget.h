@@ -6,26 +6,26 @@
  * For full terms see LICENSE file.
  */
 
-#ifndef ABOUTWINDOW_H
-#define ABOUTWINDOW_H
+#ifndef WELCOMEWIDGET_H
+#define WELCOMEWIDGET_H
 
-#include <QDialog>
+#include <QWidget>
 
 namespace Ui
 {
-    class AboutWindow;
+    class WelcomeWidget;
 }
 
-class AboutWindow : public QDialog
+class WelcomeWidget : public QWidget
 {
         Q_OBJECT
 
     public:
-        explicit AboutWindow ( QWidget *parent = 0 );
-        ~AboutWindow();
+        explicit WelcomeWidget ( QWidget *parent = 0 );
+        ~WelcomeWidget();
 
     private:
-        Ui::AboutWindow *ui;
+        Ui::WelcomeWidget *ui;
 };
 
-#endif // ABOUTWINDOW_H
+#endif // WELCOMEWIDGET_H

@@ -43,7 +43,7 @@ ElementsTableWidget::ElementsTableWidget ( std::vector<double> contents,
     ui->table->verticalHeader()->setVisible ( false );
     ui->table->setSelectionMode ( QAbstractItemView::NoSelection );
     fillTable ( );
-    for ( int x = 0; x < 118; x++ )
+    for ( int x = 0; x < ELEMENTS_COUNT; ++x )
     {
         qobject_cast<SNumberEdit *> ( ui->table->cellWidget ( x, 3 ) )->setText ( QString::number ( weights[x] ) );
         qobject_cast<SNumberEdit *> ( ui->table->cellWidget ( x, 4 ) )->setText ( QString::number ( contents[x] ) );
@@ -58,7 +58,7 @@ ElementsTableWidget::~ElementsTableWidget()
 std::vector<double> ElementsTableWidget::getElementsWeights()
 {
     std::vector<double> output;
-    for ( short x = 0; x < 118; x++ )
+    for ( short x = 0; x < ELEMENTS_COUNT; ++x )
     {
         output.push_back ( qobject_cast<SNumberEdit *> ( ui->table->cellWidget ( x, 3 ) )->text().toDouble() );
     }
@@ -68,7 +68,7 @@ std::vector<double> ElementsTableWidget::getElementsWeights()
 std::vector<double> ElementsTableWidget::getElementsContent()
 {
     std::vector<double> output;
-    for ( short x = 0; x < 118; x++ )
+    for ( short x = 0; x < ELEMENTS_COUNT; ++x )
     {
         output.push_back ( qobject_cast<SNumberEdit *> ( ui->table->cellWidget ( x, 4 ) )->text().toDouble() );
     }
@@ -77,7 +77,7 @@ std::vector<double> ElementsTableWidget::getElementsContent()
 
 void ElementsTableWidget::fillTable()
 {
-    for ( short x = 0; x < 118; ++x )
+    for ( short x = 0; x < ELEMENTS_COUNT; ++x )
     {
         std::vector<QWidget *> items;
         QLabel *numLabel = new QLabel();

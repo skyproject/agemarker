@@ -15,6 +15,7 @@ AboutWindow::AboutWindow ( QWidget *parent ) :
     ui ( new Ui::AboutWindow )
 {
     ui->setupUi ( this );
+    setAttribute ( Qt::WA_DeleteOnClose, true );
     ui->labelVersion->setText ( "Version " + QString ( APP_PRODUCTVERSION_STR )
                                 + " (released on " + QString ( APP_RELEASE_DATE_STR ) + ")" );
     connect ( ui->buttonClose, SIGNAL ( clicked() ),
@@ -24,9 +25,4 @@ AboutWindow::AboutWindow ( QWidget *parent ) :
 AboutWindow::~AboutWindow()
 {
     delete ui;
-}
-
-void AboutWindow::close()
-{
-    this->destroy();
 }

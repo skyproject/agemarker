@@ -14,6 +14,7 @@ SettingsWindow::SettingsWindow ( QWidget *parent ) :
     ui ( new Ui::SettingsWindow )
 {
     ui->setupUi ( this );
+    setAttribute ( Qt::WA_DeleteOnClose, true );
     connect ( ui->buttonApply, SIGNAL ( clicked() ),
               this, SLOT ( applySettings() ) );
     connect ( ui->buttonClose, SIGNAL ( clicked() ),

@@ -22,7 +22,7 @@ class OxidesTableWidget : public QWidget
 
     public:
         explicit OxidesTableWidget ( QWidget *parent = 0 );
-        OxidesTableWidget (std::vector<double> contents, QWidget *parent = 0 );
+        OxidesTableWidget ( std::vector<double> contents, QWidget *parent = 0 );
         ~OxidesTableWidget();
         std::vector<double> getOxidesContent();
 

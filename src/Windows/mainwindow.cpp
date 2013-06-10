@@ -15,6 +15,7 @@
 #include "Windows/calculationwindow.h"
 #include "Widgets/calculationwidget.h"
 #include "Windows/settingswindow.h"
+#include "Widgets/welcomewidget.h"
 #include "Windows/aboutwindow.h"
 #include "Windows/mainwindow.h"
 #include "IO/calculationdata.h"
@@ -72,21 +73,29 @@ void MainWindow::loadCalculations()
 {
     QStringList files = QDir ( QStandardPaths::writableLocation ( QStandardPaths::DataLocation )
                                + "/Calculations" ).entryList ( QStringList ( "*.txt" ), QDir::Files, QDir::Name );
-    foreach ( QString file, files )
+    if ( files.size() != 0 )
     {
-        int id = file.split ( "." ).at ( 0 ).toInt();
-        CalculationWidget *cw = new CalculationWidget ( CalculationData::loadUserInput ( id ), id, this );
-        connect ( cw, SIGNAL ( finished() ),
-                  this, SLOT ( calculationFinished() ) );
-        connect ( cw, SIGNAL ( removed() ),
-                  this, SLOT ( calculationRemoved() ) );
-        ui->calculationLayout->layout()->addWidget ( cw );
-        this->calculations = id;
-        if ( this->currentCalculation == -1 )
+        foreach ( QString file, files )
         {
-            this->currentCalculation = id;
-            cw->start();
+            int id = file.split ( "." ).at ( 0 ).toInt();
+            CalculationWidget *cw = new CalculationWidget ( CalculationData::loadUserInput ( id ), id, this );
+            connect ( cw, SIGNAL ( finished() ),
+                      this, SLOT ( calculationFinished() ) );
+            connect ( cw, SIGNAL ( removed() ),
+                      this, SLOT ( calculationRemoved() ) );
+            ui->calculationLayout->layout()->addWidget ( cw );
+            this->calculations = id;
+            if ( this->currentCalculation == -1 )
+            {
+                this->currentCalculation = id;
+                cw->start();
+            }
         }
+    }
+    else
+    {
+        WelcomeWidget *ww = new WelcomeWidget ( this );
+        ui->calculationLayout->layout()->addWidget ( ww );
     }
 }
 
@@ -132,6 +141,12 @@ void MainWindow::addNewCalculation()
 void MainWindow::saveCalculationInput ( Data::UserInput input )
 {
     this->wizard->close();
+    QList<WelcomeWidget *> welcomeWidgetList = this->findChildren<WelcomeWidget *>();
+    if ( welcomeWidgetList.size() != 0 )
+    {
+        ui->calculationLayout->layout()->removeWidget ( welcomeWidgetList[0] );
+        delete welcomeWidgetList[0];
+    }
     CalculationWidget *cw = new CalculationWidget ( input, this->calculations, this );
     connect ( cw, SIGNAL ( finished() ),
               this, SLOT ( calculationFinished() ) );

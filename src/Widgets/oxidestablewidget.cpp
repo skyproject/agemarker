@@ -42,7 +42,7 @@ OxidesTableWidget::OxidesTableWidget ( std::vector<double> contents, QWidget *pa
     ui->table->verticalHeader()->setVisible ( false );
     ui->table->setSelectionMode ( QAbstractItemView::NoSelection );
     fillTable();
-    for ( int x = 0; x < 53; x++ )
+    for ( int x = 0; x < OXIDES_COUNT; ++x )
     {
         qobject_cast<SNumberEdit *> ( ui->table->cellWidget ( x, 3 ) )->setText ( QString::number ( contents[x] ) );
     }
@@ -56,7 +56,7 @@ OxidesTableWidget::~OxidesTableWidget()
 std::vector<double> OxidesTableWidget::getOxidesContent()
 {
     std::vector<double> output;
-    for ( short x = 0; x < 53; x++ )
+    for ( short x = 0; x < OXIDES_COUNT; ++x )
     {
         output.push_back ( qobject_cast<SNumberEdit *> ( ui->table->cellWidget ( x, 3 ) )->text().toDouble() );
     }
@@ -65,7 +65,7 @@ std::vector<double> OxidesTableWidget::getOxidesContent()
 
 void OxidesTableWidget::fillTable()
 {
-    for ( short x = 0; x < 53; ++x )
+    for ( short x = 0; x < OXIDES_COUNT; ++x )
     {
         std::vector<QWidget *> items;
         QLabel *numLabel = new QLabel();

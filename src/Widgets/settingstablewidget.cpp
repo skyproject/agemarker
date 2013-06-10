@@ -9,20 +9,32 @@
 #include "Widgets\settingstablewidget.h"
 #include "ui_settingstablewidget.h"
 
-SettingsTableWidget::SettingsTableWidget ( QWidget *parent ) :
+SettingsTableWidget::SettingsTableWidget ( QWidget *parent ,
+        OxidesTableWidget *oxidesPtr,
+        ElementsTableWidget *elementsPtr ) :
     QWidget ( parent ),
     ui ( new Ui::SettingsTableWidget )
 {
     ui->setupUi ( this );
+    ui->multiplier->updateInputData ( oxidesPtr->getOxidesContent(), elementsPtr->getElementsContent(),
+                                      elementsPtr->getElementsContent() );
+    this->oxides = oxidesPtr;
+    this->elements = elementsPtr;
+}
+
+SettingsTableWidget::~SettingsTableWidget()
+{
+    delete ui;
 }
 
 SettingsTableWidget::SettingsTableWidget ( uint64_t multiplier, int precision, int intervals,
-        ACL::Data::Logarithm log, QWidget *parent ) :
+        ACL::Data::Logarithm log, QWidget *parent,
+        OxidesTableWidget *oxidesPtr, ElementsTableWidget *elementsPtr ) :
     QWidget ( parent ),
     ui ( new Ui::SettingsTableWidget )
 {
     ui->setupUi ( this );
-    ui->textMultiplier->setText ( QString::number ( multiplier ) );
+    ui->multiplier->setMultiplier ( multiplier );
     ui->numPrecision->setValue ( precision );
     ui->numIntervalsNumber->setValue ( intervals );
     if ( log == ACL::Data::Logarithm::Natural )
@@ -33,6 +45,17 @@ SettingsTableWidget::SettingsTableWidget ( uint64_t multiplier, int precision, i
     {
         ui->boxLogarithm->setCurrentIndex ( 1 );
     }
+    this->oxides = oxidesPtr;
+    this->elements = elementsPtr;
+}
+
+void SettingsTableWidget::showEvent ( QShowEvent *e )
+{
+    ui->multiplier->updateInputData ( this->oxides->getOxidesContent(),
+                                      this->elements->getElementsContent(),
+                                      this->elements->getElementsWeights() );
+    ui->multiplier->setCalculationsNumber();
+    QWidget::showEvent ( e );
 }
 
 int SettingsTableWidget::getPrecision()
@@ -47,7 +70,7 @@ int SettingsTableWidget::getIntervalsNumber()
 
 uint64_t SettingsTableWidget::getMultiplier()
 {
-    return ui->textMultiplier->text().toULongLong();
+    return ui->multiplier->getMultiplier();
 }
 
 ACL::Data::Logarithm SettingsTableWidget::getLogarithm()
@@ -60,9 +83,4 @@ ACL::Data::Logarithm SettingsTableWidget::getLogarithm()
     {
         return ACL::Data::Logarithm::Decimal;
     }
-}
-
-SettingsTableWidget::~SettingsTableWidget()
-{
-    delete ui;
 }

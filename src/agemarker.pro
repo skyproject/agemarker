@@ -23,6 +23,8 @@ SOURCES += main.cpp \
            Widgets\elementstablewidget.cpp \
            Widgets\settingstablewidget.cpp \
            Widgets\calculationwidget.cpp \
+           Widgets\multiplierwidget.cpp \
+           Widgets\welcomewidget.cpp \
            IO\calculationdata.cpp \
            IO\results.cpp \
            data.cpp
@@ -36,6 +38,8 @@ HEADERS  += Windows\mainwindow.h \
             Widgets\elementstablewidget.h \
             Widgets\settingstablewidget.h \
             Widgets\calculationwidget.h \
+            Widgets\multiplierwidget.h \
+            Widgets\welcomewidget.h \
             IO\calculationdata.h \
             IO\results.h \
             application.h \
@@ -49,7 +53,9 @@ FORMS    += Windows\mainwindow.ui \
             Widgets\oxidestablewidget.ui \
             Widgets\elementstablewidget.ui \
             Widgets\settingstablewidget.ui \
-            Widgets\calculationwidget.ui
+            Widgets\calculationwidget.ui \
+            Widgets\multiplierwidget.ui \
+            Widgets\welcomewidget.ui
 
 
 RESOURCES += graphics.qrc

@@ -27,14 +27,14 @@ void Results::saveResults ( ACL::Data::CalculationResult r, QString filePath )
         out += "Agemarker results file\n\n";
         out += "Oxides table\n\n";
         out += "[#] [Oxide] [Content, mass %]\n";
-        for ( int x = 0; x < 53; x++ )
+        for ( int x = 0; x < OXIDES_COUNT; ++x )
         {
             out += ( QString::number ( x + 1 ) + "\t" + fillString ( OXIDES_FULL_NAMES[x], 23 ) + "\t"
                      + QString::number ( r.calculationInput.oxidesContent[x] ) + "\n" );
         }
         out += "\nElements table\n\n";
         out += "[#] [Element] [Atomic weight] [Content, mass %]\n";
-        for ( int x = 0; x < 118; x++ )
+        for ( int x = 0; x < ELEMENTS_COUNT; ++x )
         {
             out += ( QString::number ( x + 1 ) + "\t" + fillString ( ELEMENTS_FULL_NAMES[x], 12 ) + "\t"
                      + QString::number ( r.calculationInput.elementsWeight[x] ) + "\t"
@@ -53,14 +53,14 @@ void Results::saveResults ( ACL::Data::CalculationResult r, QString filePath )
         }
         out += "Atomic weights (total)\n\n";
         out += "[#] [Atomic weight]\n";
-        for ( int x = 0; x < 118; x++ )
+        for ( int x = 0; x < ELEMENTS_COUNT; ++x )
         {
             out += ( QString::number ( x + 1 ) + "\t" + QString::number ( r.atoms[x] ) + "\n" );
         }
         out += ( "\nAtomic weights (total sum):\t" + QString::number ( r.atomsSum ) + "\n\n" );
         out += "Ip section\n\n";
         out += "[#] [Ip] [Ip Squareroot] [Frequency]\n";
-        for ( int x = 0; x < iabCount; x++ )
+        for ( int x = 0; x < iabCount; ++x )
         {
             out += ( QString::number ( x + 1 ) + "\t" + stringRound ( r.ip[x], r ) + "\t"
                      + stringRound ( r.ipSqrt[x], r ) + "\t" + QString::number ( r.ipCount[x] ) + "\n" );
@@ -77,13 +77,13 @@ void Results::saveResults ( ACL::Data::CalculationResult r, QString filePath )
         out += ( "Ip interval length:\t" + stringRound ( r.ipIntervalLength, r ) + "\n\n" );
         out += ( "Ip interval length (Squareroot):\t" + stringRound ( r.ipSqrtIntervalLength, r ) + "\n\n" );
         out += "[Interval minimum] [Interval maximum] [Interval center] [Frequency]\n\n";
-        for ( int x = 0; x < r.calculationInput.intervalsNumber; x++ )
+        for ( int x = 0; x < r.calculationInput.intervalsNumber; ++x )
         {
             out += ( stringRound ( r.ipIntervalMinimum[x], r ) + "\t" + stringRound ( r.ipIntervalMaximum[x], r )
                      + "\t" + stringRound ( r.ipIntervalCenter[x], r ) + "\t" + QString::number ( r.ipIntervalCount[x] ) + "\n" );
         }
         out += ( "\n[Interval minimum (Squareroot)] [Interval maximum (Squareroot)] [Interval center (Squareroot)] [Frequency (Squareroot)]\n" );
-        for ( int x = 0; x < r.calculationInput.intervalsNumber; x++ )
+        for ( int x = 0; x < r.calculationInput.intervalsNumber; ++x )
         {
             out += ( stringRound ( r.ipSqrtIntervalMinimum[x], r ) + "\t" + stringRound ( r.ipSqrtIntervalMaximum[x], r )
                      + "\t" + stringRound ( r.ipSqrtIntervalCenter[x], r ) + "\t" + QString::number ( r.ipSqrtIntervalCount[x] ) + "\n" );

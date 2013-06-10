@@ -28,13 +28,13 @@ void CalculationData::saveUserInput ( Data::UserInput input, int calculation )
         QString out;
         out += "Agemarker Calculation Data\n\n";
         out += "Oxides\n";
-        for ( int x = 0; x < 53; x++ )
+        for ( int x = 0; x < OXIDES_COUNT; ++x )
         {
             out += QString::number ( input.oxidesContent[x] ) + "\n";
         }
         out += "\n";
         out += "Elements\n";
-        for ( int x = 0; x < 118; x++ )
+        for ( int x = 0; x < ELEMENTS_COUNT; ++x )
         {
             out += QString::number ( input.elementsWeight[x] ) + "\t"
                    + QString::number ( input.elementsContent[x] ) + "\n";
@@ -66,7 +66,7 @@ Data::UserInput CalculationData::loadUserInput ( int calculation )
     {
         QTextStream in ( &file );
         QString line;
-        for ( int x = 0; x < 186; x++ )
+        for ( int x = 0; x < 186; ++x )
         {
             line = in.readLine();
             QStringList data = line.split ( "\t" );
@@ -119,7 +119,7 @@ Data::UserInput CalculationData::loadUserInputFromResults ( QString filePath )
     {
         QTextStream in ( &file );
         QString line;
-        for ( int x = 0; x < 188; x++ )
+        for ( int x = 0; x < 188; ++x )
         {
             line = in.readLine();
             QStringList data = line.split ( "\t" );

@@ -19,11 +19,12 @@ CalculationWindow::CalculationWindow ( QWidget *parent ) :
     ui ( new Ui::CalculationWindow )
 {
     ui->setupUi ( this );
+    setAttribute ( Qt::WA_DeleteOnClose, true );
     connect ( ui->wizard, SIGNAL ( wizardFinished() ),
               this, SLOT ( wizardFinished() ) );
     OxidesTableWidget *oxides = new OxidesTableWidget();
     ElementsTableWidget *elements = new ElementsTableWidget();
-    SettingsTableWidget *settings = new SettingsTableWidget();
+    SettingsTableWidget *settings = new SettingsTableWidget ( this, oxides, elements );
     ui->wizard->wizardPages.push_back ( oxides );
     ui->wizard->wizardPages.push_back ( elements );
     ui->wizard->wizardPages.push_back ( settings );
@@ -35,12 +36,13 @@ CalculationWindow::CalculationWindow ( Data::UserInput input, QWidget *parent ) 
     ui ( new Ui::CalculationWindow )
 {
     ui->setupUi ( this );
+    setAttribute ( Qt::WA_DeleteOnClose, true );
     connect ( ui->wizard, SIGNAL ( wizardFinished() ),
               this, SLOT ( wizardFinished() ) );
-    OxidesTableWidget *oxides = new OxidesTableWidget(input.oxidesContent);
-    ElementsTableWidget *elements = new ElementsTableWidget(input.elementsContent, input.elementsWeight);
-    SettingsTableWidget *settings = new SettingsTableWidget(input.multiplier, input.decimalPrecision,
-                                                            input.intervalsNumber, input.log);
+    OxidesTableWidget *oxides = new OxidesTableWidget ( input.oxidesContent );
+    ElementsTableWidget *elements = new ElementsTableWidget ( input.elementsContent, input.elementsWeight );
+    SettingsTableWidget *settings = new SettingsTableWidget ( input.multiplier, input.decimalPrecision,
+            input.intervalsNumber, input.log, this, oxides, elements );
     ui->wizard->wizardPages.push_back ( oxides );
     ui->wizard->wizardPages.push_back ( elements );
     ui->wizard->wizardPages.push_back ( settings );

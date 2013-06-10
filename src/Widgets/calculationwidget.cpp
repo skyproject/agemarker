@@ -133,6 +133,8 @@ void CalculationWidget::removeCalculation()
                      this, SLOT ( calculationFinished ( ACL::Data::CalculationResult ) ) );
         this->core->removeCalculation();
     }
+    this->deleteLater();
+
     CalculationData::removeUserInput ( this->calculationId );
 
     animateOpacity ( 1.0, 0.0, 0.01 );
