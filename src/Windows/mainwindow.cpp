@@ -48,8 +48,6 @@ MainWindow::MainWindow ( QWidget *parent ) :
     SUL::Structs::Application currentApp;
     currentApp.installedVersion = QString ( APP_PRODUCTVERSION_STR );
     currentApp.updateXmlUrl = QUrl ( "http://www.skyproject.org/programs/agemarker/xmlupdate.xml" );
-    currentApp.updateFilesXmlUrl = QUrl ( "http://www.skyproject.org/programs/agemarker/xmlupdatefiles.xml" );
-    currentApp.updateTasksXmlUrl = QUrl ( "http://www.skyproject.org/programs/agemarker/xmlupdatetasks.xml" );
     SUL::SoftwareUpdate *su = new SUL::SoftwareUpdate ( currentApp );
     connect ( su, SIGNAL ( finished() ),
               this, SLOT ( updateCheckFinished() ) );
