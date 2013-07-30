@@ -28,8 +28,15 @@ MultiplierWidget::~MultiplierWidget()
 
 void MultiplierWidget::setMultiplier()
 {
-    uint64_t multiplier = round ( this->getCalculationsNumber() / this->atomNorSum );
-    ui->textMultiplier->setText ( QString::number ( multiplier ) );
+    if ( ui->textCalculations->text() != "" )
+    {
+        uint64_t multiplier = round ( this->getCalculationsNumber() / this->atomNorSum );
+        ui->textMultiplier->setText ( QString::number ( multiplier ) );
+    }
+    else
+    {
+        ui->textMultiplier->setText ( "" );
+    }
 }
 
 void MultiplierWidget::setMultiplier ( uint64_t multiplier )
@@ -44,8 +51,15 @@ uint64_t MultiplierWidget::getMultiplier()
 
 void MultiplierWidget::setCalculationsNumber()
 {
-    uint64_t numberOfCalculations = round ( this->atomNorSum * this->getMultiplier() );
-    ui->textCalculations->setText ( QString::number ( numberOfCalculations ) );
+    if ( ui->textMultiplier->text() != "" )
+    {
+        uint64_t numberOfCalculations = round ( this->atomNorSum * this->getMultiplier() );
+        ui->textCalculations->setText ( QString::number ( numberOfCalculations ) );
+    }
+    else
+    {
+        ui->textCalculations->setText ( "" );
+    }
 }
 
 uint64_t MultiplierWidget::getCalculationsNumber()
@@ -227,5 +241,9 @@ void MultiplierWidget::updateInputData ( std::vector<double> oxidesContent,
     {
         double nor = ( elementsContent[x] / elementsWeight[x] );
         this->atomNorSum += nor;
+    }
+    if ( this->getMultiplier() != 0 )
+    {
+        setCalculationsNumber();
     }
 }

@@ -52,7 +52,7 @@ MainWindow::MainWindow ( QWidget *parent ) :
     connect ( su, SIGNAL ( finished() ),
               this, SLOT ( updateCheckFinished() ) );
 
-    ui->calculationLayout->layout()->setAlignment ( Qt::AlignTop );
+    ui->calculationsLayout->layout()->setAlignment ( Qt::AlignTop );
     loadCalculations();
 }
 
@@ -81,7 +81,7 @@ void MainWindow::loadCalculations()
                       this, SLOT ( calculationFinished() ) );
             connect ( cw, SIGNAL ( removed() ),
                       this, SLOT ( calculationRemoved() ) );
-            ui->calculationLayout->layout()->addWidget ( cw );
+            ui->calculationsLayout->layout()->addWidget ( cw );
             this->calculations = id;
             if ( this->currentCalculation == -1 )
             {
@@ -93,7 +93,7 @@ void MainWindow::loadCalculations()
     else
     {
         WelcomeWidget *ww = new WelcomeWidget ( this );
-        ui->calculationLayout->layout()->addWidget ( ww );
+        ui->calculationsLayout->layout()->addWidget ( ww );
     }
 }
 
@@ -142,7 +142,7 @@ void MainWindow::saveCalculationInput ( Data::UserInput input )
     QList<WelcomeWidget *> welcomeWidgetList = this->findChildren<WelcomeWidget *>();
     if ( welcomeWidgetList.size() != 0 )
     {
-        ui->calculationLayout->layout()->removeWidget ( welcomeWidgetList[0] );
+        ui->calculationsLayout->layout()->removeWidget ( welcomeWidgetList[0] );
         delete welcomeWidgetList[0];
     }
     CalculationWidget *cw = new CalculationWidget ( input, this->calculations, this );
@@ -150,7 +150,7 @@ void MainWindow::saveCalculationInput ( Data::UserInput input )
               this, SLOT ( calculationFinished() ) );
     connect ( cw, SIGNAL ( removed() ),
               this, SLOT ( calculationRemoved() ) );
-    ui->calculationLayout->layout()->addWidget ( cw );
+    ui->calculationsLayout->layout()->addWidget ( cw );
     if ( this->currentCalculation == -1 )
     {
         this->currentCalculation = this->calculations;
@@ -171,8 +171,8 @@ void MainWindow::calculationRemoved()
     {
         startNextCalculation();
     }
-    ui->calculationLayout->layout()->removeWidget ( cw );
-    if ( ui->calculationLayout->layout()->count() == 0 )
+    ui->calculationsLayout->layout()->removeWidget ( cw );
+    if ( ui->calculationsLayout->layout()->count() == 0 )
     {
         this->calculations = 0;
     }
@@ -204,12 +204,12 @@ void MainWindow::removeAllCalculations()
                                  "Are you sure you want to remove all calculations from the calculations queue?",
                                  QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
     {
-        if ( ui->calculationLayout->layout() != NULL )
+        if ( ui->calculationsLayout->layout() != NULL )
         {
             QList<CalculationWidget *> calculations = this->findChildren<CalculationWidget *>();
             foreach ( CalculationWidget * calculation, calculations )
             {
-                ui->calculationLayout->layout()->removeWidget ( calculation );
+                ui->calculationsLayout->layout()->removeWidget ( calculation );
                 delete calculation;
             }
         }
@@ -227,7 +227,7 @@ void MainWindow::removeFinishedCalculations()
         {
             if ( calculation->status == Data::CalculationStatus::Finished )
             {
-                ui->calculationLayout->layout()->removeWidget ( calculation );
+                ui->calculationsLayout->layout()->removeWidget ( calculation );
                 delete calculation;
             }
         }

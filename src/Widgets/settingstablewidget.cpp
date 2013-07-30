@@ -54,7 +54,6 @@ void SettingsTableWidget::showEvent ( QShowEvent *e )
     ui->multiplier->updateInputData ( this->oxides->getOxidesContent(),
                                       this->elements->getElementsContent(),
                                       this->elements->getElementsWeights() );
-    ui->multiplier->setCalculationsNumber();
     QWidget::showEvent ( e );
 }
 
