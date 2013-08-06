@@ -478,6 +478,9 @@
        <height>25</height>
       </size>
      </property>
+     <property name="toolTip">
+      <string>Pause</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -487,8 +490,8 @@
      </property>
      <property name="iconSize">
       <size>
-       <width>12</width>
-       <height>12</height>
+       <width>13</width>
+       <height>13</height>
       </size>
      </property>
      <property name="flat">
@@ -599,6 +602,9 @@
        <height>25</height>
       </size>
      </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Remove&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -608,8 +614,8 @@
      </property>
      <property name="iconSize">
       <size>
-       <width>12</width>
-       <height>12</height>
+       <width>13</width>
+       <height>13</height>
       </size>
      </property>
      <property name="flat">

@@ -6,5 +6,6 @@
         <file>glyphicons/pause.ico</file>
         <file>glyphicons/play.ico</file>
         <file>glyphicons/remove.ico</file>
+        <file>glyphicons/open.ico</file>
     </qresource>
 </RCC>

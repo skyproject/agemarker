@@ -7,10 +7,12 @@
  */
 
 #include <QGraphicsOpacityEffect>
+#include <QDesktopServices>
 #include <QFileInfo>
 #include <QDateTime>
 #include <QSettings>
 #include <QPoint>
+#include <QUrl>
 
 #include "Widgets/calculationwidget.h"
 #include "ui_calculationwidget.h"
@@ -94,14 +96,18 @@ void CalculationWidget::switchCalculationStatus()
         case Data::CalculationStatus::Running:
             ui->buttonPause->setVisible ( true );
             ui->buttonPause->setIcon ( QIcon ( ":/new/glyphicons/pause.ico" ) );
+            ui->buttonPause->setToolTip ( "Pause" );
             ui->labelStatus->setText ( "Running" );
             break;
         case Data::CalculationStatus::Paused:
             ui->buttonPause->setIcon ( QIcon ( ":/new/glyphicons/play.ico" ) );
+            ui->buttonPause->setToolTip ( "Resume" );
             ui->labelStatus->setText ( "Paused" );
             break;
         case Data::CalculationStatus::Finished:
-            ui->buttonPause->setVisible ( false );
+            /* after the calculation is finished, "buttonPause" will open the result file */
+            ui->buttonPause->setIcon ( QIcon ( ":/new/glyphicons/open.ico" ) );
+            ui->buttonPause->setToolTip ( "View results" );
             ui->labelStatus->setText ( "Finished" );
             ui->labelFinishedAt->setText ( "Finished at " + QDateTime::currentDateTime().toString ( "MM/dd/yyyy hh:mm:ss" ) );
             break;
@@ -121,6 +127,10 @@ void CalculationWidget::pauseCalculation()
         this->core->resumeCalculation();
         this->status = Data::CalculationStatus::Running;
         switchCalculationStatus();
+    }
+    else
+    {
+        QDesktopServices::openUrl ( QUrl ( ui->labelFile->toolTip() ) );
     }
 }
 

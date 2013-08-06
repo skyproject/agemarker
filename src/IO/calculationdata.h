@@ -6,8 +6,8 @@
  * For full terms see LICENSE file.
  */
 
-#ifndef CALCULATIONWRITER_H
-#define CALCULATIONWRITER_H
+#ifndef CALCULATIONDATA_H
+#define CALCULATIONDATA_H
 
 #include "data.h"
 
@@ -20,4 +20,4 @@ class CalculationData
         static Data::UserInput loadUserInputFromResults ( QString filePath );
 };
 
-#endif // CALCULATIONWRITER_H
+#endif // CALCULATIONDATA_H
