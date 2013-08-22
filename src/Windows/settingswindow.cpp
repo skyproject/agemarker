@@ -9,17 +9,17 @@
 #include "Windows/settingswindow.h"
 #include "ui_settingswindow.h"
 
-SettingsWindow::SettingsWindow ( QWidget *parent ) :
-    QDialog ( parent ),
-    ui ( new Ui::SettingsWindow )
+SettingsWindow::SettingsWindow(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::SettingsWindow)
 {
-    ui->setupUi ( this );
-    setAttribute ( Qt::WA_DeleteOnClose, true );
-    connect ( ui->buttonApply, SIGNAL ( clicked() ),
-              this, SLOT ( applySettings() ) );
-    connect ( ui->buttonClose, SIGNAL ( clicked() ),
-              this, SLOT ( close() ) );
-    ui->numThreads->setValue ( this->s.value ( "Threads", 1 ).toInt() );
+    ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose, true);
+    connect(ui->buttonApply, SIGNAL(clicked()),
+            this, SLOT(applySettings()));
+    connect(ui->buttonClose, SIGNAL(clicked()),
+            this, SLOT(close()));
+    ui->numThreads->setValue(this->s.value("Threads", 1).toInt());
 }
 
 SettingsWindow::~SettingsWindow()
@@ -29,5 +29,5 @@ SettingsWindow::~SettingsWindow()
 
 void SettingsWindow::applySettings()
 {
-    this->s.setValue ( "Threads", ui->numThreads->value() );
+    this->s.setValue("Threads", ui->numThreads->value());
 }

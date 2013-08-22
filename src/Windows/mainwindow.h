@@ -25,7 +25,7 @@ class MainWindow : public QMainWindow
         Q_OBJECT
 
     public:
-        explicit MainWindow ( QWidget *parent = 0 );
+        explicit MainWindow(QWidget *parent = 0);
         ~MainWindow();
 
     private slots:
@@ -37,7 +37,7 @@ class MainWindow : public QMainWindow
         void calculationFinished();
         void removeAllCalculations();
         void removeFinishedCalculations();
-        void saveCalculationInput ( Data::UserInput input );
+        void saveCalculationInput(Data::UserInput input);
         void updateCheckFinished();
 
     private:

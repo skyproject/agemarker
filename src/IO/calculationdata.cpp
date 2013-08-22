@@ -14,36 +14,36 @@
 
 #include "IO\calculationdata.h"
 
-void CalculationData::saveUserInput ( Data::UserInput input, int calculation )
+void CalculationData::saveUserInput(Data::UserInput input, int calculation)
 {
-    QString folder = ( QStandardPaths::writableLocation ( QStandardPaths::DataLocation )
-                       + "/Calculations" );
-    if ( QDir ( folder ).exists() == false )
+    QString folder = (QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+                      + "/Calculations");
+    if (QDir(folder).exists() == false)
     {
-        QDir().mkpath ( folder );
+        QDir().mkpath(folder);
     }
-    QFile file ( folder + "/" + QString::number ( calculation ) + ".txt" );
-    if ( file.open ( QIODevice::WriteOnly | QFile::Text ) )
+    QFile file(folder + "/" + QString::number(calculation) + ".txt");
+    if (file.open(QIODevice::WriteOnly | QFile::Text))
     {
         QString out;
         out += "Agemarker Calculation Data\n\n";
         out += "Oxides\n";
-        for ( int x = 0; x < OXIDES_COUNT; ++x )
+        for (int x = 0; x < OXIDES_COUNT; ++x)
         {
-            out += QString::number ( input.oxidesContent[x] ) + "\n";
+            out += QString::number(input.oxidesContent[x]) + "\n";
         }
         out += "\n";
         out += "Elements\n";
-        for ( int x = 0; x < ELEMENTS_COUNT; ++x )
+        for (int x = 0; x < ELEMENTS_COUNT; ++x)
         {
-            out += QString::number ( input.elementsWeight[x] ) + "\t"
-                   + QString::number ( input.elementsContent[x] ) + "\n";
+            out += QString::number(input.elementsWeight[x]) + "\t"
+                   + QString::number(input.elementsContent[x]) + "\n";
         }
         out += "\n";
-        out += QString::number ( input.multiplier ) + "\n\n";
-        out += QString::number ( input.decimalPrecision ) + "\n\n";
-        out += QString::number ( input.intervalsNumber ) + "\n\n";
-        if ( input.log == ACL::Data::Logarithm::Natural )
+        out += QString::number(input.multiplier) + "\n\n";
+        out += QString::number(input.decimalPrecision) + "\n\n";
+        out += QString::number(input.intervalsNumber) + "\n\n";
+        if (input.log == ACL::Data::Logarithm::Natural)
         {
             out += "Natural\n\n";
         }
@@ -51,49 +51,49 @@ void CalculationData::saveUserInput ( Data::UserInput input, int calculation )
         {
             out += "Decimal\n\n";
         }
-        out += QString ( input.resultsFilePath );
-        QTextStream stream ( &file );
+        out += QString(input.resultsFilePath);
+        QTextStream stream(&file);
         stream << out;
     }
 }
 
-Data::UserInput CalculationData::loadUserInput ( int calculation )
+Data::UserInput CalculationData::loadUserInput(int calculation)
 {
     Data::UserInput input;
-    QFile file ( QStandardPaths::writableLocation ( QStandardPaths::DataLocation )
-                 + "/Calculations/" + QString::number ( calculation ) + ".txt" );
-    if ( file.open ( QIODevice::ReadOnly | QFile::Text ) )
+    QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+               + "/Calculations/" + QString::number(calculation) + ".txt");
+    if (file.open(QIODevice::ReadOnly | QFile::Text))
     {
-        QTextStream in ( &file );
+        QTextStream in(&file);
         QString line;
-        for ( int x = 0; x < 186; ++x )
+        for (int x = 0; x < 186; ++x)
         {
             line = in.readLine();
-            QStringList data = line.split ( "\t" );
-            if ( x >= 3 && x < 56 )
+            QStringList data = line.split("\t");
+            if (x >= 3 && x < 56)
             {
-                input.oxidesContent.push_back ( data[0].toDouble() );
+                input.oxidesContent.push_back(data[0].toDouble());
             }
-            else if ( x >= 58 && x < 176 )
+            else if (x >= 58 && x < 176)
             {
-                input.elementsWeight.push_back ( data[0].toDouble() );
-                input.elementsContent.push_back ( data[1].toDouble() );
+                input.elementsWeight.push_back(data[0].toDouble());
+                input.elementsContent.push_back(data[1].toDouble());
             }
-            else if ( x == 177 )
+            else if (x == 177)
             {
                 input.multiplier = data[0].toLongLong();
             }
-            else if ( x == 179 )
+            else if (x == 179)
             {
                 input.decimalPrecision = data[0].toInt();
             }
-            else if ( x == 181 )
+            else if (x == 181)
             {
                 input.intervalsNumber = data[0].toInt();
             }
-            else if ( x == 183 )
+            else if (x == 183)
             {
-                if ( data[0] == "Natural" )
+                if (data[0] == "Natural")
                 {
                     input.log = ACL::Data::Logarithm::Natural;
                 }
@@ -102,7 +102,7 @@ Data::UserInput CalculationData::loadUserInput ( int calculation )
                     input.log = ACL::Data::Logarithm::Decimal;
                 }
             }
-            else if ( x == 185 )
+            else if (x == 185)
             {
                 input.resultsFilePath = data[0];
             }
@@ -111,42 +111,42 @@ Data::UserInput CalculationData::loadUserInput ( int calculation )
     return input;
 }
 
-Data::UserInput CalculationData::loadUserInputFromResults ( QString filePath )
+Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
 {
     Data::UserInput input;
-    QFile file ( filePath );
-    if ( file.open ( QIODevice::ReadOnly | QFile::Text ) )
+    QFile file(filePath);
+    if (file.open(QIODevice::ReadOnly | QFile::Text))
     {
-        QTextStream in ( &file );
+        QTextStream in(&file);
         QString line;
-        for ( int x = 0; x < 188; ++x )
+        for (int x = 0; x < 188; ++x)
         {
             line = in.readLine();
-            QStringList data = line.split ( "\t" );
-            if ( x >= 5 && x < 58 )
+            QStringList data = line.split("\t");
+            if (x >= 5 && x < 58)
             {
-                input.oxidesContent.push_back ( data[2].toDouble() );
+                input.oxidesContent.push_back(data[2].toDouble());
             }
-            else if ( x >= 62 && x < 180 )
+            else if (x >= 62 && x < 180)
             {
-                input.elementsWeight.push_back ( data[2].toDouble() );
-                input.elementsContent.push_back ( data[3].toDouble() );
+                input.elementsWeight.push_back(data[2].toDouble());
+                input.elementsContent.push_back(data[3].toDouble());
             }
-            else if ( x == 181 )
+            else if (x == 181)
             {
                 input.multiplier = data[1].toLongLong();
             }
-            else if ( x == 183 )
+            else if (x == 183)
             {
                 input.decimalPrecision = data[1].toInt();
             }
-            else if ( x == 185 )
+            else if (x == 185)
             {
                 input.intervalsNumber = data[1].toInt();
             }
-            else if ( x == 187 )
+            else if (x == 187)
             {
-                if ( data[1] == "Natural" )
+                if (data[1] == "Natural")
                 {
                     input.log = ACL::Data::Logarithm::Natural;
                 }
@@ -160,9 +160,9 @@ Data::UserInput CalculationData::loadUserInputFromResults ( QString filePath )
     return input;
 }
 
-void CalculationData::removeUserInput ( int calculation )
+void CalculationData::removeUserInput(int calculation)
 {
-    QFile file ( QStandardPaths::writableLocation ( QStandardPaths::DataLocation )
-                 + "/Calculations/" + QString::number ( calculation ) + ".txt" );
+    QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+               + "/Calculations/" + QString::number(calculation) + ".txt");
     file.remove();
 }

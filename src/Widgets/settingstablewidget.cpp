@@ -9,15 +9,15 @@
 #include "Widgets\settingstablewidget.h"
 #include "ui_settingstablewidget.h"
 
-SettingsTableWidget::SettingsTableWidget ( QWidget *parent ,
+SettingsTableWidget::SettingsTableWidget(QWidget *parent ,
         OxidesTableWidget *oxidesPtr,
-        ElementsTableWidget *elementsPtr ) :
-    QWidget ( parent ),
-    ui ( new Ui::SettingsTableWidget )
+        ElementsTableWidget *elementsPtr) :
+    QWidget(parent),
+    ui(new Ui::SettingsTableWidget)
 {
-    ui->setupUi ( this );
-    ui->multiplier->updateInputData ( oxidesPtr->getOxidesContent(), elementsPtr->getElementsContent(),
-                                      elementsPtr->getElementsContent() );
+    ui->setupUi(this);
+    ui->multiplier->updateInputData(oxidesPtr->getOxidesContent(), elementsPtr->getElementsContent(),
+                                    elementsPtr->getElementsContent());
     this->oxides = oxidesPtr;
     this->elements = elementsPtr;
 }
@@ -27,34 +27,34 @@ SettingsTableWidget::~SettingsTableWidget()
     delete ui;
 }
 
-SettingsTableWidget::SettingsTableWidget ( uint64_t multiplier, int precision, int intervals,
+SettingsTableWidget::SettingsTableWidget(uint64_t multiplier, int precision, int intervals,
         ACL::Data::Logarithm log, QWidget *parent,
-        OxidesTableWidget *oxidesPtr, ElementsTableWidget *elementsPtr ) :
-    QWidget ( parent ),
-    ui ( new Ui::SettingsTableWidget )
+        OxidesTableWidget *oxidesPtr, ElementsTableWidget *elementsPtr) :
+    QWidget(parent),
+    ui(new Ui::SettingsTableWidget)
 {
-    ui->setupUi ( this );
-    ui->multiplier->setMultiplier ( multiplier );
-    ui->numPrecision->setValue ( precision );
-    ui->numIntervalsNumber->setValue ( intervals );
-    if ( log == ACL::Data::Logarithm::Natural )
+    ui->setupUi(this);
+    ui->multiplier->setMultiplier(multiplier);
+    ui->numPrecision->setValue(precision);
+    ui->numIntervalsNumber->setValue(intervals);
+    if (log == ACL::Data::Logarithm::Natural)
     {
-        ui->boxLogarithm->setCurrentIndex ( 0 );
+        ui->boxLogarithm->setCurrentIndex(0);
     }
     else
     {
-        ui->boxLogarithm->setCurrentIndex ( 1 );
+        ui->boxLogarithm->setCurrentIndex(1);
     }
     this->oxides = oxidesPtr;
     this->elements = elementsPtr;
 }
 
-void SettingsTableWidget::showEvent ( QShowEvent *e )
+void SettingsTableWidget::showEvent(QShowEvent *e)
 {
-    ui->multiplier->updateInputData ( this->oxides->getOxidesContent(),
-                                      this->elements->getElementsContent(),
-                                      this->elements->getElementsWeights() );
-    QWidget::showEvent ( e );
+    ui->multiplier->updateInputData(this->oxides->getOxidesContent(),
+                                    this->elements->getElementsContent(),
+                                    this->elements->getElementsWeights());
+    QWidget::showEvent(e);
 }
 
 int SettingsTableWidget::getPrecision()
@@ -74,7 +74,7 @@ uint64_t SettingsTableWidget::getMultiplier()
 
 ACL::Data::Logarithm SettingsTableWidget::getLogarithm()
 {
-    if ( ui->boxLogarithm->currentText() == "Natural" )
+    if (ui->boxLogarithm->currentText() == "Natural")
     {
         return ACL::Data::Logarithm::Natural;
     }

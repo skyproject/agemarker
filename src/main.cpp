@@ -12,16 +12,16 @@
 #include "Windows/mainwindow.h"
 #include "application.h"
 
-int main ( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-    QApplication a ( argc, argv );
+    QApplication a(argc, argv);
 
-    QCoreApplication::setOrganizationName ( APP_COMPANYNAME_STR );
-    QCoreApplication::setOrganizationDomain ( APP_COMPANYNAME_STR );
-    QCoreApplication::setApplicationName ( APP_PRODUCTNAME_STR );
+    QCoreApplication::setOrganizationName(APP_COMPANYNAME_STR);
+    QCoreApplication::setOrganizationDomain(APP_COMPANYNAME_STR);
+    QCoreApplication::setApplicationName(APP_PRODUCTNAME_STR);
 
-    QFontDatabase::addApplicationFont ( "OpenSans-Bold.ttf" );
-    QFontDatabase::addApplicationFont ( "OpenSans-Regular.ttf" );
+    QFontDatabase::addApplicationFont("OpenSans-Bold.ttf");
+    QFontDatabase::addApplicationFont("OpenSans-Regular.ttf");
 
     MainWindow w;
     w.show();

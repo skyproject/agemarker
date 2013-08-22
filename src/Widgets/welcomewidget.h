@@ -21,7 +21,7 @@ class WelcomeWidget : public QWidget
         Q_OBJECT
 
     public:
-        explicit WelcomeWidget ( QWidget *parent = 0 );
+        explicit WelcomeWidget(QWidget *parent = 0);
         ~WelcomeWidget();
 
     private:

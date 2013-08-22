@@ -14,10 +14,10 @@
 class CalculationData
 {
     public:
-        static void saveUserInput ( Data::UserInput input, int calculation );
-        static void removeUserInput ( int calculation );
-        static Data::UserInput loadUserInput ( int calculation );
-        static Data::UserInput loadUserInputFromResults ( QString filePath );
+        static void saveUserInput(Data::UserInput input, int calculation);
+        static void removeUserInput(int calculation);
+        static Data::UserInput loadUserInput(int calculation);
+        static Data::UserInput loadUserInputFromResults(QString filePath);
 };
 
 #endif // CALCULATIONDATA_H

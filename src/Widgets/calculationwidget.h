@@ -26,7 +26,7 @@ class CalculationWidget : public QWidget
         Q_OBJECT
 
     public:
-        CalculationWidget ( Data::UserInput input, int calculation, QWidget *parent = 0 );
+        CalculationWidget(Data::UserInput input, int calculation, QWidget *parent = 0);
         ~CalculationWidget();
         void start();
         int calculationId;
@@ -41,10 +41,10 @@ class CalculationWidget : public QWidget
 
     private slots:
         void pauseCalculation();
-        void calculationFinished ( ACL::Data::CalculationResult result );
+        void calculationFinished(ACL::Data::CalculationResult result);
 
     private:
-        void animateOpacity ( double from, double to, double step );
+        void animateOpacity(double from, double to, double step);
         void switchCalculationStatus();
         bool isMoveAnimation = false;
         Ui::CalculationWidget *ui;

@@ -21,15 +21,15 @@ class ElementsTableWidget : public QWidget
         Q_OBJECT
 
     public:
-        explicit ElementsTableWidget ( QWidget *parent = 0 );
-        ElementsTableWidget ( std::vector<double> contents,
-                              std::vector<double> weights, QWidget *parent = 0 );
+        explicit ElementsTableWidget(QWidget *parent = 0);
+        ElementsTableWidget(std::vector<double> contents,
+                            std::vector<double> weights, QWidget *parent = 0);
         ~ElementsTableWidget();
         std::vector<double> getElementsWeights();
         std::vector<double> getElementsContent();
 
     private:
-        void fillTable ();
+        void fillTable();
         Ui::ElementsTableWidget *ui;
 };
 

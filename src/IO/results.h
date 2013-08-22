@@ -16,11 +16,11 @@
 class Results
 {
     public:
-        static void saveResults ( ACL::Data::CalculationResult result, QString filePath );
+        static void saveResults(ACL::Data::CalculationResult result, QString filePath);
 
     private:
-        static QString stringRound ( double source, ACL::Data::CalculationResult r );
-        static QString fillString ( QString source, int newLength );
+        static QString stringRound(double source, ACL::Data::CalculationResult r);
+        static QString fillString(QString source, int newLength);
 };
 
 #endif // RESULTS_H

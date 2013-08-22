@@ -25,12 +25,12 @@ class CalculationWindow : public QDialog
         Q_OBJECT
 
     public:
-        explicit CalculationWindow ( QWidget *parent = 0 );
-        CalculationWindow ( Data::UserInput input, QWidget *parent = 0 );
+        explicit CalculationWindow(QWidget *parent = 0);
+        CalculationWindow(Data::UserInput input, QWidget *parent = 0);
         ~CalculationWindow();
 
     signals:
-        void closed ( Data::UserInput input );
+        void closed(Data::UserInput input);
 
     private slots:
         void wizardFinished();

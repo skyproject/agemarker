@@ -24,35 +24,35 @@
 
 #include "sul_softwareupdate.h"
 
-MainWindow::MainWindow ( QWidget *parent ) :
-    QMainWindow ( parent ),
-    ui ( new Ui::MainWindow )
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
-    ui->setupUi ( this );
+    ui->setupUi(this);
 
-    connect ( ui->actionAddCalculation, SIGNAL ( triggered() ),
-              this, SLOT ( addNewCalculation() ) );
-    connect ( ui->actionLoadCalculation, SIGNAL ( triggered() ),
-              this, SLOT ( loadFromResults() ) );
-    connect ( ui->actionAbout, SIGNAL ( triggered() ),
-              this, SLOT ( showAbout() ) );
-    connect ( ui->actionSettings, SIGNAL ( triggered() ),
-              this, SLOT ( showSettings() ) );
-    connect ( ui->actionRemoveAll, SIGNAL ( triggered() ),
-              this, SLOT ( removeAllCalculations() ) );
-    connect ( ui->actionRemoveFinished, SIGNAL ( triggered() ),
-              this, SLOT ( removeFinishedCalculations() ) );
-    connect ( ui->actionExit, SIGNAL ( triggered() ),
-              QApplication::instance(), SLOT ( quit() ) );
+    connect(ui->actionAddCalculation, SIGNAL(triggered()),
+            this, SLOT(addNewCalculation()));
+    connect(ui->actionLoadCalculation, SIGNAL(triggered()),
+            this, SLOT(loadFromResults()));
+    connect(ui->actionAbout, SIGNAL(triggered()),
+            this, SLOT(showAbout()));
+    connect(ui->actionSettings, SIGNAL(triggered()),
+            this, SLOT(showSettings()));
+    connect(ui->actionRemoveAll, SIGNAL(triggered()),
+            this, SLOT(removeAllCalculations()));
+    connect(ui->actionRemoveFinished, SIGNAL(triggered()),
+            this, SLOT(removeFinishedCalculations()));
+    connect(ui->actionExit, SIGNAL(triggered()),
+            QApplication::instance(), SLOT(quit()));
 
     SUL::Structs::Application currentApp;
-    currentApp.installedVersion = QString ( APP_PRODUCTVERSION_STR );
-    currentApp.updateXmlUrl = QUrl ( "http://www.skyproject.org/programs/agemarker/xmlupdate.xml" );
-    SUL::SoftwareUpdate *su = new SUL::SoftwareUpdate ( currentApp );
-    connect ( su, SIGNAL ( finished() ),
-              this, SLOT ( updateCheckFinished() ) );
+    currentApp.installedVersion = QString(APP_PRODUCTVERSION_STR);
+    currentApp.updateXmlUrl = QUrl("http://www.skyproject.org/static/programs/agemarker/xmlupdate.xml");
+    SUL::SoftwareUpdate *su = new SUL::SoftwareUpdate(currentApp);
+    connect(su, SIGNAL(finished()),
+            this, SLOT(updateCheckFinished()));
 
-    ui->calculationsLayout->layout()->setAlignment ( Qt::AlignTop );
+    ui->calculationsLayout->layout()->setAlignment(Qt::AlignTop);
     loadCalculations();
 }
 
@@ -69,21 +69,21 @@ void MainWindow::updateCheckFinished()
 
 void MainWindow::loadCalculations()
 {
-    QStringList files = QDir ( QStandardPaths::writableLocation ( QStandardPaths::DataLocation )
-                               + "/Calculations" ).entryList ( QStringList ( "*.txt" ), QDir::Files, QDir::Name );
-    if ( files.size() != 0 )
+    QStringList files = QDir(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+                             + "/Calculations").entryList(QStringList("*.txt"), QDir::Files, QDir::Name);
+    if (files.size() != 0)
     {
-        foreach ( QString file, files )
+        foreach(QString file, files)
         {
-            int id = file.split ( "." ).at ( 0 ).toInt();
-            CalculationWidget *cw = new CalculationWidget ( CalculationData::loadUserInput ( id ), id, this );
-            connect ( cw, SIGNAL ( finished() ),
-                      this, SLOT ( calculationFinished() ) );
-            connect ( cw, SIGNAL ( removed() ),
-                      this, SLOT ( calculationRemoved() ) );
-            ui->calculationsLayout->layout()->addWidget ( cw );
+            int id = file.split(".").at(0).toInt();
+            CalculationWidget *cw = new CalculationWidget(CalculationData::loadUserInput(id), id, this);
+            connect(cw, SIGNAL(finished()),
+                    this, SLOT(calculationFinished()));
+            connect(cw, SIGNAL(removed()),
+                    this, SLOT(calculationRemoved()));
+            ui->calculationsLayout->layout()->addWidget(cw);
             this->calculations = id;
-            if ( this->currentCalculation == -1 )
+            if (this->currentCalculation == -1)
             {
                 this->currentCalculation = id;
                 cw->start();
@@ -92,66 +92,66 @@ void MainWindow::loadCalculations()
     }
     else
     {
-        WelcomeWidget *ww = new WelcomeWidget ( this );
-        ui->calculationsLayout->layout()->addWidget ( ww );
+        WelcomeWidget *ww = new WelcomeWidget(this);
+        ui->calculationsLayout->layout()->addWidget(ww);
     }
 }
 
 void MainWindow::showAbout()
 {
-    AboutWindow *a = new AboutWindow ( this );
+    AboutWindow *a = new AboutWindow(this);
     a->show();
 }
 
 void MainWindow::showSettings()
 {
-    SettingsWindow *s = new SettingsWindow ( this );
+    SettingsWindow *s = new SettingsWindow(this);
     s->show();
 }
 
 void MainWindow::loadFromResults()
 {
-    QFileDialog *fd = new QFileDialog ( this, tr ( "Select results file" ) );
-    fd->setDefaultSuffix ( ".txt" );
-    fd->setNameFilter ( "Text Documents (*.txt)" );
-    fd->setAcceptMode ( QFileDialog::AcceptOpen );
-    if ( fd->exec() == true )
+    QFileDialog *fd = new QFileDialog(this, tr("Select results file"));
+    fd->setDefaultSuffix(".txt");
+    fd->setNameFilter("Text Documents (*.txt)");
+    fd->setAcceptMode(QFileDialog::AcceptOpen);
+    if (fd->exec() == true)
     {
-        Data::UserInput input = CalculationData::loadUserInputFromResults ( fd->selectedFiles().at ( 0 ) );
-        input.resultsFilePath = fd->selectedFiles().at ( 0 );
-        this->wizard = new CalculationWindow ( input );
-        this->wizard->setWindowFlags ( Qt::Window );
-        connect ( this->wizard, SIGNAL ( closed ( Data::UserInput ) ),
-                  this, SLOT ( saveCalculationInput ( Data::UserInput ) ) );
+        Data::UserInput input = CalculationData::loadUserInputFromResults(fd->selectedFiles().at(0));
+        input.resultsFilePath = fd->selectedFiles().at(0);
+        this->wizard = new CalculationWindow(input);
+        this->wizard->setWindowFlags(Qt::Window);
+        connect(this->wizard, SIGNAL(closed(Data::UserInput)),
+                this, SLOT(saveCalculationInput(Data::UserInput)));
         this->wizard->show();
     }
 }
 
 void MainWindow::addNewCalculation()
 {
-    this->wizard = new CalculationWindow ( this );
-    this->wizard->setWindowFlags ( Qt::Window );
-    connect ( this->wizard, SIGNAL ( closed ( Data::UserInput ) ),
-              this, SLOT ( saveCalculationInput ( Data::UserInput ) ) );
+    this->wizard = new CalculationWindow(this);
+    this->wizard->setWindowFlags(Qt::Window);
+    connect(this->wizard, SIGNAL(closed(Data::UserInput)),
+            this, SLOT(saveCalculationInput(Data::UserInput)));
     this->wizard->show();
 }
 
-void MainWindow::saveCalculationInput ( Data::UserInput input )
+void MainWindow::saveCalculationInput(Data::UserInput input)
 {
     this->wizard->close();
     QList<WelcomeWidget *> welcomeWidgetList = this->findChildren<WelcomeWidget *>();
-    if ( welcomeWidgetList.size() != 0 )
+    if (welcomeWidgetList.size() != 0)
     {
-        ui->calculationsLayout->layout()->removeWidget ( welcomeWidgetList[0] );
+        ui->calculationsLayout->layout()->removeWidget(welcomeWidgetList[0]);
         delete welcomeWidgetList[0];
     }
-    CalculationWidget *cw = new CalculationWidget ( input, this->calculations, this );
-    connect ( cw, SIGNAL ( finished() ),
-              this, SLOT ( calculationFinished() ) );
-    connect ( cw, SIGNAL ( removed() ),
-              this, SLOT ( calculationRemoved() ) );
-    ui->calculationsLayout->layout()->addWidget ( cw );
-    if ( this->currentCalculation == -1 )
+    CalculationWidget *cw = new CalculationWidget(input, this->calculations, this);
+    connect(cw, SIGNAL(finished()),
+            this, SLOT(calculationFinished()));
+    connect(cw, SIGNAL(removed()),
+            this, SLOT(calculationRemoved()));
+    ui->calculationsLayout->layout()->addWidget(cw);
+    if (this->currentCalculation == -1)
     {
         this->currentCalculation = this->calculations;
         cw->start();
@@ -161,18 +161,18 @@ void MainWindow::saveCalculationInput ( Data::UserInput input )
 
 void MainWindow::calculationRemoved()
 {
-    CalculationWidget *cw = qobject_cast<CalculationWidget *> ( sender() );
-    if ( cw->calculationId == this->currentCalculation )
+    CalculationWidget *cw = qobject_cast<CalculationWidget *> (sender());
+    if (cw->calculationId == this->currentCalculation)
     {
         this->currentCalculation = -1;
     }
-    if ( cw->status == Data::CalculationStatus::Running || cw->status ==
-         Data::CalculationStatus::Paused )
+    if (cw->status == Data::CalculationStatus::Running || cw->status ==
+        Data::CalculationStatus::Paused)
     {
         startNextCalculation();
     }
-    ui->calculationsLayout->layout()->removeWidget ( cw );
-    if ( ui->calculationsLayout->layout()->count() == 0 )
+    ui->calculationsLayout->layout()->removeWidget(cw);
+    if (ui->calculationsLayout->layout()->count() == 0)
     {
         this->calculations = 0;
     }
@@ -187,9 +187,9 @@ void MainWindow::calculationFinished()
 void MainWindow::startNextCalculation()
 {
     QList<CalculationWidget *> calculations = this->findChildren<CalculationWidget *>();
-    foreach ( CalculationWidget * calculation, calculations )
+    foreach(CalculationWidget * calculation, calculations)
     {
-        if ( calculation->status == Data::CalculationStatus::Waiting )
+        if (calculation->status == Data::CalculationStatus::Waiting)
         {
             this->currentCalculation = calculation->calculationId;
             calculation->start();
@@ -200,16 +200,16 @@ void MainWindow::startNextCalculation()
 
 void MainWindow::removeAllCalculations()
 {
-    if ( QMessageBox::question ( this, "Remove all calculations",
-                                 "Are you sure you want to remove all calculations from the calculations queue?",
-                                 QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
+    if (QMessageBox::question(this, "Remove all calculations",
+                              "Are you sure you want to remove all calculations from the calculations queue?",
+                              QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
     {
-        if ( ui->calculationsLayout->layout() != NULL )
+        if (ui->calculationsLayout->layout() != NULL)
         {
             QList<CalculationWidget *> calculations = this->findChildren<CalculationWidget *>();
-            foreach ( CalculationWidget * calculation, calculations )
+            foreach(CalculationWidget * calculation, calculations)
             {
-                ui->calculationsLayout->layout()->removeWidget ( calculation );
+                ui->calculationsLayout->layout()->removeWidget(calculation);
                 delete calculation;
             }
         }
@@ -218,16 +218,16 @@ void MainWindow::removeAllCalculations()
 
 void MainWindow::removeFinishedCalculations()
 {
-    if ( QMessageBox::question ( this, "Remove all finished calculations",
-                                 "Are you sure you want to remove all finished calculations from the calculations queue?",
-                                 QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
+    if (QMessageBox::question(this, "Remove all finished calculations",
+                              "Are you sure you want to remove all finished calculations from the calculations queue?",
+                              QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
     {
         QList<CalculationWidget *> calculations = this->findChildren<CalculationWidget *>();
-        foreach ( CalculationWidget * calculation, calculations )
+        foreach(CalculationWidget * calculation, calculations)
         {
-            if ( calculation->status == Data::CalculationStatus::Finished )
+            if (calculation->status == Data::CalculationStatus::Finished)
             {
-                ui->calculationsLayout->layout()->removeWidget ( calculation );
+                ui->calculationsLayout->layout()->removeWidget(calculation);
                 delete calculation;
             }
         }

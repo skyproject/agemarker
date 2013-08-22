@@ -21,17 +21,17 @@ class MultiplierWidget : public QWidget
         Q_OBJECT
 
     public:
-        explicit MultiplierWidget ( QWidget *parent = 0 );
+        explicit MultiplierWidget(QWidget *parent = 0);
         ~MultiplierWidget();
-        void updateInputData ( std::vector<double> oxidesContent,
-                               std::vector<double> elementsContent,
-                               std::vector<double> elementsWeight );
+        void updateInputData(std::vector<double> oxidesContent,
+                             std::vector<double> elementsContent,
+                             std::vector<double> elementsWeight);
         uint64_t getMultiplier();
         uint64_t getCalculationsNumber();
 
     public slots:
         void setMultiplier();
-        void setMultiplier ( uint64_t multiplier );
+        void setMultiplier(uint64_t multiplier);
         void setCalculationsNumber();
 
     private:
