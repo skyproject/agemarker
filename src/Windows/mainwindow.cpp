@@ -117,13 +117,21 @@ void MainWindow::loadFromResults()
     fd->setAcceptMode(QFileDialog::AcceptOpen);
     if (fd->exec() == true)
     {
-        Data::UserInput input = CalculationData::loadUserInputFromResults(fd->selectedFiles().at(0));
-        input.resultsFilePath = fd->selectedFiles().at(0);
-        this->wizard = new CalculationWindow(input);
-        this->wizard->setWindowFlags(Qt::Window);
-        connect(this->wizard, SIGNAL(closed(Data::UserInput)),
-                this, SLOT(saveCalculationInput(Data::UserInput)));
-        this->wizard->show();
+        try
+        {
+            Data::UserInput input = CalculationData::loadUserInputFromResults(fd->selectedFiles().at(0));
+            input.resultsFilePath = fd->selectedFiles().at(0);
+            this->wizard = new CalculationWindow(input);
+            this->wizard->setWindowFlags(Qt::Window);
+            connect(this->wizard, SIGNAL(closed(Data::UserInput)),
+                    this, SLOT(saveCalculationInput(Data::UserInput)));
+            this->wizard->show();
+        }
+        catch (...)
+        {
+            QMessageBox::information(this, "Error", "Can't load calculation from the file you selected.",
+                                     QMessageBox::Ok);
+        }
     }
 }
 

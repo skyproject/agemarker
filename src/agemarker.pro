@@ -65,18 +65,9 @@ RESOURCES += graphics.qrc
 win32:RC_FILE = resources.rc
 
 
-# ------ d:/l/acl is a path to folder with agemarker-core library
-# ------ d:/l/sul is a path to folder with software-update library
-# ------ d:/l/suil is a path to folder with skyproject-ui library
+LIBS += -Lc:/Users/mlabu_000/Documents/Builds -lagemarker-core
+LIBS += -Lc:/Users/mlabu_000/Documents/Builds -lsoftware-update
+LIBS += -Lc:/Users/mlabu_000/Documents/Builds -lskyproject-ui
 
-LIBS += -Ld:/l/acl -lagemarker-core
-LIBS += -Ld:/l/sul -lsoftware-update
-LIBS += -Ld:/l/suil -lskyproject-ui
 
-# ------ d:/l/acl/includes/ is a path to folder with agemarker-core library header files
-# ------ d:/l/sul/includes/ is a path to folder with software-update library header files
-# ------ d:/l/suil/includes/ is a path to folder with skyproject-ui library header files
-
-INCLUDEPATH += d:/l/acl/includes/
-INCLUDEPATH += d:/l/sul/includes/
-INCLUDEPATH += d:/l/suil/includes/
+INCLUDEPATH += $$quote(c:/Users/mlabu_000/Documents/Builds/Include)

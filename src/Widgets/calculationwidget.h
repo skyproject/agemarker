@@ -11,6 +11,7 @@
 
 #include <QWidget>
 
+#include "IO/results.h"
 #include "data.h"
 
 #include "acl_agemarkercore.h"
@@ -41,12 +42,14 @@ class CalculationWidget : public QWidget
 
     private slots:
         void pauseCalculation();
+        void resultSaved();
         void calculationFinished(ACL::Data::CalculationResult result);
 
     private:
         void animateOpacity(double from, double to, double step);
         void switchCalculationStatus();
         bool isMoveAnimation = false;
+        Results *ioThread;
         Ui::CalculationWidget *ui;
         ACL::AgemarkerCore *core = NULL;
 };

@@ -9,18 +9,29 @@
 #ifndef RESULTS_H
 #define RESULTS_H
 
-#include <QString>
+#include <QThread>
 
 #include "acl_data.h"
 
-class Results
+class Results : public QThread
 {
+    Q_OBJECT
+
     public:
-        static void saveResults(ACL::Data::CalculationResult result, QString filePath);
+        Results(ACL::Data::CalculationResult result, QString file);
+        ~Results();
+        void removeThread();
+
+    signals:
+        void saved();
 
     private:
-        static QString stringRound(double source, ACL::Data::CalculationResult r);
-        static QString fillString(QString source, int newLength);
+        void run();
+        bool remove = false;
+        ACL::Data::CalculationResult resultData;
+        QString filePath;
+        QString stringRound(double source, int precision);
+        QString fillString(QString source, int newLength);
 };
 
 #endif // RESULTS_H

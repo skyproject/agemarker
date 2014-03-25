@@ -125,34 +125,69 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
             QStringList data = line.split("\t");
             if (x >= 5 && x < 58)
             {
-                input.oxidesContent.push_back(data[2].toDouble());
-            }
-            else if (x >= 62 && x < 180)
-            {
-                input.elementsWeight.push_back(data[2].toDouble());
-                input.elementsContent.push_back(data[3].toDouble());
-            }
-            else if (x == 181)
-            {
-                input.multiplier = data[1].toLongLong();
-            }
-            else if (x == 183)
-            {
-                input.decimalPrecision = data[1].toInt();
-            }
-            else if (x == 185)
-            {
-                input.intervalsNumber = data[1].toInt();
-            }
-            else if (x == 187)
-            {
-                if (data[1] == "Natural")
+                if (data.size() > 2)
                 {
-                    input.log = ACL::Data::Logarithm::Natural;
+                    input.oxidesContent.push_back(data[2].toDouble());
                 }
                 else
                 {
+                    throw 0;
+                }
+            }
+            else if (x >= 62 && x < 180)
+            {
+                if (data.size() > 3)
+                {
+                    input.elementsWeight.push_back(data[2].toDouble());
+                    input.elementsContent.push_back(data[3].toDouble());
+                }
+                else
+                {
+                    throw 0;
+                }
+            }
+            else if (x == 181)
+            {
+                if (data.size() > 1)
+                {
+                    input.multiplier = data[1].toLongLong();
+                }
+                else
+                {
+                    throw 0;
+                }
+            }
+            else if (x == 183)
+            {
+                if (data.size() > 1)
+                {
+                    input.decimalPrecision = data[1].toInt();
+                }
+                else
+                {
+                    throw 0;
+                }
+            }
+            else if (x == 185)
+            {
+                if (data.size() > 1)
+                {
+                    input.intervalsNumber = data[1].toInt();
+                }
+                else
+                {
+                    throw 0;
+                }
+            }
+            else if (x == 187)
+            {
+                if (data.value(1) == "Decimal")
+                {
                     input.log = ACL::Data::Logarithm::Decimal;
+                }
+                else
+                {
+                    input.log = ACL::Data::Logarithm::Natural;
                 }
             }
         }

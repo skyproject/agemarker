@@ -39,6 +39,7 @@ class Data
             Waiting,
             Running,
             Paused,
+            Saving,
             Finished
         };
 };

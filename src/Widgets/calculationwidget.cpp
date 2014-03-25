@@ -75,7 +75,16 @@ void CalculationWidget::start()
 
 void CalculationWidget::calculationFinished(ACL::Data::CalculationResult result)
 {
-    Results::saveResults(result, ui->labelFile->toolTip());
+    this->status = Data::CalculationStatus::Saving;
+    switchCalculationStatus();
+    this->ioThread = new Results(result, ui->labelFile->toolTip());
+    connect (this->ioThread, SIGNAL(saved()),
+             this, SLOT(resultSaved()));
+    this->ioThread->start();
+}
+
+void CalculationWidget::resultSaved()
+{
     CalculationData::removeUserInput(this->calculationId);
     this->status = Data::CalculationStatus::Finished;
     switchCalculationStatus();
@@ -104,8 +113,13 @@ void CalculationWidget::switchCalculationStatus()
             ui->buttonPause->setToolTip("Resume");
             ui->labelStatus->setText("Paused");
             break;
+        case Data::CalculationStatus::Saving:
+            ui->buttonPause->setVisible(false);
+            ui->labelStatus->setText("Saving");
+            break;
         case Data::CalculationStatus::Finished:
             /* if the calculation is finished, "buttonPause" will open the result file */
+            ui->buttonPause->setVisible(true);
             ui->buttonPause->setIcon(QIcon(":/new/glyphicons/open.ico"));
             ui->buttonPause->setToolTip("View results");
             ui->labelStatus->setText("Finished");
@@ -142,6 +156,9 @@ void CalculationWidget::removeCalculation()
         disconnect(this->core, SIGNAL(calculationFinished(ACL::Data::CalculationResult)),
                    this, SLOT(calculationFinished(ACL::Data::CalculationResult)));
         this->core->removeCalculation();
+    } else if (this->status == Data::CalculationStatus::Saving)
+    {
+        this->ioThread->removeThread();
     }
     this->deleteLater();
 
