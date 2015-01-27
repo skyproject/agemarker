@@ -38,11 +38,11 @@ class MainWindow : public QMainWindow
         void removeAllCalculations();
         void removeFinishedCalculations();
         void saveCalculationInput(Data::UserInput input);
-        void updateCheckFinished();
 
     private:
         void loadCalculations();
         void startNextCalculation();
+        void closeEvent(QCloseEvent *event);
         Ui::MainWindow *ui;
         CalculationWindow *wizard = NULL;
         int calculations = 0;

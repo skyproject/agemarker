@@ -28,9 +28,13 @@ class SettingsTableWidget : public QWidget
     public:
         explicit SettingsTableWidget(QWidget *parent = 0, OxidesTableWidget *oxidesPtr = 0,
                                      ElementsTableWidget *elementsPtr = 0);
+        SettingsTableWidget(QWidget *parent = 0, ElementsTableWidget *elementsPtr = 0);
         SettingsTableWidget(uint64_t multiplier, int precision, int intervals,
                             ACL::Data::Logarithm log, QWidget *parent = 0,
                             OxidesTableWidget *oxidesPtr = 0, ElementsTableWidget *elementsPtr = 0);
+        SettingsTableWidget(uint64_t multiplier, int precision, int intervals,
+                            ACL::Data::Logarithm log, QWidget *parent = 0,
+                            ElementsTableWidget *elementsPtr = 0);
         ~SettingsTableWidget();
         int getPrecision();
         int getIntervalsNumber();
@@ -42,8 +46,8 @@ class SettingsTableWidget : public QWidget
 
     private:
         Ui::SettingsTableWidget *ui;
-        OxidesTableWidget *oxides;
-        ElementsTableWidget *elements;
+        OxidesTableWidget *oxides = NULL;
+        ElementsTableWidget *elements = NULL;
 };
 
 #endif // SETTINGSTABLEWIDGET_H

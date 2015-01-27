@@ -8,9 +8,10 @@
 
 #include <QFontDatabase>
 #include <QApplication>
+#include <QSettings>
 
-#include "Windows/mainwindow.h"
 #include "application.h"
+#include "initialize.h"
 
 int main(int argc, char *argv[])
 {
@@ -23,8 +24,7 @@ int main(int argc, char *argv[])
     QFontDatabase::addApplicationFont("OpenSans-Bold.ttf");
     QFontDatabase::addApplicationFont("OpenSans-Regular.ttf");
 
-    MainWindow w;
-    w.show();
+    Initialize app;
 
     return a.exec();
 }

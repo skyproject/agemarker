@@ -14,6 +14,9 @@
 
 #include "IO\calculationdata.h"
 
+/* TODO: Rewrite the following block so it'd either use pre-defined constants or
+ * parse the file contents without referring to line number at all. */
+
 void CalculationData::saveUserInput(Data::UserInput input, int calculation)
 {
     QString folder = (QStandardPaths::writableLocation(QStandardPaths::DataLocation)
@@ -30,14 +33,14 @@ void CalculationData::saveUserInput(Data::UserInput input, int calculation)
         out += "Oxides\n";
         for (int x = 0; x < OXIDES_COUNT; ++x)
         {
-            out += QString::number(input.oxidesContent[x]) + "\n";
+            out += QString::number(input.oxidesContent[x], 'g', 14) + "\n";
         }
         out += "\n";
         out += "Elements\n";
         for (int x = 0; x < ELEMENTS_COUNT; ++x)
         {
-            out += QString::number(input.elementsWeight[x]) + "\t"
-                   + QString::number(input.elementsContent[x]) + "\n";
+            out += QString::number(input.elementsWeight[x], 'g', 14) + "\t"
+                   + QString::number(input.elementsContent[x], 'g', 14) + "\n";
         }
         out += "\n";
         out += QString::number(input.multiplier) + "\n\n";
@@ -50,6 +53,14 @@ void CalculationData::saveUserInput(Data::UserInput input, int calculation)
         else
         {
             out += "Decimal\n\n";
+        }
+        if (input.elementsContentUnits == ACL::Data::ElementsContentUnits::MassPercent)
+        {
+            out += "%\n\n";
+        }
+        else
+        {
+            out += "#\n\n";
         }
         out += QString(input.resultsFilePath);
         QTextStream stream(&file);
@@ -66,33 +77,57 @@ Data::UserInput CalculationData::loadUserInput(int calculation)
     {
         QTextStream in(&file);
         QString line;
-        for (int x = 0; x < 186; ++x)
+        for (int x = 0; x < 188; ++x)
         {
             line = in.readLine();
             QStringList data = line.split("\t");
             if (x >= 3 && x < 56)
             {
+                if (data.size() < 1)
+                {
+                    throw 0;
+                }
                 input.oxidesContent.push_back(data[0].toDouble());
             }
             else if (x >= 58 && x < 176)
             {
+                if (data.size() < 2)
+                {
+                    throw 1;
+                }
                 input.elementsWeight.push_back(data[0].toDouble());
                 input.elementsContent.push_back(data[1].toDouble());
             }
             else if (x == 177)
             {
+                if (data.size() < 1)
+                {
+                    throw 0;
+                }
                 input.multiplier = data[0].toLongLong();
             }
             else if (x == 179)
             {
+                if (data.size() < 1)
+                {
+                    throw 0;
+                }
                 input.decimalPrecision = data[0].toInt();
             }
             else if (x == 181)
             {
+                if (data.size() < 1)
+                {
+                    throw 0;
+                }
                 input.intervalsNumber = data[0].toInt();
             }
             else if (x == 183)
             {
+                if (data.size() < 1)
+                {
+                    throw 0;
+                }
                 if (data[0] == "Natural")
                 {
                     input.log = ACL::Data::Logarithm::Natural;
@@ -104,6 +139,25 @@ Data::UserInput CalculationData::loadUserInput(int calculation)
             }
             else if (x == 185)
             {
+                if (data.size() < 1)
+                {
+                    throw 0;
+                }
+                if (data[0] == "%")
+                {
+                    input.elementsContentUnits = ACL::Data::ElementsContentUnits::MassPercent;
+                }
+                else
+                {
+                    input.elementsContentUnits = ACL::Data::ElementsContentUnits::NumberOfAtoms;
+                }
+            }
+            else if (x == 187)
+            {
+                if (data.size() < 1)
+                {
+                    throw 0;
+                }
                 input.resultsFilePath = data[0];
             }
         }
@@ -119,11 +173,11 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
     {
         QTextStream in(&file);
         QString line;
-        for (int x = 0; x < 188; ++x)
+        for (int x = 0; x < 202; ++x)
         {
             line = in.readLine();
             QStringList data = line.split("\t");
-            if (x >= 5 && x < 58)
+            if (x >= 9 && x < 62)
             {
                 if (data.size() > 2)
                 {
@@ -134,7 +188,18 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
                     throw 0;
                 }
             }
-            else if (x >= 62 && x < 180)
+            else if (x == 69)
+            {
+                if (line == "[#] [Element] [Atomic weight] [Content, # of atoms]")
+                {
+                    input.elementsContentUnits = ACL::Data::ElementsContentUnits::NumberOfAtoms;
+                }
+                else
+                {
+                    input.elementsContentUnits = ACL::Data::ElementsContentUnits::MassPercent;
+                }
+            }
+            else if (x >= 70 && x < 188)
             {
                 if (data.size() > 3)
                 {
@@ -146,7 +211,7 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
                     throw 0;
                 }
             }
-            else if (x == 181)
+            else if (x == 195)
             {
                 if (data.size() > 1)
                 {
@@ -157,7 +222,7 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
                     throw 0;
                 }
             }
-            else if (x == 183)
+            else if (x == 197)
             {
                 if (data.size() > 1)
                 {
@@ -168,7 +233,7 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
                     throw 0;
                 }
             }
-            else if (x == 185)
+            else if (x == 199)
             {
                 if (data.size() > 1)
                 {
@@ -179,7 +244,7 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
                     throw 0;
                 }
             }
-            else if (x == 187)
+            else if (x == 201)
             {
                 if (data.value(1) == "Decimal")
                 {

@@ -15,6 +15,8 @@
 
 #include "acl_data.h"
 
+#include "suil_wizard.h"
+
 namespace Ui
 {
     class CalculationWindow;
@@ -33,10 +35,13 @@ class CalculationWindow : public QDialog
         void closed(Data::UserInput input);
 
     private slots:
+        void initializeWizard(ACL::Data::ElementsContentUnits contentUnits);
         void wizardFinished();
 
     private:
         Ui::CalculationWindow *ui;
+        ACL::Data::ElementsContentUnits contentUnits;
+        SWizard *wizard;
 };
 
 #endif // CALCULATIONWINDOW_H

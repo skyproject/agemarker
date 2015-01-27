@@ -69,6 +69,7 @@ uint64_t MultiplierWidget::getCalculationsNumber()
 
 void MultiplierWidget::updateInputData(std::vector<double> oxidesContent,
                                        std::vector<double> elementsContent,
+                                       ACL::Data::ElementsContentUnits elementsContentUnits,
                                        std::vector<double> elementsWeight)
 {
     double oxidesWeightSum[OXIDES_COUNT];
@@ -83,7 +84,7 @@ void MultiplierWidget::updateInputData(std::vector<double> oxidesContent,
     oxidesWeightSum[8] = ((elementsWeight[19] * 1) + (elementsWeight[7] * 1));
     oxidesWeightSum[9] = ((elementsWeight[10] * 2) + (elementsWeight[7] * 1));
     oxidesWeightSum[10] = ((elementsWeight[0] * 2) + (elementsWeight[7] * 1));
-    oxidesWeightSum[11] = ((elementsWeight[0] * 2) + (elementsWeight[7] * 1));
+    oxidesWeightSum[11] = ((elementsWeight[14] * 4) + (elementsWeight[7] * 6));
     oxidesWeightSum[12] = ((elementsWeight[14] * 2) + (elementsWeight[7] * 5));
     oxidesWeightSum[13] = ((elementsWeight[5] * 1) + (elementsWeight[7] * 2));
     oxidesWeightSum[14] = ((elementsWeight[4] * 2) + (elementsWeight[7] * 3));
@@ -137,7 +138,7 @@ void MultiplierWidget::updateInputData(std::vector<double> oxidesContent,
     oxidesPureElement[8] = ((elementsWeight[19] * 1) * (oxidesContent[8]) / (oxidesWeightSum[8]));
     oxidesPureElement[9] = ((elementsWeight[10] * 2) * (oxidesContent[9]) / (oxidesWeightSum[9]));
     oxidesPureElement[10] = ((elementsWeight[0] * 2) * (oxidesContent[10]) / (oxidesWeightSum[10]));
-    oxidesPureElement[11] = ((elementsWeight[0] * 2) * (oxidesContent[11]) / (oxidesWeightSum[11]));
+    oxidesPureElement[11] = ((elementsWeight[14] * 4) * (oxidesContent[11]) / (oxidesWeightSum[11]));
     oxidesPureElement[12] = ((elementsWeight[14] * 2) * (oxidesContent[12]) / (oxidesWeightSum[12]));
     oxidesPureElement[13] = ((elementsWeight[5] * 1) * (oxidesContent[13]) / (oxidesWeightSum[13]));
     oxidesPureElement[14] = ((elementsWeight[4] * 2) * (oxidesContent[14]) / (oxidesWeightSum[14]));
@@ -239,7 +240,15 @@ void MultiplierWidget::updateInputData(std::vector<double> oxidesContent,
     this->atomNorSum = 0;
     for (int x = 0; x < ELEMENTS_COUNT; ++x)
     {
-        double nor = (elementsContent[x] / elementsWeight[x]);
+        double nor;
+        if (elementsContentUnits == ACL::Data::ElementsContentUnits::MassPercent)
+        {
+            nor = (elementsContent[x] / elementsWeight[x]);
+        }
+        else
+        {
+            nor = elementsContent[x];
+        }
         this->atomNorSum += nor;
     }
     if (this->getMultiplier() != 0)

@@ -29,6 +29,7 @@ class Data
             std::vector<double> elementsContent;
             std::vector<double> elementsWeight;
             ACL::Data::Logarithm log;
+            ACL::Data::ElementsContentUnits elementsContentUnits;
             QString resultsFilePath;
             int decimalPrecision;
             uint64_t multiplier;

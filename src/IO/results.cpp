@@ -11,6 +11,7 @@
 #include <QFile>
 
 #include "IO/results.h"
+#include "numbers.h"
 #include "data.h"
 
 #include "acl_math.h"
@@ -40,41 +41,60 @@ void Results::run()
     {
         QString out;
 
-        out += "Agemarker results file\n\n";
-        out += "Oxides table\n\n";
+        out += "Agemarker results file\n";
+        out += ("\n——————————————————————————————\n\n");
+        out += "~~~ Oxides (input) ~~~\n\n";
+        out += ("——————————————————————————————\n\n");
         out += "[#] [Oxide] [Content, mass %]\n";
         for (uint x = 0; x < OXIDES_COUNT; ++x)
         {
             out += (QString::number(x + 1) + "\t" + fillString(OXIDES_FULL_NAMES[x], 23) + "\t"
-                    + QString::number(this->resultData.calculationInput.oxidesContent[x]) + "\n");
+                    + Numbers::numberToString(this->resultData.calculationInput.oxidesContent[x], precision) + "\n");
         }
-        out += "\nElements table\n\n";
-        out += "[#] [Element] [Atomic weight] [Content, mass %]\n";
+        out += ("\n——————————————————————————————\n\n");
+        out += "~~~ Elements (input) ~~~\n\n";
+        out += ("——————————————————————————————\n\n");
+        if (this->resultData.calculationInput.elementsContentUnits ==
+                ACL::Data::ElementsContentUnits::MassPercent)
+        {
+            out += "[#] [Element] [Atomic weight] [Content, mass %]\n";
+        }
+        else
+        {
+            out += "[#] [Element] [Atomic weight] [Content, # of atoms]\n";
+        }
         for (uint x = 0; x < ELEMENTS_COUNT; ++x)
         {
-            out += (QString::number(x + 1) + "\t" + fillString(ELEMENTS_FULL_NAMES[x], 12) + "\t"
-                    + QString::number(this->resultData.calculationInput.elementsWeight[x]) + "\t"
-                    + QString::number(this->resultData.calculationInput.elementsContent[x]) + "\n");
+            out += (QString::number(x + 1) + "\t" + fillString(ELEMENTS_FULL_NAMES[x], 12) + "\t");
+            out += (Numbers::numberToString(this->resultData.calculationInput.elementsWeight[x], precision) + "\t");
+            out += (Numbers::numberToString(this->resultData.calculationInput.elementsContent[x], precision) + "\n");
         }
-        out += "\nMultiplier:\t" + QString::number(this->resultData.calculationInput.multiplier) + "\n\n";
+        out += ("\n——————————————————————————————\n\n");
+        out += "~~~ Calculation settings ~~~\n\n";
+        out += ("——————————————————————————————\n\n");
+        out += "Multiplier:\t" + QString::number(this->resultData.calculationInput.multiplier) + "\n\n";
         out += "Decimal precision:\t" + QString::number(this->resultData.calculationInput.decimalPrecision) + "\n\n";
         out += "Number of grouping intervals:\t" + QString::number(this->resultData.calculationInput.intervalsNumber) + "\n\n";
         if (this->resultData.calculationInput.log == ACL::Data::Logarithm::Natural)
         {
-            out += "Logarithmic base:\tNatural\n\n";
+            out += "Logarithmic base:\tNatural\n";
         }
         else
         {
-            out += "Logarithmic base:\tDecimal\n\n";
+            out += "Logarithmic base:\tDecimal\n";
         }
-        out += "Atomic weights (total)\n\n";
+        out += ("\n——————————————————————————————\n\n");
+        out += "~~~ Atomic weights (total) ~~~\n\n";
+        out += ("——————————————————————————————\n\n");
         out += "[#] [Atomic weight]\n";
         for (uint x = 0; x < ELEMENTS_COUNT; ++x)
         {
             out += (QString::number(x + 1) + "\t" + QString::number(this->resultData.atoms[x]) + "\n");
         }
-        out += ("\nAtomic weights (total sum):\t" + QString::number(this->resultData.atomsSum) + "\n\n");
-        out += "Ip section\n\n";
+        out += ("\nAtomic weights (total sum):\t" + QString::number(this->resultData.atomsSum) + "\n");
+        out += ("\n——————————————————————————————\n\n");
+        out += "~~~ Ip values ~~~\n\n";
+        out += ("——————————————————————————————\n\n");
         out += "[#] [Ip] [Ip Squareroot] [Frequency]\n";
         for (uint64_t x = 0; x < ip; ++x)
         {
@@ -82,50 +102,50 @@ void Results::run()
             {
                 break;
             }
-            out += (QString::number(x + 1) + "\t" + stringRound(this->resultData.ip[x], precision) + "\t"
-                    + stringRound(this->resultData.ipSqrt[x], precision) + "\t" + QString::number(this->resultData.ipCount[x]) + "\n");
+            out += (QString::number(x + 1) + "\t" + Numbers::numberToString(this->resultData.ip[x], precision) + "\t"
+                    + Numbers::numberToString(this->resultData.ipSqrt[x], precision) + "\t" + QString::number(this->resultData.ipCount[x]) + "\n");
         }
         if (remove == false)
         {
-            out += ("\nIp (Average):\t" + stringRound(this->resultData.ipAverage, precision) + "\n\n");
-            out += ("Variance:\t" + stringRound(this->resultData.ipVariance, precision) + "\n\n");
-            out += ("Standard deviation:\t" + stringRound(this->resultData.ipStandardDeviation, precision) + "\n\n");
-            out += ("Ip Squareroot (Average):\t" + stringRound(this->resultData.ipSqrtAverage, precision) + "\n\n");
-            out += ("Variance (Ip Squareroot):\t" + stringRound(this->resultData.ipSqrtVariance, precision) + "\n\n");
-            out += ("Standard deviation (Ip Squareroot):\t" + stringRound(this->resultData.ipSqrtStandardDeviation, precision) + "\n\n");
-            out += "Unimodality check\n\n";
-            out += ("Ip range:\t" + stringRound(this->resultData.ipRange, precision) + "\n\n");
-            out += ("Ip range (Squareroot):\t" + stringRound(this->resultData.ipSqrtRange, precision) + "\n\n");
-            out += ("Ip interval length:\t" + stringRound(this->resultData.ipIntervalLength, precision) + "\n\n");
-            out += ("Ip interval length (Squareroot):\t" + stringRound(this->resultData.ipSqrtIntervalLength, precision) + "\n\n");
+            out += ("\n——————————————————————————————\n\n");
+            out += "~~~ Statistics ~~~\n\n";
+            out += ("——————————————————————————————\n\n");
+            out += ("Average (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtAverage, precision) + "\n\n");
+            out += ("Variance (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtVariance, precision) + "\n\n");
+            out += ("Standard deviation (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtStandardDeviation, precision) + "\n\n");
+            out += ("Skewness of dataset (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtSkewnessOfDataset, precision) + "\n\n");
+            out += ("Excess kurtosis of dataset (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtExcessKurtosisOfDataset, precision) + "\n\n");
+            out += ("Mean squared error (Average (Ip Squareroot)):\t" + Numbers::numberToString(this->resultData.ipSqrtMeanSquareError, precision) + "\n\n");
+            out += ("\n\nAverage (Ip):\t" + Numbers::numberToString(this->resultData.ipAverage, precision) + "\n\n");
+            out += ("Variance (Ip):\t" + Numbers::numberToString(this->resultData.ipVariance, precision) + "\n\n");
+            out += ("Standard deviation (Ip):\t" + Numbers::numberToString(this->resultData.ipStandardDeviation, precision) + "\n\n");
+            out += ("Skewness of dataset (Ip):\t" + Numbers::numberToString(this->resultData.ipSkewnessOfDataset, precision) + "\n\n");
+            out += ("Excess kurtosis of dataset (Ip):\t" + Numbers::numberToString(this->resultData.ipExcessKurtosisOfDataset, precision) + "\n\n");
+            out += ("Mean squared error (Average (Ip)):\t" + Numbers::numberToString(this->resultData.ipMeanSquareError, precision) + "\n");
+            out += ("\n——————————————————————————————\n\n");
+            out += "~~~ Unimodality check ~~~\n\n";
+            out += ("——————————————————————————————\n\n");
+            out += ("Ip range:\t" + Numbers::numberToString(this->resultData.ipRange, precision) + "\n\n");
+            out += ("Ip range (Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtRange, precision) + "\n\n");
+            out += ("Ip interval length:\t" + Numbers::numberToString(this->resultData.ipIntervalLength, precision) + "\n\n");
+            out += ("Ip interval length (Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtIntervalLength, precision) + "\n\n");
             out += "[Interval minimum] [Interval maximum] [Interval center] [Frequency]\n";
             for (int x = 0; x < this->resultData.calculationInput.intervalsNumber; ++x)
             {
-                out += (stringRound(this->resultData.ipIntervalMinimum[x], precision) + "\t" + stringRound(this->resultData.ipIntervalMaximum[x], precision)
-                        + "\t" + stringRound(this->resultData.ipIntervalCenter[x], precision) + "\t" + QString::number(this->resultData.ipIntervalCount[x]) + "\n");
+                out += (Numbers::numberToString(this->resultData.ipIntervalMinimum[x], precision) + "\t" + Numbers::numberToString(this->resultData.ipIntervalMaximum[x], precision)
+                        + "\t" + Numbers::numberToString(this->resultData.ipIntervalCenter[x], precision) + "\t" + QString::number(this->resultData.ipIntervalCount[x]) + "\n");
             }
             out += ("\n[Interval minimum (Squareroot)] [Interval maximum (Squareroot)] [Interval center (Squareroot)] [Frequency (Squareroot)]\n");
             for (int x = 0; x < this->resultData.calculationInput.intervalsNumber; ++x)
             {
-                out += (stringRound(this->resultData.ipSqrtIntervalMinimum[x], precision) + "\t" + stringRound(this->resultData.ipSqrtIntervalMaximum[x], precision)
-                        + "\t" + stringRound(this->resultData.ipSqrtIntervalCenter[x], precision) + "\t" + QString::number(this->resultData.ipSqrtIntervalCount[x]) + "\n");
+                out += (Numbers::numberToString(this->resultData.ipSqrtIntervalMinimum[x], precision) + "\t" + Numbers::numberToString(this->resultData.ipSqrtIntervalMaximum[x], precision)
+                        + "\t" + Numbers::numberToString(this->resultData.ipSqrtIntervalCenter[x], precision) + "\t" + QString::number(this->resultData.ipSqrtIntervalCount[x]) + "\n");
             }
             QTextStream stream(&file);
             stream << out;
             emit saved();
         }
     }
-}
-
-QString Results::stringRound(double source, int precision)
-{
-    QString value = QString::number(source, 'g', precision);
-    QStringList valueSplit = value.split(".");
-    while (valueSplit[1].length() < precision)
-    {
-        valueSplit[1] += QString::number(0);
-    }
-    return (valueSplit[0] + "." + valueSplit[1]);
 }
 
 QString Results::fillString(QString source, int newLength)

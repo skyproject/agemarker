@@ -11,6 +11,8 @@
 
 #include <QWidget>
 
+#include "acl_data.h"
+
 namespace Ui
 {
     class MultiplierWidget;
@@ -25,6 +27,7 @@ class MultiplierWidget : public QWidget
         ~MultiplierWidget();
         void updateInputData(std::vector<double> oxidesContent,
                              std::vector<double> elementsContent,
+                             ACL::Data::ElementsContentUnits elementsContentUnits,
                              std::vector<double> elementsWeight);
         uint64_t getMultiplier();
         uint64_t getCalculationsNumber();

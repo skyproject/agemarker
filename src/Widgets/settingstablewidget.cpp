@@ -9,16 +9,23 @@
 #include "Widgets\settingstablewidget.h"
 #include "ui_settingstablewidget.h"
 
-SettingsTableWidget::SettingsTableWidget(QWidget *parent ,
+SettingsTableWidget::SettingsTableWidget(QWidget *parent,
         OxidesTableWidget *oxidesPtr,
         ElementsTableWidget *elementsPtr) :
     QWidget(parent),
     ui(new Ui::SettingsTableWidget)
 {
     ui->setupUi(this);
-    ui->multiplier->updateInputData(oxidesPtr->getOxidesContent(), elementsPtr->getElementsContent(),
-                                    elementsPtr->getElementsContent());
     this->oxides = oxidesPtr;
+    this->elements = elementsPtr;
+}
+
+SettingsTableWidget::SettingsTableWidget(QWidget *parent,
+        ElementsTableWidget *elementsPtr) :
+    QWidget(parent),
+    ui(new Ui::SettingsTableWidget)
+{
+    ui->setupUi(this);
     this->elements = elementsPtr;
 }
 
@@ -49,11 +56,48 @@ SettingsTableWidget::SettingsTableWidget(uint64_t multiplier, int precision, int
     this->elements = elementsPtr;
 }
 
+SettingsTableWidget::SettingsTableWidget(uint64_t multiplier, int precision, int intervals,
+        ACL::Data::Logarithm log, QWidget *parent,
+        ElementsTableWidget *elementsPtr) :
+    QWidget(parent),
+    ui(new Ui::SettingsTableWidget)
+{
+    ui->setupUi(this);
+    ui->multiplier->setMultiplier(multiplier);
+    ui->numPrecision->setValue(precision);
+    ui->numIntervalsNumber->setValue(intervals);
+    if (log == ACL::Data::Logarithm::Natural)
+    {
+        ui->boxLogarithm->setCurrentIndex(0);
+    }
+    else
+    {
+        ui->boxLogarithm->setCurrentIndex(1);
+    }
+    this->elements = elementsPtr;
+}
+
 void SettingsTableWidget::showEvent(QShowEvent *e)
 {
-    ui->multiplier->updateInputData(this->oxides->getOxidesContent(),
-                                    this->elements->getElementsContent(),
-                                    this->elements->getElementsWeights());
+    if (this->oxides == NULL)
+    {
+        std::vector<double> nullOxides;
+        for (short x = 0; x < OXIDES_COUNT; ++x)
+        {
+            nullOxides.push_back(0);
+        }
+        ui->multiplier->updateInputData(nullOxides,
+                                        this->elements->getElementsContent(),
+                                        this->elements->getElementsContentUnits(),
+                                        this->elements->getElementsWeights());
+    }
+    else
+    {
+        ui->multiplier->updateInputData(this->oxides->getOxidesContent(),
+                                        this->elements->getElementsContent(),
+                                        this->elements->getElementsContentUnits(),
+                                        this->elements->getElementsWeights());
+    }
     QWidget::showEvent(e);
 }
 

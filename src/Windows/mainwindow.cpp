@@ -10,6 +10,8 @@
 #include <QStringList>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QCloseEvent>
+#include <QSettings>
 #include <QDir>
 
 #include "Windows/calculationwindow.h"
@@ -20,9 +22,6 @@
 #include "Windows/mainwindow.h"
 #include "IO/calculationdata.h"
 #include "ui_mainwindow.h"
-#include "application.h"
-
-#include "sul_softwareupdate.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -45,13 +44,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionExit, SIGNAL(triggered()),
             QApplication::instance(), SLOT(quit()));
 
-    SUL::Structs::Application currentApp;
-    currentApp.installedVersion = QString(APP_PRODUCTVERSION_STR);
-    currentApp.updateXmlUrl = QUrl("http://www.skyproject.org/static/programs/agemarker/xmlupdate.xml");
-    SUL::SoftwareUpdate *su = new SUL::SoftwareUpdate(currentApp);
-    connect(su, SIGNAL(finished()),
-            this, SLOT(updateCheckFinished()));
-
     ui->calculationsLayout->layout()->setAlignment(Qt::AlignTop);
     loadCalculations();
 }
@@ -59,12 +51,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-void MainWindow::updateCheckFinished()
-{
-    this->show();
-    sender()->deleteLater();
 }
 
 void MainWindow::loadCalculations()
@@ -76,21 +62,28 @@ void MainWindow::loadCalculations()
         foreach(QString file, files)
         {
             int id = file.split(".").at(0).toInt();
-            CalculationWidget *cw = new CalculationWidget(CalculationData::loadUserInput(id), id, this);
-            connect(cw, SIGNAL(finished()),
-                    this, SLOT(calculationFinished()));
-            connect(cw, SIGNAL(removed()),
-                    this, SLOT(calculationRemoved()));
-            ui->calculationsLayout->layout()->addWidget(cw);
-            this->calculations = id;
-            if (this->currentCalculation == -1)
+            try
             {
-                this->currentCalculation = id;
-                cw->start();
+                Data::UserInput input = CalculationData::loadUserInput(id);
+                CalculationWidget *cw = new CalculationWidget(input, id, this);
+                connect(cw, SIGNAL(finished()),
+                        this, SLOT(calculationFinished()));
+                connect(cw, SIGNAL(removed()),
+                        this, SLOT(calculationRemoved()));
+                ui->calculationsLayout->layout()->addWidget(cw);
+                this->calculations = id;
+                if (this->currentCalculation == -1)
+                {
+                    this->currentCalculation = id;
+                    cw->start();
+                }
+            }
+            catch (...)
+            {
             }
         }
     }
-    else
+    if (this->currentCalculation == -1)
     {
         WelcomeWidget *ww = new WelcomeWidget(this);
         ui->calculationsLayout->layout()->addWidget(ww);
@@ -239,5 +232,23 @@ void MainWindow::removeFinishedCalculations()
                 delete calculation;
             }
         }
+    }
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    QMessageBox::StandardButton confirmation = QMessageBox::question(this, "Exit",
+                                                                    tr("Are you sure you want to close the program?\n\nWhen you start Agemarker next time, your unfinished calculations will start from the very beginning, with the finished calculations being removed from the queue."),
+                                                                    QMessageBox::No | QMessageBox::Yes,
+                                                                    QMessageBox::Yes);
+    if (confirmation != QMessageBox::Yes)
+    {
+        event->ignore();
+    }
+    else
+    {
+        QSettings s;
+        s.setValue("ExitedNormally", true);
+        event->accept();
     }
 }

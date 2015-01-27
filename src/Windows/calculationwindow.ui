@@ -89,22 +89,23 @@
     <normaloff>:/new/icons/application-icon.ico</normaloff>:/new/icons/application-icon.ico</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="SWizard" name="wizard" native="true"/>
+    <layout class="QVBoxLayout" name="layout"/>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>SWizard</class>
-   <extends>QWidget</extends>
-   <header>suil_wizard.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../graphics.qrc"/>
  </resources>

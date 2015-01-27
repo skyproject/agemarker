@@ -7,14 +7,18 @@
  */
 
 #include <QLabel>
+#include <QPushButton>
 
 #include "Widgets\elementstablewidget.h"
 #include "ui_elementstablewidget.h"
+
+#include "numbers.h"
 #include "data.h"
 
 #include "suil_number_edit.h"
 
-ElementsTableWidget::ElementsTableWidget(QWidget *parent) :
+ElementsTableWidget::ElementsTableWidget(ACL::Data::ElementsContentUnits contentsUnits,
+                                         QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ElementsTableWidget)
 {
@@ -23,14 +27,22 @@ ElementsTableWidget::ElementsTableWidget(QWidget *parent) :
     ui->table->addColumn("Element", 140);
     ui->table->addColumn("Element Name", 360);
     ui->table->addColumn("Atomic Weight", 400);
-    ui->table->addColumn("Content, Mass %", 400);
+    if (contentsUnits == ACL::Data::ElementsContentUnits::MassPercent)
+    {
+        ui->table->addColumn("Content, Mass %", 400);
+    }
+    else
+    {
+        ui->table->addColumn("Content, # of Atoms", 400);
+    }
     ui->table->verticalHeader()->setVisible(false);
     ui->table->setSelectionMode(QAbstractItemView::NoSelection);
     fillTable();
 }
 
 ElementsTableWidget::ElementsTableWidget(std::vector<double> contents,
-        std::vector<double> weights, QWidget *parent) :
+                                         ACL::Data::ElementsContentUnits contentsUnits,
+                                         std::vector<double> weights, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ElementsTableWidget)
 {
@@ -39,9 +51,16 @@ ElementsTableWidget::ElementsTableWidget(std::vector<double> contents,
     ui->table->addColumn("Element", 140);
     ui->table->addColumn("Element Name", 360);
     ui->table->addColumn("Atomic Weight", 400);
-    ui->table->addColumn("Content, Mass %", 400);
     ui->table->verticalHeader()->setVisible(false);
     ui->table->setSelectionMode(QAbstractItemView::NoSelection);
+    if (contentsUnits == ACL::Data::ElementsContentUnits::MassPercent)
+    {
+        ui->table->addColumn("Content, Mass %", 400);
+    }
+    else
+    {
+        ui->table->addColumn("Content, # of Atoms", 400);
+    }
     fillTable();
     for (int x = 0; x < ELEMENTS_COUNT; ++x)
     {
@@ -60,7 +79,7 @@ std::vector<double> ElementsTableWidget::getElementsWeights()
     std::vector<double> output;
     for (short x = 0; x < ELEMENTS_COUNT; ++x)
     {
-        output.push_back(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->text().toDouble());
+        output.push_back(Numbers::toDouble(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->text()));
     }
     return output;
 }
@@ -68,11 +87,31 @@ std::vector<double> ElementsTableWidget::getElementsWeights()
 std::vector<double> ElementsTableWidget::getElementsContent()
 {
     std::vector<double> output;
-    for (short x = 0; x < ELEMENTS_COUNT; ++x)
+    if (ui->table->horizontalHeaderItem(4)->text() == "Content, Mass %" ||
+        ui->table->horizontalHeaderItem(4)->text() == "Content, # of Atoms")
     {
-        output.push_back(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 4))->text().toDouble());
+        for (short x = 0; x < ELEMENTS_COUNT; ++x)
+        {
+            output.push_back(Numbers::toDouble(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 4))->text()));
+        }
+    }
+    else
+    {
+        for (short x = 0; x < ELEMENTS_COUNT; ++x)
+        {
+            output.push_back(0);
+        }
     }
     return output;
+}
+
+ACL::Data::ElementsContentUnits ElementsTableWidget::getElementsContentUnits()
+{
+    if (ui->table->horizontalHeaderItem(4)->text() == "Content, # of Atoms")
+    {
+        return ACL::Data::ElementsContentUnits::NumberOfAtoms;
+    }
+    return ACL::Data::ElementsContentUnits::MassPercent;
 }
 
 void ElementsTableWidget::fillTable()
@@ -98,13 +137,13 @@ void ElementsTableWidget::fillTable()
         SNumberEdit *aEdit = new SNumberEdit();
         aEdit->setAlignment(Qt::AlignHCenter);
         aEdit->setFrame(false);
-        aEdit->setText(QString::number(ELEMENTS_ATOMIC_WEIGHTS[x]));
+        aEdit->setText(Numbers::numberToString(ELEMENTS_ATOMIC_WEIGHTS[x]));
         items.push_back(aEdit);
-        SNumberEdit *cEdit = new SNumberEdit();
-        cEdit->setAlignment(Qt::AlignHCenter);
-        cEdit->setFrame(false);
-        cEdit->setText("0");
-        items.push_back(cEdit);
+        SNumberEdit *aContentEdit = new SNumberEdit();
+        aContentEdit->setAlignment(Qt::AlignHCenter);
+        aContentEdit->setFrame(false);
+        aContentEdit->setText("0");
+        items.push_back(aContentEdit);
         ui->table->addRow(items);
     }
 }

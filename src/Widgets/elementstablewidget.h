@@ -11,6 +11,8 @@
 
 #include <QWidget>
 
+#include "acl_data.h"
+
 namespace Ui
 {
     class ElementsTableWidget;
@@ -21,12 +23,16 @@ class ElementsTableWidget : public QWidget
         Q_OBJECT
 
     public:
-        explicit ElementsTableWidget(QWidget *parent = 0);
+        explicit ElementsTableWidget(ACL::Data::ElementsContentUnits contentsUnits,
+                                     QWidget *parent = 0);
         ElementsTableWidget(std::vector<double> contents,
-                            std::vector<double> weights, QWidget *parent = 0);
+                            ACL::Data::ElementsContentUnits contentsUnits,
+                            std::vector<double> weights,
+                            QWidget *parent = 0);
         ~ElementsTableWidget();
         std::vector<double> getElementsWeights();
         std::vector<double> getElementsContent();
+        ACL::Data::ElementsContentUnits getElementsContentUnits();
 
     private:
         void fillTable();

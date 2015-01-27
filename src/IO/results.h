@@ -30,7 +30,6 @@ class Results : public QThread
         bool remove = false;
         ACL::Data::CalculationResult resultData;
         QString filePath;
-        QString stringRound(double source, int precision);
         QString fillString(QString source, int newLength);
 };
 

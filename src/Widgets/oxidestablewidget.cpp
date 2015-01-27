@@ -12,6 +12,8 @@
 
 #include "Widgets/oxidestablewidget.h"
 #include "ui_oxidestablewidget.h"
+
+#include "numbers.h"
 #include "data.h"
 
 #include "suil_number_edit.h"
@@ -58,7 +60,7 @@ std::vector<double> OxidesTableWidget::getOxidesContent()
     std::vector<double> output;
     for (short x = 0; x < OXIDES_COUNT; ++x)
     {
-        output.push_back(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->text().toDouble());
+        output.push_back(Numbers::toDouble(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->text()));
     }
     return output;
 }

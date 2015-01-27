@@ -8,6 +8,7 @@
 
 #include <QGraphicsOpacityEffect>
 #include <QDesktopServices>
+#include <QMessageBox>
 #include <QFileInfo>
 #include <QDateTime>
 #include <QSettings>
@@ -62,6 +63,7 @@ void CalculationWidget::start()
     calculationInput.elementsWeight = input.elementsWeight;
     calculationInput.intervalsNumber = input.intervalsNumber;
     calculationInput.log = input.log;
+    calculationInput.elementsContentUnits = input.elementsContentUnits;
     calculationInput.multiplier = input.multiplier;
     calculationInput.oxidesContent = input.oxidesContent;
     calculationInput.decimalPrecision = input.decimalPrecision;
@@ -144,7 +146,7 @@ void CalculationWidget::pauseCalculation()
     }
     else
     {
-        QDesktopServices::openUrl(QUrl(ui->labelFile->toolTip()));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(ui->labelFile->toolTip()));
     }
 }
 
@@ -153,11 +155,27 @@ void CalculationWidget::removeCalculation()
     if (this->status == Data::CalculationStatus::Running
         || this->status == Data::CalculationStatus::Paused)
     {
+        QMessageBox::StandardButton confirmation = QMessageBox::question(this, "Remove calculation",
+                                                                        tr("This calculation is unfinished. Are you sure you want to remove it?"),
+                                                                        QMessageBox::No | QMessageBox::Yes,
+                                                                        QMessageBox::Yes);
+        if (confirmation != QMessageBox::Yes)
+        {
+            return;
+        }
+
         disconnect(this->core, SIGNAL(calculationFinished(ACL::Data::CalculationResult)),
                    this, SLOT(calculationFinished(ACL::Data::CalculationResult)));
         this->core->removeCalculation();
-    } else if (this->status == Data::CalculationStatus::Saving)
+    }
+    else if (this->status == Data::CalculationStatus::Saving)
     {
+        /* This is a part of on old hack that prevents result saving function
+         * from freezing the whole program.
+         *
+         * In short, results are being saved in another thread which, if
+         * the calculation has been removed, will be stopped as well using
+         * the line below. */
         this->ioThread->removeThread();
     }
     this->deleteLater();
