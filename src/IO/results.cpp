@@ -95,7 +95,7 @@ void Results::run()
         out += ("\n——————————————————————————————\n\n");
         out += "~~~ Ip values ~~~\n\n";
         out += ("——————————————————————————————\n\n");
-        out += "[#] [Ip] [Ip Squareroot] [Frequency]\n";
+        out += "[#] [Ip] [Ip Squareroot] [Frequency] [Approximate frequency]\n";
         for (uint64_t x = 0; x < ip; ++x)
         {
             if (remove == true)
@@ -103,25 +103,47 @@ void Results::run()
                 break;
             }
             out += (QString::number(x + 1) + "\t" + Numbers::numberToString(this->resultData.ip[x], precision) + "\t"
-                    + Numbers::numberToString(this->resultData.ipSqrt[x], precision) + "\t" + QString::number(this->resultData.ipCount[x]) + "\n");
+                    + Numbers::numberToString(this->resultData.ipSqrt[x], precision) + "\t" + QString::number(this->resultData.ipFrequency[x])
+                    + "\t" + QString::number(this->resultData.ipTheoreticalFrequency[x]) + "\n");
         }
         if (remove == false)
         {
             out += ("\n——————————————————————————————\n\n");
             out += "~~~ Statistics ~~~\n\n";
             out += ("——————————————————————————————\n\n");
-            out += ("Average (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtAverage, precision) + "\n\n");
-            out += ("Variance (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtVariance, precision) + "\n\n");
-            out += ("Standard deviation (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtStandardDeviation, precision) + "\n\n");
-            out += ("Skewness of dataset (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtSkewnessOfDataset, precision) + "\n\n");
-            out += ("Excess kurtosis of dataset (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtExcessKurtosisOfDataset, precision) + "\n\n");
+            out += ("Average (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtAverage.sample, precision));
+            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtAverage.population, precision) + "]\n\n");
+
+            out += ("Variance (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtVariance.sample, precision));
+            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtVariance.population, precision) + "]\n\n");
+
+            out += ("Standard deviation (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtStandardDeviation.sample, precision));
+            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtStandardDeviation.population, precision) + "]\n\n");
+
+            out += ("Skewness of dataset (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtSkewnessOfDataset.sample, precision));
+            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtSkewnessOfDataset.population, precision) + "]\n\n");
+
+            out += ("Excess kurtosis of dataset (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtExcessKurtosisOfDataset.sample, precision));
+            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtExcessKurtosisOfDataset.population, precision) + "]\n\n");
+
             out += ("Mean squared error (Average (Ip Squareroot)):\t" + Numbers::numberToString(this->resultData.ipSqrtMeanSquareError, precision) + "\n\n");
-            out += ("\n\nAverage (Ip):\t" + Numbers::numberToString(this->resultData.ipAverage, precision) + "\n\n");
-            out += ("Variance (Ip):\t" + Numbers::numberToString(this->resultData.ipVariance, precision) + "\n\n");
-            out += ("Standard deviation (Ip):\t" + Numbers::numberToString(this->resultData.ipStandardDeviation, precision) + "\n\n");
-            out += ("Skewness of dataset (Ip):\t" + Numbers::numberToString(this->resultData.ipSkewnessOfDataset, precision) + "\n\n");
-            out += ("Excess kurtosis of dataset (Ip):\t" + Numbers::numberToString(this->resultData.ipExcessKurtosisOfDataset, precision) + "\n\n");
-            out += ("Mean squared error (Average (Ip)):\t" + Numbers::numberToString(this->resultData.ipMeanSquareError, precision) + "\n");
+
+            out += ("\n\nAverage (Ip):\t" + Numbers::numberToString(this->resultData.ipAverage.sample, precision));
+            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipAverage.population, precision) + "]\n\n");
+
+            out += ("Variance (Ip):\t" + Numbers::numberToString(this->resultData.ipVariance.sample, precision));
+            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipVariance.population, precision) + "]\n\n");
+
+            out += ("Standard deviation (Ip):\t" + Numbers::numberToString(this->resultData.ipStandardDeviation.sample, precision));
+            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipStandardDeviation.population, precision) + "]\n\n");
+
+            out += ("Skewness of dataset (Ip):\t" + Numbers::numberToString(this->resultData.ipSkewnessOfDataset.sample, precision));
+            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipSkewnessOfDataset.population, precision) + "]\n\n");
+
+            out += ("Excess kurtosis of dataset (Ip):\t" + Numbers::numberToString(this->resultData.ipExcessKurtosisOfDataset.sample, precision));
+            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipExcessKurtosisOfDataset.population, precision) + "]\n\n");
+
+            out += ("Mean squared error (Average (Ip)):\t" + Numbers::numberToString(this->resultData.ipMeanSquareError, precision) + "\n\n");
             out += ("\n——————————————————————————————\n\n");
             out += "~~~ Unimodality check ~~~\n\n";
             out += ("——————————————————————————————\n\n");
@@ -129,17 +151,19 @@ void Results::run()
             out += ("Ip range (Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtRange, precision) + "\n\n");
             out += ("Ip interval length:\t" + Numbers::numberToString(this->resultData.ipIntervalLength, precision) + "\n\n");
             out += ("Ip interval length (Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtIntervalLength, precision) + "\n\n");
-            out += "[Interval minimum] [Interval maximum] [Interval center] [Frequency]\n";
+            out += "[Interval minimum] [Interval maximum] [Interval center] [Frequency] [Approximate frequency]\n";
             for (int x = 0; x < this->resultData.calculationInput.intervalsNumber; ++x)
             {
                 out += (Numbers::numberToString(this->resultData.ipIntervalMinimum[x], precision) + "\t" + Numbers::numberToString(this->resultData.ipIntervalMaximum[x], precision)
-                        + "\t" + Numbers::numberToString(this->resultData.ipIntervalCenter[x], precision) + "\t" + QString::number(this->resultData.ipIntervalCount[x]) + "\n");
+                        + "\t" + Numbers::numberToString(this->resultData.ipIntervalCenter[x], precision) + "\t" + QString::number(this->resultData.ipIntervalCount[x].sample) + "\t"
+                        + QString::number(this->resultData.ipIntervalCount[x].population) + "\n");
             }
             out += ("\n[Interval minimum (Squareroot)] [Interval maximum (Squareroot)] [Interval center (Squareroot)] [Frequency (Squareroot)]\n");
             for (int x = 0; x < this->resultData.calculationInput.intervalsNumber; ++x)
             {
                 out += (Numbers::numberToString(this->resultData.ipSqrtIntervalMinimum[x], precision) + "\t" + Numbers::numberToString(this->resultData.ipSqrtIntervalMaximum[x], precision)
-                        + "\t" + Numbers::numberToString(this->resultData.ipSqrtIntervalCenter[x], precision) + "\t" + QString::number(this->resultData.ipSqrtIntervalCount[x]) + "\n");
+                        + "\t" + Numbers::numberToString(this->resultData.ipSqrtIntervalCenter[x], precision) + "\t" + QString::number(this->resultData.ipSqrtIntervalCount[x].sample) + "\t"
+                        + QString::number(this->resultData.ipSqrtIntervalCount[x].population) + "\n");
             }
             QTextStream stream(&file);
             stream << out;

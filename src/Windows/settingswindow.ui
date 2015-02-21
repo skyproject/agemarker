@@ -150,7 +150,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Number of calculation threads</string>
+          <string>Calculation threads</string>
          </property>
         </widget>
        </item>

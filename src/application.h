@@ -10,10 +10,10 @@
 #define APPLICATION_H
 
 
-#define APP_FILEVERSION             1,0,2,2
-#define APP_PRODUCTVERSION          1,0,2,2
-#define APP_FILEVERSION_STR         "1.0.2.2\0"
-#define APP_PRODUCTVERSION_STR      "1.0.2.2\0"
+#define APP_FILEVERSION             1,0,2,3
+#define APP_PRODUCTVERSION          1,0,2,3
+#define APP_FILEVERSION_STR         "1.0.2.3\0"
+#define APP_PRODUCTVERSION_STR      "1.0.2.3\0"
 
 #define APP_COMPANYNAME_STR         "skyproject.org"
 #define APP_FILEDESCRIPTION_STR     "Agemarker"
@@ -21,7 +21,7 @@
 #define APP_LEGALCOPYRIGHT_STR      "Copyright © 2013-2015 Mikhail Labushev"
 #define APP_ORIGINALFILENAME_STR    "agemarker.exe"
 #define APP_PRODUCTNAME_STR         "Agemarker"
-#define APP_RELEASE_DATE_STR        "January 27, 2015"
+#define APP_RELEASE_DATE_STR        "February 21, 2015"
 
 #endif // APPLICATION_H
 

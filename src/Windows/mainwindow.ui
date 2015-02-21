@@ -274,7 +274,7 @@
   </action>
   <action name="actionAddCalculation">
    <property name="text">
-    <string>Add new calculation</string>
+    <string>New</string>
    </property>
    <property name="font">
     <font>
@@ -289,7 +289,7 @@
   </action>
   <action name="actionRemoveAll">
    <property name="text">
-    <string>All calculations</string>
+    <string>All</string>
    </property>
    <property name="font">
     <font>
@@ -304,7 +304,7 @@
   </action>
   <action name="actionRemoveFinished">
    <property name="text">
-    <string>All finished calculations</string>
+    <string>Finished</string>
    </property>
    <property name="font">
     <font>
@@ -331,7 +331,7 @@
   </action>
   <action name="actionLoadCalculation">
    <property name="text">
-    <string>Load calculation from results</string>
+    <string>Load from results</string>
    </property>
    <property name="font">
     <font>

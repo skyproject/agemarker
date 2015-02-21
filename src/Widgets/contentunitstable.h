@@ -33,8 +33,7 @@ class ContentUnitsTable : public QWidget
         void unitsChoosen(ACL::Data::ElementsContentUnits units);
 
     private slots:
-        void chooseMassPercent();
-        void chooseAtomsNumber();
+        void proceed();
 
     private:
         Ui::ContentUnitsTable *ui;

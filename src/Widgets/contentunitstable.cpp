@@ -14,10 +14,8 @@ ContentUnitsTable::ContentUnitsTable(QWidget *parent) :
     ui(new Ui::ContentUnitsTable)
 {
     ui->setupUi(this);
-    connect(ui->buttonAtomsNumber, SIGNAL(clicked()),
-            this, SLOT(chooseAtomsNumber()));
-    connect(ui->buttonMassPercent, SIGNAL(clicked()),
-            this, SLOT(chooseMassPercent()));
+    connect(ui->buttonNext, SIGNAL(clicked()),
+            this, SLOT(proceed()));
 }
 
 ContentUnitsTable::~ContentUnitsTable()
@@ -25,12 +23,14 @@ ContentUnitsTable::~ContentUnitsTable()
     delete ui;
 }
 
-void ContentUnitsTable::chooseAtomsNumber()
+void ContentUnitsTable::proceed()
 {
-    emit unitsChoosen(ACL::Data::ElementsContentUnits::NumberOfAtoms);
-}
-
-void ContentUnitsTable::chooseMassPercent()
-{
-    emit unitsChoosen(ACL::Data::ElementsContentUnits::MassPercent);
+    if (ui->radioMassPercent->isChecked() == true)
+    {
+        emit unitsChoosen(ACL::Data::ElementsContentUnits::MassPercent);
+    }
+    else
+    {
+        emit unitsChoosen(ACL::Data::ElementsContentUnits::NumberOfAtoms);
+    }
 }

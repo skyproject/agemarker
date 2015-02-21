@@ -97,6 +97,7 @@
     <widget class="QLabel" name="labelMultiplier">
      <property name="font">
       <font>
+       <family>Open Sans</family>
        <pointsize>11</pointsize>
       </font>
      </property>
@@ -164,6 +165,7 @@
     <widget class="QLabel" name="labelPrecision">
      <property name="font">
       <font>
+       <family>Open Sans</family>
        <pointsize>11</pointsize>
       </font>
      </property>
@@ -246,6 +248,7 @@
     <widget class="QLabel" name="labelLogarithm">
      <property name="font">
       <font>
+       <family>Open Sans</family>
        <pointsize>11</pointsize>
       </font>
      </property>
@@ -277,6 +280,7 @@
      </property>
      <property name="font">
       <font>
+       <family>Open Sans</family>
        <pointsize>11</pointsize>
       </font>
      </property>
@@ -322,6 +326,7 @@
     <widget class="QLabel" name="labelIntervalsNumber">
      <property name="font">
       <font>
+       <family>Open Sans</family>
        <pointsize>11</pointsize>
       </font>
      </property>
