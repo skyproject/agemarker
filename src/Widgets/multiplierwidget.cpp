@@ -30,7 +30,8 @@ void MultiplierWidget::setMultiplier()
 {
     if (ui->textCalculations->text() != "")
     {
-        uint64_t multiplier = round(this->getCalculationsNumber() / this->atomNorSum);
+        float128 m = boost::multiprecision::round(this->getCalculationsNumber() / this->atomNorSum);
+        uint64_t multiplier = boost::numeric_cast<uint64_t>(m);
         ui->textMultiplier->setText(QString::number(multiplier));
     }
     else
@@ -53,7 +54,8 @@ void MultiplierWidget::setCalculationsNumber()
 {
     if (ui->textMultiplier->text() != "")
     {
-        uint64_t numberOfCalculations = round(this->atomNorSum * this->getMultiplier());
+        float128 n = boost::multiprecision::round(this->atomNorSum * this->getMultiplier());
+        uint64_t numberOfCalculations = boost::numeric_cast<uint64_t>(n);
         ui->textCalculations->setText(QString::number(numberOfCalculations));
     }
     else
@@ -67,12 +69,12 @@ uint64_t MultiplierWidget::getCalculationsNumber()
     return ui->textCalculations->text().toULongLong();
 }
 
-void MultiplierWidget::updateInputData(std::vector<double> oxidesContent,
-                                       std::vector<double> elementsContent,
+void MultiplierWidget::updateInputData(std::vector<float128> oxidesContent,
+                                       std::vector<float128> elementsContent,
                                        ACL::Data::ElementsContentUnits elementsContentUnits,
-                                       std::vector<double> elementsWeight)
+                                       std::vector<float128> elementsWeight)
 {
-    double oxidesWeightSum[OXIDES_COUNT];
+    float128 oxidesWeightSum[OXIDES_COUNT];
     oxidesWeightSum[0] = ((elementsWeight[13] * 1) + (elementsWeight[7] * 2));
     oxidesWeightSum[1] = ((elementsWeight[21] * 1) + (elementsWeight[7] * 2));
     oxidesWeightSum[2] = ((elementsWeight[12] * 2) + (elementsWeight[7] * 3));
@@ -126,7 +128,7 @@ void MultiplierWidget::updateInputData(std::vector<double> oxidesContent,
     oxidesWeightSum[50] = ((elementsWeight[43] * 1) + (elementsWeight[7] * 2));
     oxidesWeightSum[51] = ((elementsWeight[54] * 2) + (elementsWeight[7] * 1));
     oxidesWeightSum[52] = ((elementsWeight[36] * 2) + (elementsWeight[7] * 1));
-    double oxidesPureElement[OXIDES_COUNT];
+    float128 oxidesPureElement[OXIDES_COUNT];
     oxidesPureElement[0] = ((elementsWeight[13] * 1) * (oxidesContent[0]) / (oxidesWeightSum[0]));
     oxidesPureElement[1] = ((elementsWeight[21] * 1) * (oxidesContent[1]) / (oxidesWeightSum[1]));
     oxidesPureElement[2] = ((elementsWeight[12] * 2) * (oxidesContent[2]) / (oxidesWeightSum[2]));
@@ -234,13 +236,13 @@ void MultiplierWidget::updateInputData(std::vector<double> oxidesContent,
     elementsContent[36] += oxidesPureElement[52];
     for (int x = 0; x < OXIDES_COUNT; ++x)
     {
-        double oxideOxygen = ((oxidesContent[x]) - (oxidesPureElement[x]));
+        float128 oxideOxygen = ((oxidesContent[x]) - (oxidesPureElement[x]));
         elementsContent[7] += oxideOxygen;
     }
     this->atomNorSum = 0;
     for (int x = 0; x < ELEMENTS_COUNT; ++x)
     {
-        double nor;
+        float128 nor;
         if (elementsContentUnits == ACL::Data::ElementsContentUnits::MassPercent)
         {
             nor = (elementsContent[x] / elementsWeight[x]);

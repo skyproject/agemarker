@@ -6,31 +6,30 @@
  * For full terms see LICENSE file.
  */
 
+#include <sstream>
+#include <string>
+
 #include "numbers.h"
 
-QString Numbers::numberToString(double source, int precision)
+QString Numbers::numberToString(float128 source, int precision)
 {
-    QString value = QString::number(source, 'g', precision);
-    QStringList valueSplit = value.split(QLocale::system().decimalPoint());
-    if (valueSplit.count() < 2)
-    {
-        return value;
-    }
-    while (valueSplit[1].length() < precision)
-    {
-        valueSplit[1] += " ";
-    }
-    return (valueSplit[0] + "." + valueSplit[1]);
+    std::ostringstream s;
+    s << std::setprecision(precision) << source;
+    return QString::fromStdString(s.str());
+
+    /* QLocale::system().toString(); ? */
 }
 
-QString Numbers::numberToString(double source)
+QString Numbers::numberToString(float128 source)
 {
-    /* 15 is the maximum precision Agemarker is supposed to
-    work with due to 'double' type limitations. */
-    return QLocale::system().toString(source, 'g', 15);
+    /* 30 is the default precision for Agemarker
+     * (maximum limitation of "float128" type is
+     * 34 decimal places, but we take extra precaution)
+     */
+    return numberToString(source, 30);
 }
 
-double Numbers::toDouble(QString input)
+float128 Numbers::toFloat128(QString input)
 {
-    return QLocale::system().toDouble(input);
+    return boost::numeric_cast<float128>(input.toStdString());
 }

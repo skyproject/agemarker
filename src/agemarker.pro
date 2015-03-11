@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=gnu++0x
 QMAKE_CXXFLAGS_RELEASE += -O2
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -74,6 +74,7 @@ RESOURCES += graphics.qrc
 
 win32:RC_FILE = resources.rc
 
+LIBS += -lquadmath
 
 LIBS += -Lc:/Users/mlabu_000.RESONANS-PC/Documents/Builds/agemarker-core/debug -lagemarker-core
 LIBS += -Lc:/Users/mlabu_000.RESONANS-PC/Documents/Builds/software-update/debug -lsoftware-update
@@ -82,3 +83,5 @@ LIBS += -Lc:/Users/mlabu_000.RESONANS-PC/Documents/Builds/skyproject-ui/debug -l
 INCLUDEPATH += $$quote(c:/Users/mlabu_000.RESONANS-PC/Documents/GitHub/agemarker-core/src)
 INCLUDEPATH += $$quote(c:/Users/mlabu_000.RESONANS-PC/Documents/GitHub/skyproject-ui/src)
 INCLUDEPATH += $$quote(c:/Users/mlabu_000.RESONANS-PC/Documents/GitHub/software-update/src)
+
+INCLUDEPATH += $$quote(c:/Users/mlabu_000.RESONANS-PC/Documents/Libs)

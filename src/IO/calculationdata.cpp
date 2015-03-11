@@ -13,6 +13,7 @@
 #include <QDir>
 
 #include "IO\calculationdata.h"
+#include "numbers.h"
 
 /* TODO: Rewrite the following block so it'd either use pre-defined constants or
  * parse the file contents without referring to line number at all. */
@@ -33,14 +34,14 @@ void CalculationData::saveUserInput(Data::UserInput input, int calculation)
         out += "Oxides\n";
         for (int x = 0; x < OXIDES_COUNT; ++x)
         {
-            out += QString::number(input.oxidesContent[x], 'g', 14) + "\n";
+            out += Numbers::numberToString(input.oxidesContent[x]) + "\n";
         }
         out += "\n";
         out += "Elements\n";
         for (int x = 0; x < ELEMENTS_COUNT; ++x)
         {
-            out += QString::number(input.elementsWeight[x], 'g', 14) + "\t"
-                   + QString::number(input.elementsContent[x], 'g', 14) + "\n";
+            out += Numbers::numberToString(input.elementsWeight[x]) + "\t"
+                   + Numbers::numberToString(input.elementsContent[x]) + "\n";
         }
         out += "\n";
         out += QString::number(input.multiplier) + "\n\n";
@@ -87,7 +88,7 @@ Data::UserInput CalculationData::loadUserInput(int calculation)
                 {
                     throw 0;
                 }
-                input.oxidesContent.push_back(data[0].toDouble());
+                input.oxidesContent.push_back(Numbers::toFloat128(data[0]));
             }
             else if (x >= 58 && x < 176)
             {
@@ -95,8 +96,8 @@ Data::UserInput CalculationData::loadUserInput(int calculation)
                 {
                     throw 1;
                 }
-                input.elementsWeight.push_back(data[0].toDouble());
-                input.elementsContent.push_back(data[1].toDouble());
+                input.elementsWeight.push_back(Numbers::toFloat128(data[0]));
+                input.elementsContent.push_back(Numbers::toFloat128(data[1]));
             }
             else if (x == 177)
             {
@@ -181,7 +182,7 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
             {
                 if (data.size() > 2)
                 {
-                    input.oxidesContent.push_back(data[2].toDouble());
+                    input.oxidesContent.push_back(Numbers::toFloat128(data[2]));
                 }
                 else
                 {
@@ -203,8 +204,8 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
             {
                 if (data.size() > 3)
                 {
-                    input.elementsWeight.push_back(data[2].toDouble());
-                    input.elementsContent.push_back(data[3].toDouble());
+                    input.elementsWeight.push_back(Numbers::toFloat128(data[2]));
+                    input.elementsContent.push_back(Numbers::toFloat128(data[3]));
                 }
                 else
                 {

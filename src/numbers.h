@@ -9,14 +9,18 @@
 #ifndef NUMBERS_H
 #define NUMBERS_H
 
+#include <boost/multiprecision/float128.hpp>
+
 #include <QLocale>
+
+using namespace boost::multiprecision;
 
 class Numbers
 {
     public:
-        static QString numberToString(double source, int precision);
-        static QString numberToString(double source);
-        static double toDouble(QString input);
+        static QString numberToString(float128 source, int precision);
+        static QString numberToString(float128 source);
+        static float128 toFloat128(QString input);
 };
 
 #endif // NUMBERS_H

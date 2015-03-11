@@ -112,36 +112,36 @@ void Results::run()
             out += "~~~ Statistics ~~~\n\n";
             out += ("——————————————————————————————\n\n");
             out += ("Average (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtAverage.sample, precision));
-            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtAverage.population, precision) + "]\n\n");
+            out += ("\t|\tApproximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtAverage.population, precision) + "\n\n");
 
             out += ("Variance (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtVariance.sample, precision));
-            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtVariance.population, precision) + "]\n\n");
+            out += ("\t|\tApproximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtVariance.population, precision) + "\n\n");
 
             out += ("Standard deviation (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtStandardDeviation.sample, precision));
-            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtStandardDeviation.population, precision) + "]\n\n");
+            out += ("\t|\tApproximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtStandardDeviation.population, precision) + "\n\n");
 
             out += ("Skewness of dataset (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtSkewnessOfDataset.sample, precision));
-            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtSkewnessOfDataset.population, precision) + "]\n\n");
+            out += ("\t|\tApproximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtSkewnessOfDataset.population, precision) + "\n\n");
 
             out += ("Excess kurtosis of dataset (Ip Squareroot):\t" + Numbers::numberToString(this->resultData.ipSqrtExcessKurtosisOfDataset.sample, precision));
-            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtExcessKurtosisOfDataset.population, precision) + "]\n\n");
+            out += ("\t|\tApproximate value:\t" + Numbers::numberToString(this->resultData.ipSqrtExcessKurtosisOfDataset.population, precision) + "\n\n");
 
             out += ("Mean squared error (Average (Ip Squareroot)):\t" + Numbers::numberToString(this->resultData.ipSqrtMeanSquareError, precision) + "\n\n");
 
             out += ("\n\nAverage (Ip):\t" + Numbers::numberToString(this->resultData.ipAverage.sample, precision));
-            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipAverage.population, precision) + "]\n\n");
+            out += ("\t|\tApproximate value:\t" + Numbers::numberToString(this->resultData.ipAverage.population, precision) + "\n\n");
 
             out += ("Variance (Ip):\t" + Numbers::numberToString(this->resultData.ipVariance.sample, precision));
-            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipVariance.population, precision) + "]\n\n");
+            out += ("\t|\tApproximate value:\t" + Numbers::numberToString(this->resultData.ipVariance.population, precision) + "\n\n");
 
             out += ("Standard deviation (Ip):\t" + Numbers::numberToString(this->resultData.ipStandardDeviation.sample, precision));
-            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipStandardDeviation.population, precision) + "]\n\n");
+            out += ("\t|\tApproximate value:\t" + Numbers::numberToString(this->resultData.ipStandardDeviation.population, precision) + "\n\n");
 
             out += ("Skewness of dataset (Ip):\t" + Numbers::numberToString(this->resultData.ipSkewnessOfDataset.sample, precision));
-            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipSkewnessOfDataset.population, precision) + "]\n\n");
+            out += ("\t|\tApproximate value:\t" + Numbers::numberToString(this->resultData.ipSkewnessOfDataset.population, precision) + "\n\n");
 
             out += ("Excess kurtosis of dataset (Ip):\t" + Numbers::numberToString(this->resultData.ipExcessKurtosisOfDataset.sample, precision));
-            out += ("\t [Approximate value:\t" + Numbers::numberToString(this->resultData.ipExcessKurtosisOfDataset.population, precision) + "]\n\n");
+            out += ("\t|\tApproximate value:\t" + Numbers::numberToString(this->resultData.ipExcessKurtosisOfDataset.population, precision) + "\n\n");
 
             out += ("Mean squared error (Average (Ip)):\t" + Numbers::numberToString(this->resultData.ipMeanSquareError, precision) + "\n\n");
             out += ("\n——————————————————————————————\n\n");

@@ -9,7 +9,11 @@
 #ifndef OXIDESTABLEWIDGET_H
 #define OXIDESTABLEWIDGET_H
 
+#include <boost/multiprecision/float128.hpp>
+
 #include <QWidget>
+
+using namespace boost::multiprecision;
 
 namespace Ui
 {
@@ -22,9 +26,9 @@ class OxidesTableWidget : public QWidget
 
     public:
         explicit OxidesTableWidget(QWidget *parent = 0);
-        OxidesTableWidget(std::vector<double> contents, QWidget *parent = 0);
+        OxidesTableWidget(std::vector<float128> contents, QWidget *parent = 0);
         ~OxidesTableWidget();
-        std::vector<double> getOxidesContent();
+        std::vector<float128> getOxidesContent();
 
     private:
         void fillTable();

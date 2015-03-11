@@ -40,9 +40,9 @@ ElementsTableWidget::ElementsTableWidget(ACL::Data::ElementsContentUnits content
     fillTable();
 }
 
-ElementsTableWidget::ElementsTableWidget(std::vector<double> contents,
+ElementsTableWidget::ElementsTableWidget(std::vector<float128> contents,
                                          ACL::Data::ElementsContentUnits contentsUnits,
-                                         std::vector<double> weights, QWidget *parent) :
+                                         std::vector<float128> weights, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ElementsTableWidget)
 {
@@ -64,8 +64,8 @@ ElementsTableWidget::ElementsTableWidget(std::vector<double> contents,
     fillTable();
     for (int x = 0; x < ELEMENTS_COUNT; ++x)
     {
-        qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->setText(QString::number(weights[x]));
-        qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 4))->setText(QString::number(contents[x]));
+        qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->setText(Numbers::numberToString(weights[x]));
+        qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 4))->setText(Numbers::numberToString(contents[x]));
     }
 }
 
@@ -74,25 +74,25 @@ ElementsTableWidget::~ElementsTableWidget()
     delete ui;
 }
 
-std::vector<double> ElementsTableWidget::getElementsWeights()
+std::vector<float128> ElementsTableWidget::getElementsWeights()
 {
-    std::vector<double> output;
+    std::vector<float128> output;
     for (short x = 0; x < ELEMENTS_COUNT; ++x)
     {
-        output.push_back(Numbers::toDouble(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->text()));
+        output.push_back(Numbers::toFloat128(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->text()));
     }
     return output;
 }
 
-std::vector<double> ElementsTableWidget::getElementsContent()
+std::vector<float128> ElementsTableWidget::getElementsContent()
 {
-    std::vector<double> output;
+    std::vector<float128> output;
     if (ui->table->horizontalHeaderItem(4)->text() == "Content, Mass %" ||
         ui->table->horizontalHeaderItem(4)->text() == "Content, # of Atoms")
     {
         for (short x = 0; x < ELEMENTS_COUNT; ++x)
         {
-            output.push_back(Numbers::toDouble(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 4))->text()));
+            output.push_back(Numbers::toFloat128(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 4))->text()));
         }
     }
     else
