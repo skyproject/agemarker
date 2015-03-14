@@ -13,10 +13,12 @@
 #include <QDir>
 
 #include "IO\calculationdata.h"
-#include "numbers.h"
 
-/* TODO: Rewrite the following block so it'd either use pre-defined constants or
- * parse the file contents without referring to line number at all. */
+/* TODO: Rewrite the following block so it'd either
+ * use pre-defined constants.
+ * Or, parse the file contents without referring to line
+ * number at all.
+*/
 
 void CalculationData::saveUserInput(Data::UserInput input, int calculation)
 {
@@ -34,14 +36,14 @@ void CalculationData::saveUserInput(Data::UserInput input, int calculation)
         out += "Oxides\n";
         for (int x = 0; x < OXIDES_COUNT; ++x)
         {
-            out += Numbers::numberToString(input.oxidesContent[x]) + "\n";
+            out += ACL::Float(input.oxidesContent[x]).toString() + "\n";
         }
         out += "\n";
         out += "Elements\n";
         for (int x = 0; x < ELEMENTS_COUNT; ++x)
         {
-            out += Numbers::numberToString(input.elementsWeight[x]) + "\t"
-                   + Numbers::numberToString(input.elementsContent[x]) + "\n";
+            out += ACL::Float(input.elementsWeight[x]).toString() + "\t"
+                   + ACL::Float(input.elementsContent[x]).toString() + "\n";
         }
         out += "\n";
         out += QString::number(input.multiplier) + "\n\n";
@@ -88,7 +90,8 @@ Data::UserInput CalculationData::loadUserInput(int calculation)
                 {
                     throw 0;
                 }
-                input.oxidesContent.push_back(Numbers::toFloat128(data[0]));
+                input.oxidesContent.push_back(boost::numeric_cast<boost::multiprecision::float128>
+                                              (data[0].toStdString()));
             }
             else if (x >= 58 && x < 176)
             {
@@ -96,8 +99,10 @@ Data::UserInput CalculationData::loadUserInput(int calculation)
                 {
                     throw 1;
                 }
-                input.elementsWeight.push_back(Numbers::toFloat128(data[0]));
-                input.elementsContent.push_back(Numbers::toFloat128(data[1]));
+                input.elementsWeight.push_back(boost::numeric_cast<boost::multiprecision::float128>
+                                               (data[0].toStdString()));
+                input.elementsContent.push_back(boost::numeric_cast<boost::multiprecision::float128>
+                                               (data[1].toStdString()));
             }
             else if (x == 177)
             {
@@ -182,7 +187,8 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
             {
                 if (data.size() > 2)
                 {
-                    input.oxidesContent.push_back(Numbers::toFloat128(data[2]));
+                    input.oxidesContent.push_back(boost::numeric_cast<boost::multiprecision::float128>
+                                                  (data[2].toStdString()));
                 }
                 else
                 {
@@ -204,8 +210,10 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
             {
                 if (data.size() > 3)
                 {
-                    input.elementsWeight.push_back(Numbers::toFloat128(data[2]));
-                    input.elementsContent.push_back(Numbers::toFloat128(data[3]));
+                    input.elementsWeight.push_back(boost::numeric_cast<boost::multiprecision::float128>
+                                                   (data[2].toStdString()));
+                    input.elementsContent.push_back(boost::numeric_cast<boost::multiprecision::float128>
+                                                    (data[3].toStdString()));
                 }
                 else
                 {

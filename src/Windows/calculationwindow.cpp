@@ -131,7 +131,7 @@ void CalculationWindow::wizardFinished()
         }
         else
         {
-            std::vector<float128> nullOxides;
+            std::vector<boost::multiprecision::float128> nullOxides;
             for (short x = 0; x < OXIDES_COUNT; ++x)
             {
                 nullOxides.push_back(0);

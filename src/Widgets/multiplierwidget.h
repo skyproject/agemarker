@@ -25,10 +25,10 @@ class MultiplierWidget : public QWidget
     public:
         explicit MultiplierWidget(QWidget *parent = 0);
         ~MultiplierWidget();
-        void updateInputData(std::vector<float128> oxidesContent,
-                             std::vector<float128> elementsContent,
+        void updateInputData(std::vector<boost::multiprecision::float128> oxidesContent,
+                             std::vector<boost::multiprecision::float128> elementsContent,
                              ACL::Data::ElementsContentUnits elementsContentUnits,
-                             std::vector<float128> elementsWeight);
+                             std::vector<boost::multiprecision::float128> elementsWeight);
         uint64_t getMultiplier();
         uint64_t getCalculationsNumber();
 
@@ -39,7 +39,7 @@ class MultiplierWidget : public QWidget
 
     private:
         Ui::MultiplierWidget *ui;
-        float128 atomNorSum;
+        boost::multiprecision::float128 atomNorSum;
 };
 
 #endif // MULTIPLIERWIDGET_H

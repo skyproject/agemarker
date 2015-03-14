@@ -57,16 +57,32 @@ void CalculationWidget::start()
     this->status = Data::CalculationStatus::Running;
     switchCalculationStatus();
     ui->labelStartedAt->setText("Started at " + QDateTime::currentDateTime().toString("MM/dd/yyyy hh:mm:ss"));
+
     Data::UserInput input = CalculationData::loadUserInput(this->calculationId);
+
     ACL::Data::CalculationInput calculationInput;
-    calculationInput.elementsContent = input.elementsContent;
-    calculationInput.elementsWeight = input.elementsWeight;
+
+    /* TODO: A bit ugly here, clean up needed. */
+
+    for (int x = 0; x < ELEMENTS_COUNT; x++)
+    {
+        calculationInput.elementsContent.push_back(ACL::Float(ACL::Float(input.elementsContent[x]).toString(),
+                                                              calculationInput.decimalPrecision));
+        calculationInput.elementsWeight.push_back(ACL::Float(ACL::Float(input.elementsWeight[x]).toString(),
+                                                              calculationInput.decimalPrecision));
+    }
+    for (int x = 0; x < OXIDES_COUNT; x++)
+    {
+        calculationInput.oxidesContent.push_back(ACL::Float(ACL::Float(input.oxidesContent[x]).toString(),
+                                                              calculationInput.decimalPrecision));
+    }
+
     calculationInput.intervalsNumber = input.intervalsNumber;
     calculationInput.log = input.log;
     calculationInput.elementsContentUnits = input.elementsContentUnits;
     calculationInput.multiplier = input.multiplier;
-    calculationInput.oxidesContent = input.oxidesContent;
     calculationInput.decimalPrecision = input.decimalPrecision;
+
     QSettings s;
     calculationInput.threadsNumber = s.value("Threads", 1).toInt();
     this->core = new ACL::AgemarkerCore(calculationInput);

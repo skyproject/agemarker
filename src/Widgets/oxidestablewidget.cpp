@@ -13,7 +13,6 @@
 #include "Widgets/oxidestablewidget.h"
 #include "ui_oxidestablewidget.h"
 
-#include "numbers.h"
 #include "data.h"
 
 #include "suil_number_edit.h"
@@ -32,7 +31,7 @@ OxidesTableWidget::OxidesTableWidget(QWidget *parent) :
     fillTable();
 }
 
-OxidesTableWidget::OxidesTableWidget(std::vector<float128> contents, QWidget *parent) :
+OxidesTableWidget::OxidesTableWidget(std::vector<boost::multiprecision::float128> contents, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::OxidesTableWidget)
 {
@@ -46,7 +45,7 @@ OxidesTableWidget::OxidesTableWidget(std::vector<float128> contents, QWidget *pa
     fillTable();
     for (int x = 0; x < OXIDES_COUNT; ++x)
     {
-        qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->setText((Numbers::numberToString(contents[x])));
+        qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->setText((ACL::Float(contents[x]).toString()));
     }
 }
 
@@ -55,12 +54,13 @@ OxidesTableWidget::~OxidesTableWidget()
     delete ui;
 }
 
-std::vector<float128> OxidesTableWidget::getOxidesContent()
+std::vector<boost::multiprecision::float128> OxidesTableWidget::getOxidesContent()
 {
-    std::vector<float128> output;
+    std::vector<boost::multiprecision::float128> output;
     for (short x = 0; x < OXIDES_COUNT; ++x)
     {
-        output.push_back(Numbers::toFloat128(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->text()));
+        output.push_back(boost::numeric_cast<boost::multiprecision::float128>
+                         (qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->text().toStdString()));
     }
     return output;
 }

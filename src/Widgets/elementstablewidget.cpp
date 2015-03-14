@@ -12,7 +12,6 @@
 #include "Widgets\elementstablewidget.h"
 #include "ui_elementstablewidget.h"
 
-#include "numbers.h"
 #include "data.h"
 
 #include "suil_number_edit.h"
@@ -40,9 +39,9 @@ ElementsTableWidget::ElementsTableWidget(ACL::Data::ElementsContentUnits content
     fillTable();
 }
 
-ElementsTableWidget::ElementsTableWidget(std::vector<float128> contents,
+ElementsTableWidget::ElementsTableWidget(std::vector<boost::multiprecision::float128> contents,
                                          ACL::Data::ElementsContentUnits contentsUnits,
-                                         std::vector<float128> weights, QWidget *parent) :
+                                         std::vector<boost::multiprecision::float128> weights, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ElementsTableWidget)
 {
@@ -64,8 +63,8 @@ ElementsTableWidget::ElementsTableWidget(std::vector<float128> contents,
     fillTable();
     for (int x = 0; x < ELEMENTS_COUNT; ++x)
     {
-        qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->setText(Numbers::numberToString(weights[x]));
-        qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 4))->setText(Numbers::numberToString(contents[x]));
+        qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->setText(ACL::Float(weights[x]).toString());
+        qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 4))->setText(ACL::Float(contents[x]).toString());
     }
 }
 
@@ -74,25 +73,27 @@ ElementsTableWidget::~ElementsTableWidget()
     delete ui;
 }
 
-std::vector<float128> ElementsTableWidget::getElementsWeights()
+std::vector<boost::multiprecision::float128> ElementsTableWidget::getElementsWeights()
 {
-    std::vector<float128> output;
+    std::vector<boost::multiprecision::float128> output;
     for (short x = 0; x < ELEMENTS_COUNT; ++x)
     {
-        output.push_back(Numbers::toFloat128(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->text()));
+        output.push_back(boost::numeric_cast<boost::multiprecision::float128>
+                         (qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->text().toStdString()));
     }
     return output;
 }
 
-std::vector<float128> ElementsTableWidget::getElementsContent()
+std::vector<boost::multiprecision::float128> ElementsTableWidget::getElementsContent()
 {
-    std::vector<float128> output;
+    std::vector<boost::multiprecision::float128> output;
     if (ui->table->horizontalHeaderItem(4)->text() == "Content, Mass %" ||
         ui->table->horizontalHeaderItem(4)->text() == "Content, # of Atoms")
     {
         for (short x = 0; x < ELEMENTS_COUNT; ++x)
         {
-            output.push_back(Numbers::toFloat128(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 4))->text()));
+            output.push_back(boost::numeric_cast<boost::multiprecision::float128>
+                             (qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 4))->text().toStdString()));
         }
     }
     else
@@ -137,7 +138,7 @@ void ElementsTableWidget::fillTable()
         SNumberEdit *aEdit = new SNumberEdit();
         aEdit->setAlignment(Qt::AlignHCenter);
         aEdit->setFrame(false);
-        aEdit->setText(Numbers::numberToString(ELEMENTS_ATOMIC_WEIGHTS[x]));
+        aEdit->setText(ACL::Float(ELEMENTS_ATOMIC_WEIGHTS[x]).toString());
         items.push_back(aEdit);
         SNumberEdit *aContentEdit = new SNumberEdit();
         aContentEdit->setAlignment(Qt::AlignHCenter);

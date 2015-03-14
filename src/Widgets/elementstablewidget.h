@@ -25,13 +25,13 @@ class ElementsTableWidget : public QWidget
     public:
         explicit ElementsTableWidget(ACL::Data::ElementsContentUnits contentsUnits,
                                      QWidget *parent = 0);
-        ElementsTableWidget(std::vector<float128> contents,
+        ElementsTableWidget(std::vector<boost::multiprecision::float128> contents,
                             ACL::Data::ElementsContentUnits contentsUnits,
-                            std::vector<float128> weights,
+                            std::vector<boost::multiprecision::float128> weights,
                             QWidget *parent = 0);
         ~ElementsTableWidget();
-        std::vector<float128> getElementsWeights();
-        std::vector<float128> getElementsContent();
+        std::vector<boost::multiprecision::float128> getElementsWeights();
+        std::vector<boost::multiprecision::float128> getElementsContent();
         ACL::Data::ElementsContentUnits getElementsContentUnits();
 
     private:

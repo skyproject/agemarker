@@ -9,9 +9,9 @@
 #ifndef OXIDESTABLEWIDGET_H
 #define OXIDESTABLEWIDGET_H
 
-#include <boost/multiprecision/float128.hpp>
-
 #include <QWidget>
+
+#include "acl_float.h"
 
 using namespace boost::multiprecision;
 
@@ -26,9 +26,9 @@ class OxidesTableWidget : public QWidget
 
     public:
         explicit OxidesTableWidget(QWidget *parent = 0);
-        OxidesTableWidget(std::vector<float128> contents, QWidget *parent = 0);
+        OxidesTableWidget(std::vector<boost::multiprecision::float128> contents, QWidget *parent = 0);
         ~OxidesTableWidget();
-        std::vector<float128> getOxidesContent();
+        std::vector<boost::multiprecision::float128> getOxidesContent();
 
     private:
         void fillTable();

@@ -31,7 +31,6 @@ SOURCES += main.cpp \
            IO\calculationdata.cpp \
            IO\results.cpp \
            initialize.cpp \
-           numbers.cpp \
            data.cpp
 
 
@@ -50,7 +49,6 @@ HEADERS  += Windows\mainwindow.h \
             IO\calculationdata.h \
             IO\results.h \
             initialize.h \
-            numbers.h \
             application.h \
             data.h
 

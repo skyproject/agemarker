@@ -18,16 +18,27 @@ extern const QString OXIDES_FULL_NAMES[];
 extern const QString OXIDES_SHORT_NAMES[];
 extern const QString ELEMENTS_FULL_NAMES[];
 extern const QString ELEMENTS_SHORT_NAMES[];
-extern const float128 ELEMENTS_ATOMIC_WEIGHTS[];
+extern const boost::multiprecision::float128 ELEMENTS_ATOMIC_WEIGHTS[];
 
 class Data
 {
     public:
         struct UserInput
         {
-            std::vector<float128> oxidesContent;
-            std::vector<float128> elementsContent;
-            std::vector<float128> elementsWeight;
+            /* "float128" is used there instead of "ACL::Float" because
+             * the latter requires decimal precision value to determine
+             * the type. User enters it on the final page of
+             * calculation wizard, with "oxidesContent", "elementsContent"
+             * and "elementsWeight" already filled in.
+             *
+             * Therefore, it is more practical to convert "float128" to
+             * "ACL::Float" when the user has finished entering data (so
+             * the decimal precision choosen can be used).
+             * See "Widgets/calculationwidget.cpp" for the convertation code.
+             */
+            std::vector<boost::multiprecision::float128> oxidesContent;
+            std::vector<boost::multiprecision::float128> elementsContent;
+            std::vector<boost::multiprecision::float128> elementsWeight;
             ACL::Data::Logarithm log;
             ACL::Data::ElementsContentUnits elementsContentUnits;
             QString resultsFilePath;
