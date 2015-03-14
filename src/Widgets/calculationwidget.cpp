@@ -67,14 +67,14 @@ void CalculationWidget::start()
     for (int x = 0; x < ELEMENTS_COUNT; x++)
     {
         calculationInput.elementsContent.push_back(ACL::Float(ACL::Float(input.elementsContent[x]).toString(),
-                                                              calculationInput.decimalPrecision));
+                                                              input.decimalPrecision));
         calculationInput.elementsWeight.push_back(ACL::Float(ACL::Float(input.elementsWeight[x]).toString(),
-                                                              calculationInput.decimalPrecision));
+                                                              input.decimalPrecision));
     }
     for (int x = 0; x < OXIDES_COUNT; x++)
     {
         calculationInput.oxidesContent.push_back(ACL::Float(ACL::Float(input.oxidesContent[x]).toString(),
-                                                              calculationInput.decimalPrecision));
+                                                              input.decimalPrecision));
     }
 
     calculationInput.intervalsNumber = input.intervalsNumber;
