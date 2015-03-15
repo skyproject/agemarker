@@ -56,7 +56,8 @@ void CalculationWidget::start()
 {
     this->status = Data::CalculationStatus::Running;
     switchCalculationStatus();
-    ui->labelStartedAt->setText("Started at " + QDateTime::currentDateTime().toString("MM/dd/yyyy hh:mm:ss"));
+    ui->labelStartedAt->setText("Started at " +
+                                QDateTime::currentDateTime().toString("MM/dd/yyyy hh:mm:ss"));
 
     Data::UserInput input = CalculationData::loadUserInput(this->calculationId);
 

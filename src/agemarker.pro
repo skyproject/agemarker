@@ -6,7 +6,8 @@
 
 QT       += core gui
 
-QMAKE_CXXFLAGS += -std=gnu++0x
+QMAKE_CXXFLAGS += -std=c++14
+QMAKE_CXXFLAGS += -fext-numeric-literals
 QMAKE_CXXFLAGS_RELEASE += -O2
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
