@@ -81,7 +81,7 @@ void SettingsTableWidget::showEvent(QShowEvent *e)
 {
     if (this->oxides == NULL)
     {
-        std::vector<boost::multiprecision::float128> nullOxides;
+        std::vector<Float> nullOxides;
         for (short x = 0; x < OXIDES_COUNT; ++x)
         {
             nullOxides.push_back(0);

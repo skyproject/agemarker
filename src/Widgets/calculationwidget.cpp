@@ -62,22 +62,9 @@ void CalculationWidget::start()
     Data::UserInput input = CalculationData::loadUserInput(this->calculationId);
 
     ACL::Data::CalculationInput calculationInput;
-
-    /* TODO: A bit ugly here, clean up needed. */
-
-    for (int x = 0; x < ELEMENTS_COUNT; x++)
-    {
-        calculationInput.elementsContent.push_back(ACL::Float(ACL::Float(input.elementsContent[x]).toString(),
-                                                              input.decimalPrecision));
-        calculationInput.elementsWeight.push_back(ACL::Float(ACL::Float(input.elementsWeight[x]).toString(),
-                                                              input.decimalPrecision));
-    }
-    for (int x = 0; x < OXIDES_COUNT; x++)
-    {
-        calculationInput.oxidesContent.push_back(ACL::Float(ACL::Float(input.oxidesContent[x]).toString(),
-                                                              input.decimalPrecision));
-    }
-
+    calculationInput.elementsContent = input.elementsContent;
+    calculationInput.elementsWeight = input.elementsWeight;
+    calculationInput.oxidesContent = input.oxidesContent;
     calculationInput.intervalsNumber = input.intervalsNumber;
     calculationInput.log = input.log;
     calculationInput.elementsContentUnits = input.elementsContentUnits;

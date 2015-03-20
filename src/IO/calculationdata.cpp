@@ -36,14 +36,14 @@ void CalculationData::saveUserInput(Data::UserInput input, int calculation)
         out += "Oxides\n";
         for (int x = 0; x < OXIDES_COUNT; ++x)
         {
-            out += ACL::Float(input.oxidesContent[x]).toString() + "\n";
+            out += ACL::FMath::toStr(input.oxidesContent[x]) + "\n";
         }
         out += "\n";
         out += "Elements\n";
         for (int x = 0; x < ELEMENTS_COUNT; ++x)
         {
-            out += ACL::Float(input.elementsWeight[x]).toString() + "\t"
-                   + ACL::Float(input.elementsContent[x]).toString() + "\n";
+            out += ACL::FMath::toStr(input.elementsWeight[x]) + "\t"
+                   + ACL::FMath::toStr(input.elementsContent[x]) + "\n";
         }
         out += "\n";
         out += QString::number(input.multiplier) + "\n\n";
@@ -90,8 +90,7 @@ Data::UserInput CalculationData::loadUserInput(int calculation)
                 {
                     throw 0;
                 }
-                input.oxidesContent.push_back(boost::numeric_cast<boost::multiprecision::float128>
-                                              (data[0].toStdString()));
+                input.oxidesContent.push_back(ACL::FMath::fromStr(data[0]));
             }
             else if (x >= 58 && x < 176)
             {
@@ -99,10 +98,8 @@ Data::UserInput CalculationData::loadUserInput(int calculation)
                 {
                     throw 1;
                 }
-                input.elementsWeight.push_back(boost::numeric_cast<boost::multiprecision::float128>
-                                               (data[0].toStdString()));
-                input.elementsContent.push_back(boost::numeric_cast<boost::multiprecision::float128>
-                                               (data[1].toStdString()));
+                input.elementsWeight.push_back(ACL::FMath::fromStr(data[0]));
+                input.elementsContent.push_back(ACL::FMath::fromStr(data[1]));
             }
             else if (x == 177)
             {
@@ -187,8 +184,7 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
             {
                 if (data.size() > 2)
                 {
-                    input.oxidesContent.push_back(boost::numeric_cast<boost::multiprecision::float128>
-                                                  (data[2].toStdString()));
+                    input.oxidesContent.push_back(ACL::FMath::fromStr(data[2]));
                 }
                 else
                 {
@@ -210,10 +206,8 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
             {
                 if (data.size() > 3)
                 {
-                    input.elementsWeight.push_back(boost::numeric_cast<boost::multiprecision::float128>
-                                                   (data[2].toStdString()));
-                    input.elementsContent.push_back(boost::numeric_cast<boost::multiprecision::float128>
-                                                    (data[3].toStdString()));
+                    input.elementsWeight.push_back(ACL::FMath::fromStr(data[2]));
+                    input.elementsContent.push_back(ACL::FMath::fromStr(data[3]));
                 }
                 else
                 {

@@ -366,7 +366,7 @@ const QString ELEMENTS_SHORT_NAMES[] =
     "Uuo"
 };
 
-const boost::multiprecision::float128 ELEMENTS_ATOMIC_WEIGHTS[] =
+const Float ELEMENTS_ATOMIC_WEIGHTS[] =
 {
     1.008Q,
     4.002602Q,
