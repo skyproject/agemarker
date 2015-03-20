@@ -44,6 +44,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionExit, SIGNAL(triggered()),
             QApplication::instance(), SLOT(quit()));
 
+#ifdef USING_FLOAT128
+    this->setWindowTitle("Agemarker (Extended Precision)");
+#endif
+
     ui->calculationsLayout->layout()->setAlignment(Qt::AlignTop);
     loadCalculations();
 }
