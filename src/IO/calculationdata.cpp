@@ -22,8 +22,14 @@
 
 void CalculationData::saveUserInput(Data::UserInput input, int calculation)
 {
+#ifdef USING_FLOAT128
+    QString folder = (QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+                      + "/CalculationsEP");
+#else
     QString folder = (QStandardPaths::writableLocation(QStandardPaths::DataLocation)
                       + "/Calculations");
+#endif
+
     if (QDir(folder).exists() == false)
     {
         QDir().mkpath(folder);
@@ -74,8 +80,15 @@ void CalculationData::saveUserInput(Data::UserInput input, int calculation)
 Data::UserInput CalculationData::loadUserInput(int calculation)
 {
     Data::UserInput input;
+
+#ifdef USING_FLOAT128
+    QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+               + "/CalculationsEP/" + QString::number(calculation) + ".txt");
+#else
     QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
                + "/Calculations/" + QString::number(calculation) + ".txt");
+#endif
+
     if (file.open(QIODevice::ReadOnly | QFile::Text))
     {
         QTextStream in(&file);
@@ -265,7 +278,12 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
 
 void CalculationData::removeUserInput(int calculation)
 {
+#ifdef USING_FLOAT128
+    QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+               + "/CalculationsEP/" + QString::number(calculation) + ".txt");
+#else
     QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
                + "/Calculations/" + QString::number(calculation) + ".txt");
+#endif
     file.remove();
 }

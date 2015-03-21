@@ -59,8 +59,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::loadCalculations()
 {
+#ifdef USING_FLOAT128
+    QStringList files = QDir(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+                             + "/CalculationsEP").entryList(QStringList("*.txt"), QDir::Files, QDir::Name);
+#else
     QStringList files = QDir(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
                              + "/Calculations").entryList(QStringList("*.txt"), QDir::Files, QDir::Name);
+#endif
+
     if (files.size() != 0)
     {
         foreach(QString file, files)

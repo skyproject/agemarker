@@ -9,6 +9,7 @@
 #include "Windows/aboutwindow.h"
 #include "ui_aboutwindow.h"
 #include "application.h"
+#include "data.h"
 
 AboutWindow::AboutWindow(QWidget *parent) :
     QDialog(parent),
