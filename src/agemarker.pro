@@ -12,9 +12,15 @@ QMAKE_CXXFLAGS_RELEASE += -O2
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+# When compiling Agemarker with USING_FLOAT128,
+# change TARGET (executable name) to "agemarker-ep".
+# Don't forget to do the same for the library.
+#
+# Also note that the LIBS include at the bottom
+# of this file should match the library's name.
 TARGET = agemarker
-TEMPLATE = app
 
+TEMPLATE = app
 
 SOURCES += main.cpp \
            Windows\mainwindow.cpp \
@@ -75,6 +81,8 @@ win32:RC_FILE = resources.rc
 
 LIBS += -lquadmath
 
+# When compiling Agemarker with USING_FLOAT128,
+# change "-lagemarker-core" to "-lagemarker-core-ep".
 LIBS += -Lc:/Users/mlabu_000.RESONANS-PC/Documents/Builds/agemarker-core/debug -lagemarker-core
 LIBS += -Lc:/Users/mlabu_000.RESONANS-PC/Documents/Builds/software-update/debug -lsoftware-update
 LIBS += -Lc:/Users/mlabu_000.RESONANS-PC/Documents/Builds/skyproject-ui/debug -lskyproject-ui
