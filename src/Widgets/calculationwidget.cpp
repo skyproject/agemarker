@@ -56,17 +56,21 @@ void CalculationWidget::start()
 {
     this->status = Data::CalculationStatus::Running;
     switchCalculationStatus();
-    ui->labelStartedAt->setText("Started at " + QDateTime::currentDateTime().toString("MM/dd/yyyy hh:mm:ss"));
+    ui->labelStartedAt->setText("Started at " +
+                                QDateTime::currentDateTime().toString("MM/dd/yyyy hh:mm:ss"));
+
     Data::UserInput input = CalculationData::loadUserInput(this->calculationId);
+
     ACL::Data::CalculationInput calculationInput;
     calculationInput.elementsContent = input.elementsContent;
     calculationInput.elementsWeight = input.elementsWeight;
+    calculationInput.oxidesContent = input.oxidesContent;
     calculationInput.intervalsNumber = input.intervalsNumber;
     calculationInput.log = input.log;
     calculationInput.elementsContentUnits = input.elementsContentUnits;
     calculationInput.multiplier = input.multiplier;
-    calculationInput.oxidesContent = input.oxidesContent;
     calculationInput.decimalPrecision = input.decimalPrecision;
+
     QSettings s;
     calculationInput.threadsNumber = s.value("Threads", 1).toInt();
     this->core = new ACL::AgemarkerCore(calculationInput);

@@ -14,13 +14,22 @@
 
 #include "IO\calculationdata.h"
 
-/* TODO: Rewrite the following block so it'd either use pre-defined constants or
- * parse the file contents without referring to line number at all. */
+/* TODO: Rewrite the following block so it'd either
+ * use pre-defined constants.
+ * Or, parse the file contents without referring to line
+ * number at all.
+*/
 
 void CalculationData::saveUserInput(Data::UserInput input, int calculation)
 {
+#ifdef USING_FLOAT128
+    QString folder = (QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+                      + "/CalculationsEP");
+#else
     QString folder = (QStandardPaths::writableLocation(QStandardPaths::DataLocation)
                       + "/Calculations");
+#endif
+
     if (QDir(folder).exists() == false)
     {
         QDir().mkpath(folder);
@@ -33,14 +42,14 @@ void CalculationData::saveUserInput(Data::UserInput input, int calculation)
         out += "Oxides\n";
         for (int x = 0; x < OXIDES_COUNT; ++x)
         {
-            out += QString::number(input.oxidesContent[x], 'g', 14) + "\n";
+            out += ACL::FMath::toStr(input.oxidesContent[x]) + "\n";
         }
         out += "\n";
         out += "Elements\n";
         for (int x = 0; x < ELEMENTS_COUNT; ++x)
         {
-            out += QString::number(input.elementsWeight[x], 'g', 14) + "\t"
-                   + QString::number(input.elementsContent[x], 'g', 14) + "\n";
+            out += ACL::FMath::toStr(input.elementsWeight[x]) + "\t"
+                   + ACL::FMath::toStr(input.elementsContent[x]) + "\n";
         }
         out += "\n";
         out += QString::number(input.multiplier) + "\n\n";
@@ -71,8 +80,15 @@ void CalculationData::saveUserInput(Data::UserInput input, int calculation)
 Data::UserInput CalculationData::loadUserInput(int calculation)
 {
     Data::UserInput input;
+
+#ifdef USING_FLOAT128
+    QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+               + "/CalculationsEP/" + QString::number(calculation) + ".txt");
+#else
     QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
                + "/Calculations/" + QString::number(calculation) + ".txt");
+#endif
+
     if (file.open(QIODevice::ReadOnly | QFile::Text))
     {
         QTextStream in(&file);
@@ -87,7 +103,7 @@ Data::UserInput CalculationData::loadUserInput(int calculation)
                 {
                     throw 0;
                 }
-                input.oxidesContent.push_back(data[0].toDouble());
+                input.oxidesContent.push_back(ACL::FMath::fromStr(data[0]));
             }
             else if (x >= 58 && x < 176)
             {
@@ -95,8 +111,8 @@ Data::UserInput CalculationData::loadUserInput(int calculation)
                 {
                     throw 1;
                 }
-                input.elementsWeight.push_back(data[0].toDouble());
-                input.elementsContent.push_back(data[1].toDouble());
+                input.elementsWeight.push_back(ACL::FMath::fromStr(data[0]));
+                input.elementsContent.push_back(ACL::FMath::fromStr(data[1]));
             }
             else if (x == 177)
             {
@@ -181,7 +197,7 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
             {
                 if (data.size() > 2)
                 {
-                    input.oxidesContent.push_back(data[2].toDouble());
+                    input.oxidesContent.push_back(ACL::FMath::fromStr(data[2]));
                 }
                 else
                 {
@@ -203,8 +219,8 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
             {
                 if (data.size() > 3)
                 {
-                    input.elementsWeight.push_back(data[2].toDouble());
-                    input.elementsContent.push_back(data[3].toDouble());
+                    input.elementsWeight.push_back(ACL::FMath::fromStr(data[2]));
+                    input.elementsContent.push_back(ACL::FMath::fromStr(data[3]));
                 }
                 else
                 {
@@ -262,7 +278,12 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
 
 void CalculationData::removeUserInput(int calculation)
 {
+#ifdef USING_FLOAT128
+    QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+               + "/CalculationsEP/" + QString::number(calculation) + ".txt");
+#else
     QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
                + "/Calculations/" + QString::number(calculation) + ".txt");
+#endif
     file.remove();
 }

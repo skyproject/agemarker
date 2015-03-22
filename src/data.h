@@ -18,16 +18,16 @@ extern const QString OXIDES_FULL_NAMES[];
 extern const QString OXIDES_SHORT_NAMES[];
 extern const QString ELEMENTS_FULL_NAMES[];
 extern const QString ELEMENTS_SHORT_NAMES[];
-extern const double ELEMENTS_ATOMIC_WEIGHTS[];
+extern const Float ELEMENTS_ATOMIC_WEIGHTS[];
 
 class Data
 {
     public:
         struct UserInput
         {
-            std::vector<double> oxidesContent;
-            std::vector<double> elementsContent;
-            std::vector<double> elementsWeight;
+            std::vector<Float> oxidesContent;
+            std::vector<Float> elementsContent;
+            std::vector<Float> elementsWeight;
             ACL::Data::Logarithm log;
             ACL::Data::ElementsContentUnits elementsContentUnits;
             QString resultsFilePath;

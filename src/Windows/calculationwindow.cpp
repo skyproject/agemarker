@@ -131,7 +131,7 @@ void CalculationWindow::wizardFinished()
         }
         else
         {
-            std::vector<double> nullOxides;
+            std::vector<Float> nullOxides;
             for (short x = 0; x < OXIDES_COUNT; ++x)
             {
                 nullOxides.push_back(0);

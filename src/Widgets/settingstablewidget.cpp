@@ -18,6 +18,10 @@ SettingsTableWidget::SettingsTableWidget(QWidget *parent,
     ui->setupUi(this);
     this->oxides = oxidesPtr;
     this->elements = elementsPtr;
+
+#ifdef USING_FLOAT128
+    ui->numPrecision->setMaximum(30);
+#endif
 }
 
 SettingsTableWidget::SettingsTableWidget(QWidget *parent,
@@ -27,11 +31,10 @@ SettingsTableWidget::SettingsTableWidget(QWidget *parent,
 {
     ui->setupUi(this);
     this->elements = elementsPtr;
-}
 
-SettingsTableWidget::~SettingsTableWidget()
-{
-    delete ui;
+#ifdef USING_FLOAT128
+    ui->numPrecision->setMaximum(30);
+#endif
 }
 
 SettingsTableWidget::SettingsTableWidget(uint64_t multiplier, int precision, int intervals,
@@ -54,6 +57,10 @@ SettingsTableWidget::SettingsTableWidget(uint64_t multiplier, int precision, int
     }
     this->oxides = oxidesPtr;
     this->elements = elementsPtr;
+
+#ifdef USING_FLOAT128
+    ui->numPrecision->setMaximum(30);
+#endif
 }
 
 SettingsTableWidget::SettingsTableWidget(uint64_t multiplier, int precision, int intervals,
@@ -75,13 +82,22 @@ SettingsTableWidget::SettingsTableWidget(uint64_t multiplier, int precision, int
         ui->boxLogarithm->setCurrentIndex(1);
     }
     this->elements = elementsPtr;
+
+#ifdef USING_FLOAT128
+    ui->numPrecision->setMaximum(30);
+#endif
+}
+
+SettingsTableWidget::~SettingsTableWidget()
+{
+    delete ui;
 }
 
 void SettingsTableWidget::showEvent(QShowEvent *e)
 {
     if (this->oxides == NULL)
     {
-        std::vector<double> nullOxides;
+        std::vector<Float> nullOxides;
         for (short x = 0; x < OXIDES_COUNT; ++x)
         {
             nullOxides.push_back(0);

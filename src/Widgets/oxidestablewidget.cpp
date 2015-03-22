@@ -13,9 +13,6 @@
 #include "Widgets/oxidestablewidget.h"
 #include "ui_oxidestablewidget.h"
 
-#include "numbers.h"
-#include "data.h"
-
 #include "suil_number_edit.h"
 
 OxidesTableWidget::OxidesTableWidget(QWidget *parent) :
@@ -32,7 +29,7 @@ OxidesTableWidget::OxidesTableWidget(QWidget *parent) :
     fillTable();
 }
 
-OxidesTableWidget::OxidesTableWidget(std::vector<double> contents, QWidget *parent) :
+OxidesTableWidget::OxidesTableWidget(std::vector<Float> contents, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::OxidesTableWidget)
 {
@@ -46,7 +43,7 @@ OxidesTableWidget::OxidesTableWidget(std::vector<double> contents, QWidget *pare
     fillTable();
     for (int x = 0; x < OXIDES_COUNT; ++x)
     {
-        qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->setText(QString::number(contents[x]));
+        qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->setText((ACL::FMath::toStr(contents[x])));
     }
 }
 
@@ -55,12 +52,13 @@ OxidesTableWidget::~OxidesTableWidget()
     delete ui;
 }
 
-std::vector<double> OxidesTableWidget::getOxidesContent()
+std::vector<Float> OxidesTableWidget::getOxidesContent()
 {
-    std::vector<double> output;
+    std::vector<Float> output;
     for (short x = 0; x < OXIDES_COUNT; ++x)
     {
-        output.push_back(Numbers::toDouble(qobject_cast<SNumberEdit *> (ui->table->cellWidget(x, 3))->text()));
+        output.push_back(ACL::FMath::fromStr(qobject_cast<SNumberEdit *>
+                                             (ui->table->cellWidget(x, 3))->text()));
     }
     return output;
 }
