@@ -222,7 +222,7 @@ p, li { white-space: pre-wrap; }
       <string notr="true">margin: 4;</string>
      </property>
      <property name="text">
-      <string>Choose this option if you intend to enter the contents of oxides.</string>
+      <string>Choose this option if you intend to enter the contents of oxides (and/or elements).</string>
      </property>
      <property name="checked">
       <bool>true</bool>
