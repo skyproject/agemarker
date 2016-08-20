@@ -236,12 +236,12 @@ const QString ELEMENTS_FULL_NAMES[] =
     "Darmstadtium",
     "Roentgenium",
     "Copernicium",
-    "Ununtrium",
+    "Nihonium",
     "Flerovium",
-    "Ununpentium",
+    "Moscovium",
     "Livermorium",
-    "Ununseptium",
-    "Ununoctium"
+    "Tennessine",
+    "Oganesson"
 };
 
 const QString ELEMENTS_SHORT_NAMES[] =
@@ -358,12 +358,12 @@ const QString ELEMENTS_SHORT_NAMES[] =
     "Ds",
     "Rg",
     "Cn",
-    "Uut",
+    "Nh",
     "Fl",
-    "Uup",
+    "Mc",
     "Lv",
-    "Uus",
-    "Uuo"
+    "Ts",
+    "Og"
 };
 
 const Float ELEMENTS_ATOMIC_WEIGHTS[] =
