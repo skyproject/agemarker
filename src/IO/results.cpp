@@ -10,13 +10,15 @@
 #include <QStringList>
 #include <QFile>
 
+#include "IO/calculationdata.h"
 #include "IO/results.h"
 #include "data.h"
 
 #include "acl_math.h"
 
-Results::Results(ACL::Data::CalculationResult result, QString file)
+Results::Results(int calculation, ACL::Data::CalculationResult result, QString file)
 {
+    this->calculationId = calculation;
     this->resultData = result;
     this->filePath = file;
 }
@@ -168,6 +170,13 @@ void Results::run()
                         + QString::number(this->resultData.ipSqrtIntervalCount[x].sample) + "\t"
                         + QString::number(this->resultData.ipSqrtIntervalCount[x].population) + "\n");
             }
+            out += ("\n——————————————————————————————\n\n");
+            out += "~~~ Calculation data ~~~\n\n";
+            out += ("——————————————————————————————\n\n");
+            out += "This section is reserved for \"Load from results\" function in Agemarker, and\n";
+            out += "can be removed if you do not wish to load this particular calculation.\n\n";
+            out += "===BEGIN CALCULATION DATA===\n";
+            out += CalculationData::encodeTempfileForResults(this->calculationId);
             QTextStream stream(&file);
             stream << out;
             emit saved();

@@ -7,176 +7,36 @@
  */
 
 #include <QStandardPaths>
-#include <QTextStream>
 #include <QStringList>
+#include <QTextStream>
+#include <QJsonObject>
+#include <QJsonArray>
 #include <QFile>
 #include <QDir>
 
 #include "IO\calculationdata.h"
 
-/* TODO: Rewrite the following block so it'd either
- * use pre-defined constants.
- * Or, parse the file contents without referring to line
- * number at all.
-*/
-
 void CalculationData::saveUserInput(Data::UserInput input, int calculation)
 {
-#ifdef USING_FLOAT128
-    QString folder = (QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-                      + "/CalculationsEP");
-#else
-    QString folder = (QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-                      + "/Calculations");
-#endif
-
-    if (QDir(folder).exists() == false)
+    if (QDir(getDataFolder()).exists() == false)
     {
-        QDir().mkpath(folder);
+        QDir().mkpath(getDataFolder());
     }
-    QFile file(folder + "/" + QString::number(calculation) + ".txt");
-    if (file.open(QIODevice::WriteOnly | QFile::Text))
+    QFile file(getTempfilePath(calculation));
+    if (file.open(QIODevice::WriteOnly))
     {
-        QString out;
-        out += "Agemarker Calculation Data\n\n";
-        out += "Oxides\n";
-        for (int x = 0; x < OXIDES_COUNT; ++x)
-        {
-            out += ACL::FMath::toStr(input.oxidesContent[x]) + "\n";
-        }
-        out += "\n";
-        out += "Elements\n";
-        for (int x = 0; x < ELEMENTS_COUNT; ++x)
-        {
-            out += ACL::FMath::toStr(input.elementsWeight[x]) + "\t"
-                   + ACL::FMath::toStr(input.elementsContent[x]) + "\n";
-        }
-        out += "\n";
-        out += QString::number(input.multiplier) + "\n\n";
-        out += QString::number(input.decimalPrecision) + "\n\n";
-        out += QString::number(input.intervalsNumber) + "\n\n";
-        if (input.log == ACL::Data::Logarithm::Natural)
-        {
-            out += "Natural\n\n";
-        }
-        else
-        {
-            out += "Decimal\n\n";
-        }
-        if (input.elementsContentUnits == ACL::Data::ElementsContentUnits::MassPercent)
-        {
-            out += "%\n\n";
-        }
-        else
-        {
-            out += "#\n\n";
-        }
-        out += QString(input.resultsConfiguration.path);
-        QTextStream stream(&file);
-        stream << out;
+        file.write(toJson(input).toJson(QJsonDocument::Compact));
+        file.close();
     }
 }
 
 Data::UserInput CalculationData::loadUserInput(int calculation)
 {
     Data::UserInput input;
-
-#ifdef USING_FLOAT128
-    QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-               + "/CalculationsEP/" + QString::number(calculation) + ".txt");
-#else
-    QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-               + "/Calculations/" + QString::number(calculation) + ".txt");
-#endif
-
-    if (file.open(QIODevice::ReadOnly | QFile::Text))
+    QFile file(getTempfilePath(calculation));
+    if (file.open(QIODevice::ReadOnly))
     {
-        QTextStream in(&file);
-        QString line;
-        for (int x = 0; x < 188; ++x)
-        {
-            line = in.readLine();
-            QStringList data = line.split("\t");
-            if (x >= 3 && x < 56)
-            {
-                if (data.size() < 1)
-                {
-                    throw 0;
-                }
-                input.oxidesContent.push_back(ACL::FMath::fromStr(data[0]));
-            }
-            else if (x >= 58 && x < 176)
-            {
-                if (data.size() < 2)
-                {
-                    throw 1;
-                }
-                input.elementsWeight.push_back(ACL::FMath::fromStr(data[0]));
-                input.elementsContent.push_back(ACL::FMath::fromStr(data[1]));
-            }
-            else if (x == 177)
-            {
-                if (data.size() < 1)
-                {
-                    throw 0;
-                }
-                input.multiplier = data[0].toLongLong();
-            }
-            else if (x == 179)
-            {
-                if (data.size() < 1)
-                {
-                    throw 0;
-                }
-                input.decimalPrecision = data[0].toInt();
-            }
-            else if (x == 181)
-            {
-                if (data.size() < 1)
-                {
-                    throw 0;
-                }
-                input.intervalsNumber = data[0].toInt();
-            }
-            else if (x == 183)
-            {
-                if (data.size() < 1)
-                {
-                    throw 0;
-                }
-                if (data[0] == "Natural")
-                {
-                    input.log = ACL::Data::Logarithm::Natural;
-                }
-                else
-                {
-                    input.log = ACL::Data::Logarithm::Decimal;
-                }
-            }
-            else if (x == 185)
-            {
-                if (data.size() < 1)
-                {
-                    throw 0;
-                }
-                if (data[0] == "%")
-                {
-                    input.elementsContentUnits = ACL::Data::ElementsContentUnits::MassPercent;
-                }
-                else
-                {
-                    input.elementsContentUnits = ACL::Data::ElementsContentUnits::NumberOfAtoms;
-                }
-            }
-            else if (x == 187)
-            {
-                if (data.size() < 1)
-                {
-                    throw 0;
-                }
-                input.resultsConfiguration.path = data[0];
-            }
-        }
+        input = fromJson(QJsonDocument::fromJson(file.readAll()));
     }
     return input;
 }
@@ -187,103 +47,125 @@ Data::UserInput CalculationData::loadUserInputFromResults(QString filePath)
     QFile file(filePath);
     if (file.open(QIODevice::ReadOnly | QFile::Text))
     {
-        QTextStream in(&file);
         QString line;
-        for (int x = 0; x < 202; ++x)
+        QByteArray base64JsonBlock;
+        QTextStream in(&file);
+        bool foundBase64JsonBlock = false;
+        while (!in.atEnd())
         {
-            line = in.readLine();
-            QStringList data = line.split("\t");
-            if (x >= 9 && x < 62)
-            {
-                if (data.size() > 2)
-                {
-                    input.oxidesContent.push_back(ACL::FMath::fromStr(data[2]));
-                }
-                else
-                {
-                    throw 0;
-                }
-            }
-            else if (x == 69)
-            {
-                if (line == "[#] [Element] [Atomic weight] [Content, # of atoms]")
-                {
-                    input.elementsContentUnits = ACL::Data::ElementsContentUnits::NumberOfAtoms;
-                }
-                else
-                {
-                    input.elementsContentUnits = ACL::Data::ElementsContentUnits::MassPercent;
-                }
-            }
-            else if (x >= 70 && x < 188)
-            {
-                if (data.size() > 3)
-                {
-                    input.elementsWeight.push_back(ACL::FMath::fromStr(data[2]));
-                    input.elementsContent.push_back(ACL::FMath::fromStr(data[3]));
-                }
-                else
-                {
-                    throw 0;
-                }
-            }
-            else if (x == 195)
-            {
-                if (data.size() > 1)
-                {
-                    input.multiplier = data[1].toLongLong();
-                }
-                else
-                {
-                    throw 0;
-                }
-            }
-            else if (x == 197)
-            {
-                if (data.size() > 1)
-                {
-                    input.decimalPrecision = data[1].toInt();
-                }
-                else
-                {
-                    throw 0;
-                }
-            }
-            else if (x == 199)
-            {
-                if (data.size() > 1)
-                {
-                    input.intervalsNumber = data[1].toInt();
-                }
-                else
-                {
-                    throw 0;
-                }
-            }
-            else if (x == 201)
-            {
-                if (data.value(1) == "Decimal")
-                {
-                    input.log = ACL::Data::Logarithm::Decimal;
-                }
-                else
-                {
-                    input.log = ACL::Data::Logarithm::Natural;
-                }
-            }
+           line = in.readLine();
+           if (foundBase64JsonBlock)
+           {
+               base64JsonBlock.append(line);
+           }
+           if (line == "===BEGIN CALCULATION DATA===")
+           {
+               foundBase64JsonBlock = true;
+           }
         }
+        input = fromJson(QJsonDocument::fromJson(QByteArray::fromBase64(base64JsonBlock)));
     }
     return input;
 }
 
+QString CalculationData::encodeTempfileForResults(int calculation)
+{
+    QFile file(getTempfilePath(calculation));
+    file.open(QIODevice::ReadOnly);
+
+    QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
+    QJsonObject resultsConfiguration = json["results"].toObject();
+    resultsConfiguration.remove("path"); /* could be considered as sensitive data */
+    json["results"] = resultsConfiguration;
+
+    return QJsonDocument(json).toJson(QJsonDocument::Compact).toBase64();
+}
+
 void CalculationData::removeUserInput(int calculation)
 {
+    QFile(getTempfilePath(calculation)).remove();
+}
+
+QString CalculationData::getTempfilePath(int calculation)
+{
+    return (getDataFolder() + QString::number(calculation) + ".json");
+}
+
+QString CalculationData::getDataFolder()
+{
 #ifdef USING_FLOAT128
-    QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-               + "/CalculationsEP/" + QString::number(calculation) + ".txt");
+    return (QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/CalculationsEP/");
 #else
-    QFile file(QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-               + "/Calculations/" + QString::number(calculation) + ".txt");
+    return (QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/Calculations/");
 #endif
-    file.remove();
+}
+
+Data::UserInput CalculationData::fromJson(QJsonDocument doc)
+{
+    Data::UserInput input;
+    QJsonObject json = doc.object();
+
+    QJsonArray oxidesContent = json["oxides_content"].toArray();
+    for (int i = 0; i < oxidesContent.size(); i++)
+    {
+        input.oxidesContent.push_back(ACL::FMath::fromStr(oxidesContent[i].toString()));
+    }
+    QJsonArray elementsWeight = json["elements_weight"].toArray();
+    for (int i = 0; i < elementsWeight.size(); i++)
+    {
+        input.elementsWeight.push_back(ACL::FMath::fromStr(elementsWeight[i].toString()));
+    }
+    QJsonArray elementsContent = json["elements_content"].toArray();
+    for (int i = 0; i < elementsContent.size(); i++)
+    {
+        input.elementsContent.push_back(ACL::FMath::fromStr(elementsContent[i].toString()));
+    }
+    input.multiplier = json["multiplier"].toString().toLongLong();
+    input.decimalPrecision = json["precision"].toString().toInt();
+    input.intervalsNumber = json["intervals"].toString().toInt();
+    input.log = (json["log"] == "natural") ? ACL::Data::Logarithm::Natural : ACL::Data::Logarithm::Decimal;
+    input.elementsContentUnits = (json["content_units"] == "%") ? ACL::Data::ElementsContentUnits::MassPercent : ACL::Data::ElementsContentUnits::NumberOfAtoms;
+
+    QJsonObject results = json["results"].toObject();
+    input.resultsConfiguration.path = results["path"].toString();
+
+    return input;
+}
+
+QJsonDocument CalculationData::toJson(Data::UserInput input)
+{
+    QJsonObject json;
+
+    QJsonArray oxidesContent;
+    for (int x = 0; x < OXIDES_COUNT; ++x)
+    {
+        oxidesContent.append(ACL::FMath::toStr(input.oxidesContent[x]));
+    }
+    json["oxides_content"] = oxidesContent;
+
+    QJsonArray elementsWeight;
+    for (int x = 0; x < ELEMENTS_COUNT; ++x)
+    {
+        elementsWeight.append(ACL::FMath::toStr(input.elementsWeight[x]));
+    }
+    json["elements_weight"] = elementsWeight;
+
+    QJsonArray elementsContent;
+    for (int x = 0; x < ELEMENTS_COUNT; ++x)
+    {
+        elementsContent.append(ACL::FMath::toStr(input.elementsContent[x]));
+    }
+    json["elements_content"] = elementsContent;
+
+    json["multiplier"] = QString::number(input.multiplier);
+    json["precision"] = QString::number(input.decimalPrecision);
+    json["intervals"] = QString::number(input.intervalsNumber);
+    json["log"] = (input.log == ACL::Data::Logarithm::Natural) ? "natural" : "decimal";
+    json["content_units"] = (input.elementsContentUnits == ACL::Data::ElementsContentUnits::MassPercent) ? "%" : "#";
+
+    QJsonObject results;
+    results["path"] = input.resultsConfiguration.path;
+    json["results"] = results;
+
+    return QJsonDocument(json);
 }

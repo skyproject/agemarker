@@ -83,7 +83,7 @@ void CalculationWidget::calculationFinished(ACL::Data::CalculationResult result)
 {
     this->status = Data::CalculationStatus::Saving;
     switchCalculationStatus();
-    this->ioThread = new Results(result, ui->labelFile->toolTip());
+    this->ioThread = new Results(this->calculationId, result, ui->labelFile->toolTip());
     connect (this->ioThread, SIGNAL(saved()),
              this, SLOT(resultSaved()));
     this->ioThread->start();

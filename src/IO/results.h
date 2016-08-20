@@ -18,7 +18,7 @@ class Results : public QThread
     Q_OBJECT
 
     public:
-        Results(ACL::Data::CalculationResult result, QString file);
+        Results(int calculation, ACL::Data::CalculationResult result, QString file);
         ~Results();
         void removeThread();
 
@@ -28,6 +28,7 @@ class Results : public QThread
     private:
         void run();
         bool remove = false;
+        int calculationId;
         ACL::Data::CalculationResult resultData;
         QString filePath;
         QString fillString(QString source, int newLength);
