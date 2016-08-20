@@ -40,25 +40,25 @@ CalculationWindow::CalculationWindow(Data::UserInput input, QWidget *parent) :
             this, SLOT(wizardFinished()));
     ui->layout->addWidget(this->wizard);
 
-    this->contentUnits = input.elementsContentUnits;
+    this->contentUnits = input.calculation.elementsContentUnits;
 
-    if (input.elementsContentUnits == ACL::Data::ElementsContentUnits::MassPercent)
+    if (this->contentUnits == ACL::Data::ElementsContentUnits::MassPercent)
     {
-        OxidesTableWidget *oxides = new OxidesTableWidget(input.oxidesContent);
-        ElementsTableWidget *elements = new ElementsTableWidget(input.elementsContent, input.elementsContentUnits,
-                                                                input.elementsWeight);
-        SettingsTableWidget *settings = new SettingsTableWidget(input.multiplier, input.decimalPrecision,
-                input.intervalsNumber, input.log, this, oxides, elements);
+        OxidesTableWidget *oxides = new OxidesTableWidget(input.calculation.oxidesContent);
+        ElementsTableWidget *elements = new ElementsTableWidget(input.calculation.elementsContent, input.calculation.elementsContentUnits,
+                                                                input.calculation.elementsWeight);
+        SettingsTableWidget *settings = new SettingsTableWidget(input.calculation.multiplier, input.calculation.decimalPrecision,
+                input.calculation.intervalsNumber, input.calculation.log, this, oxides, elements);
         this->wizard->wizardPages.push_back(oxides);
         this->wizard->wizardPages.push_back(elements);
         this->wizard->wizardPages.push_back(settings);
     }
     else
     {
-        ElementsTableWidget *elements = new ElementsTableWidget(input.elementsContent, input.elementsContentUnits,
-                                                                input.elementsWeight);
-        SettingsTableWidget *settings = new SettingsTableWidget(input.multiplier, input.decimalPrecision,
-                input.intervalsNumber, input.log, this, elements);
+        ElementsTableWidget *elements = new ElementsTableWidget(input.calculation.elementsContent, input.calculation.elementsContentUnits,
+                                                                input.calculation.elementsWeight);
+        SettingsTableWidget *settings = new SettingsTableWidget(input.calculation.multiplier, input.calculation.decimalPrecision,
+                input.calculation.intervalsNumber, input.calculation.log, this, elements);
         this->wizard->wizardPages.push_back(elements);
         this->wizard->wizardPages.push_back(settings);
     }
@@ -115,34 +115,38 @@ void CalculationWindow::initializeWizard(ACL::Data::ElementsContentUnits content
 void CalculationWindow::wizardFinished()
 {
     Data::UserInput input;
+    input.calculation.elementsContentUnits = this->contentUnits;
+
+    int wizardPageStep = 0;
     if (this->contentUnits == ACL::Data::ElementsContentUnits::MassPercent)
     {
-        input.oxidesContent = qobject_cast<OxidesTableWidget *> (this->wizard->wizardPages[0])->getOxidesContent();
-        input.elementsContent = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[1])->getElementsContent();
-        input.elementsWeight = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[1])->getElementsWeights();
-        input.intervalsNumber = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[2])->getIntervalsNumber();
-        input.decimalPrecision = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[2])->getPrecision();
-        input.multiplier = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[2])->getMultiplier();
-        input.log = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[2])->getLogarithm();
-        input.resultsConfiguration = qobject_cast<ResultsWidget *> (this->wizard->wizardPages[3])->getResultsConfiguration();
-        input.elementsContentUnits = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[1])->getElementsContentUnits();
+        wizardPageStep++;
+        input.calculation.oxidesContent = qobject_cast<OxidesTableWidget *> (this->wizard->wizardPages[0])->getOxidesContent();
     }
     else
     {
-        std::vector<Float> nullOxides;
         for (short x = 0; x < OXIDES_COUNT; ++x)
         {
-            nullOxides.push_back(0);
+            input.calculation.oxidesContent.push_back(0);
         }
-        input.oxidesContent = nullOxides;
-        input.elementsContent = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[0])->getElementsContent();
-        input.elementsWeight = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[0])->getElementsWeights();
-        input.intervalsNumber = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[1])->getIntervalsNumber();
-        input.decimalPrecision = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[1])->getPrecision();
-        input.multiplier = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[1])->getMultiplier();
-        input.log = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[1])->getLogarithm();
-        input.resultsConfiguration = qobject_cast<ResultsWidget *> (this->wizard->wizardPages[2])->getResultsConfiguration();
-        input.elementsContentUnits = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[0])->getElementsContentUnits();
     }
+
+    input.calculation.elementsContent = qobject_cast<ElementsTableWidget *>
+            (this->wizard->wizardPages[(0 + wizardPageStep)])->getElementsContent();
+    input.calculation.elementsWeight = qobject_cast<ElementsTableWidget *>
+            (this->wizard->wizardPages[(0 + wizardPageStep)])->getElementsWeights();
+    input.calculation.intervalsNumber = qobject_cast<SettingsTableWidget *>
+            (this->wizard->wizardPages[(1 + wizardPageStep)])->getIntervalsNumber();
+    input.calculation.decimalPrecision = qobject_cast<SettingsTableWidget *>
+            (this->wizard->wizardPages[(1 + wizardPageStep)])->getPrecision();
+    input.calculation.multiplier = qobject_cast<SettingsTableWidget *>
+            (this->wizard->wizardPages[(1 + wizardPageStep)])->getMultiplier();
+    input.calculation.log = qobject_cast<SettingsTableWidget *>
+            (this->wizard->wizardPages[(1 + wizardPageStep)])->getLogarithm();
+    input.resultsFilePath = qobject_cast<ResultsWidget *>
+            (this->wizard->wizardPages[(2 + wizardPageStep)])->getFilePath();
+    input.resultOptions = qobject_cast<ResultsWidget *>
+            (this->wizard->wizardPages[(2 + wizardPageStep)])->getResultOptions();
+
     emit closed(input);
 }

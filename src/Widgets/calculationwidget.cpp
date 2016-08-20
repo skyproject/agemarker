@@ -30,9 +30,9 @@ CalculationWidget::CalculationWidget(Data::UserInput input,
     CalculationData::saveUserInput(input, calculation);
     this->calculationId = calculation;
 
-    QFileInfo info(input.resultsConfiguration.path);
+    QFileInfo info(input.resultsFilePath);
     ui->labelFile->setText(info.fileName());
-    ui->labelFile->setToolTip(input.resultsConfiguration.path);
+    ui->labelFile->setToolTip(input.resultsFilePath);
 
     connect(ui->buttonPause, SIGNAL(clicked()),
             this, SLOT(pauseCalculation()));
@@ -61,19 +61,9 @@ void CalculationWidget::start()
 
     Data::UserInput input = CalculationData::loadUserInput(this->calculationId);
 
-    ACL::Data::CalculationInput calculationInput;
-    calculationInput.elementsContent = input.elementsContent;
-    calculationInput.elementsWeight = input.elementsWeight;
-    calculationInput.oxidesContent = input.oxidesContent;
-    calculationInput.intervalsNumber = input.intervalsNumber;
-    calculationInput.log = input.log;
-    calculationInput.elementsContentUnits = input.elementsContentUnits;
-    calculationInput.multiplier = input.multiplier;
-    calculationInput.decimalPrecision = input.decimalPrecision;
-
     QSettings s;
-    calculationInput.threadsNumber = s.value("Threads", 1).toInt();
-    this->core = new ACL::AgemarkerCore(calculationInput);
+    input.calculation.threadsNumber = s.value("Threads", 1).toInt();
+    this->core = new ACL::AgemarkerCore(input.calculation);
     this->core->startCalculation();
     connect(this->core, SIGNAL(calculationFinished(ACL::Data::CalculationResult)),
             this, SLOT(calculationFinished(ACL::Data::CalculationResult)));

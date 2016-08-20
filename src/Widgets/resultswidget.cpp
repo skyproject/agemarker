@@ -29,9 +29,14 @@ void ResultsWidget::chooseResultsFile()
     }
 }
 
-Data::ResultsConfiguration ResultsWidget::getResultsConfiguration()
+QString ResultsWidget::getFilePath()
 {
-    Data::ResultsConfiguration conf;
-    conf.path = ui->labelPath->text();
-    return conf;
+    return ui->labelPath->text();
 }
+
+ACL::Data::CalculationResultOptions ResultsWidget::getResultOptions()
+{
+    ACL::Data::CalculationResultOptions options;
+    return options;
+}
+

@@ -17,7 +17,8 @@ class ResultsWidget : public QWidget
     public:
         explicit ResultsWidget(QWidget *parent = 0);
         ~ResultsWidget();
-        Data::ResultsConfiguration getResultsConfiguration();
+        QString getFilePath();
+        ACL::Data::CalculationResultOptions getResultOptions();
 
     private slots:
         void chooseResultsFile();

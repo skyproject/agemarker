@@ -105,29 +105,31 @@ Data::UserInput CalculationData::fromJson(QJsonDocument doc)
     Data::UserInput input;
     QJsonObject json = doc.object();
 
-    QJsonArray oxidesContent = json["oxides_content"].toArray();
+    QJsonObject calculation = json["calculation"].toObject();
+    QJsonArray oxidesContent = calculation["oxides_content"].toArray();
     for (int i = 0; i < oxidesContent.size(); i++)
     {
-        input.oxidesContent.push_back(ACL::FMath::fromStr(oxidesContent[i].toString()));
+        input.calculation.oxidesContent.push_back(ACL::FMath::fromStr(oxidesContent[i].toString()));
     }
-    QJsonArray elementsWeight = json["elements_weight"].toArray();
+    QJsonArray elementsWeight = calculation["elements_weight"].toArray();
     for (int i = 0; i < elementsWeight.size(); i++)
     {
-        input.elementsWeight.push_back(ACL::FMath::fromStr(elementsWeight[i].toString()));
+        input.calculation.elementsWeight.push_back(ACL::FMath::fromStr(elementsWeight[i].toString()));
     }
-    QJsonArray elementsContent = json["elements_content"].toArray();
+    QJsonArray elementsContent = calculation["elements_content"].toArray();
     for (int i = 0; i < elementsContent.size(); i++)
     {
-        input.elementsContent.push_back(ACL::FMath::fromStr(elementsContent[i].toString()));
+        input.calculation.elementsContent.push_back(ACL::FMath::fromStr(elementsContent[i].toString()));
     }
-    input.multiplier = json["multiplier"].toString().toLongLong();
-    input.decimalPrecision = json["precision"].toString().toInt();
-    input.intervalsNumber = json["intervals"].toString().toInt();
-    input.log = (json["log"] == "natural") ? ACL::Data::Logarithm::Natural : ACL::Data::Logarithm::Decimal;
-    input.elementsContentUnits = (json["content_units"] == "%") ? ACL::Data::ElementsContentUnits::MassPercent : ACL::Data::ElementsContentUnits::NumberOfAtoms;
+    input.calculation.multiplier = calculation["multiplier"].toString().toLongLong();
+    input.calculation.decimalPrecision = calculation["precision"].toString().toInt();
+    input.calculation.intervalsNumber = calculation["intervals"].toString().toInt();
+    input.calculation.log = (calculation["log"] == "natural") ? ACL::Data::Logarithm::Natural : ACL::Data::Logarithm::Decimal;
+    input.calculation.elementsContentUnits = (calculation["content_units"] == "%") ? ACL::Data::ElementsContentUnits::MassPercent : ACL::Data::ElementsContentUnits::NumberOfAtoms;
+
+    input.resultsFilePath = json["file"].toString();
 
     QJsonObject results = json["results"].toObject();
-    input.resultsConfiguration.path = results["path"].toString();
 
     return input;
 }
@@ -136,36 +138,39 @@ QJsonDocument CalculationData::toJson(Data::UserInput input)
 {
     QJsonObject json;
 
+    QJsonObject calculation;
+    /* arrays */
     QJsonArray oxidesContent;
     for (int x = 0; x < OXIDES_COUNT; ++x)
     {
-        oxidesContent.append(ACL::FMath::toStr(input.oxidesContent[x]));
+        oxidesContent.append(ACL::FMath::toStr(input.calculation.oxidesContent[x]));
     }
-    json["oxides_content"] = oxidesContent;
-
+    calculation["oxides_content"] = oxidesContent;
     QJsonArray elementsWeight;
     for (int x = 0; x < ELEMENTS_COUNT; ++x)
     {
-        elementsWeight.append(ACL::FMath::toStr(input.elementsWeight[x]));
+        elementsWeight.append(ACL::FMath::toStr(input.calculation.elementsWeight[x]));
     }
-    json["elements_weight"] = elementsWeight;
-
+    calculation["elements_weight"] = elementsWeight;
     QJsonArray elementsContent;
     for (int x = 0; x < ELEMENTS_COUNT; ++x)
     {
-        elementsContent.append(ACL::FMath::toStr(input.elementsContent[x]));
+        elementsContent.append(ACL::FMath::toStr(input.calculation.elementsContent[x]));
     }
-    json["elements_content"] = elementsContent;
+    calculation["elements_content"] = elementsContent;
+    /* individual options */
+    calculation["multiplier"] = QString::number(input.calculation.multiplier);
+    calculation["precision"] = QString::number(input.calculation.decimalPrecision);
+    calculation["intervals"] = QString::number(input.calculation.intervalsNumber);
+    calculation["log"] = (input.calculation.log == ACL::Data::Logarithm::Natural) ? "natural" : "decimal";
+    calculation["content_units"] = (input.calculation.elementsContentUnits == ACL::Data::ElementsContentUnits::MassPercent) ? "%" : "#";
+    /* put all that inside the root object */
+    json["calculation"] = calculation;
 
-    json["multiplier"] = QString::number(input.multiplier);
-    json["precision"] = QString::number(input.decimalPrecision);
-    json["intervals"] = QString::number(input.intervalsNumber);
-    json["log"] = (input.log == ACL::Data::Logarithm::Natural) ? "natural" : "decimal";
-    json["content_units"] = (input.elementsContentUnits == ACL::Data::ElementsContentUnits::MassPercent) ? "%" : "#";
+    json["file"] = input.resultsFilePath;
 
-    QJsonObject results;
-    results["path"] = input.resultsConfiguration.path;
-    json["results"] = results;
+    QJsonObject resultOptions;
+    json["results"] = resultOptions;
 
     return QJsonDocument(json);
 }
