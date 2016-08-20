@@ -63,7 +63,7 @@ void CalculationWidget::start()
 
     QSettings s;
     input.calculation.threadsNumber = s.value("Threads", 1).toInt();
-    this->core = new ACL::AgemarkerCore(input.calculation);
+    this->core = new ACL::AgemarkerCore(input.calculation, input.resultOptions);
     this->core->startCalculation();
     connect(this->core, SIGNAL(calculationFinished(ACL::Data::CalculationResult)),
             this, SLOT(calculationFinished(ACL::Data::CalculationResult)));

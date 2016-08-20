@@ -6,6 +6,8 @@
  * For full terms see LICENSE file.
  */
 
+#include <QFileDialog>
+
 #include "Widgets/settingstablewidget.h"
 #include "Widgets/elementstablewidget.h"
 #include "Widgets/oxidestablewidget.h"
@@ -114,39 +116,45 @@ void CalculationWindow::initializeWizard(ACL::Data::ElementsContentUnits content
 
 void CalculationWindow::wizardFinished()
 {
-    Data::UserInput input;
-    input.calculation.elementsContentUnits = this->contentUnits;
+    QFileDialog *fd = new QFileDialog(this, tr("Select file for saving calculation results"));
+    fd->setDefaultSuffix(".txt");
+    fd->setNameFilter("Text Documents (*.txt)");
+    fd->setAcceptMode(QFileDialog::AcceptSave);
+    if (fd->exec() == true)
+    {
+        Data::UserInput input;
+        input.resultsFilePath = fd->selectedFiles().at(0);
+        input.calculation.elementsContentUnits = this->contentUnits;
 
-    int wizardPageStep = 0;
-    if (this->contentUnits == ACL::Data::ElementsContentUnits::MassPercent)
-    {
-        wizardPageStep++;
-        input.calculation.oxidesContent = qobject_cast<OxidesTableWidget *> (this->wizard->wizardPages[0])->getOxidesContent();
-    }
-    else
-    {
-        for (short x = 0; x < OXIDES_COUNT; ++x)
+        int wizardPageStep = 0;
+        if (this->contentUnits == ACL::Data::ElementsContentUnits::MassPercent)
         {
-            input.calculation.oxidesContent.push_back(0);
+            wizardPageStep++;
+            input.calculation.oxidesContent = qobject_cast<OxidesTableWidget *> (this->wizard->wizardPages[0])->getOxidesContent();
         }
+        else
+        {
+            for (short x = 0; x < OXIDES_COUNT; ++x)
+            {
+                input.calculation.oxidesContent.push_back(0);
+            }
+        }
+
+        input.calculation.elementsContent = qobject_cast<ElementsTableWidget *>
+                (this->wizard->wizardPages[(0 + wizardPageStep)])->getElementsContent();
+        input.calculation.elementsWeight = qobject_cast<ElementsTableWidget *>
+                (this->wizard->wizardPages[(0 + wizardPageStep)])->getElementsWeights();
+        input.calculation.intervalsNumber = qobject_cast<SettingsTableWidget *>
+                (this->wizard->wizardPages[(1 + wizardPageStep)])->getIntervalsNumber();
+        input.calculation.decimalPrecision = qobject_cast<SettingsTableWidget *>
+                (this->wizard->wizardPages[(1 + wizardPageStep)])->getPrecision();
+        input.calculation.multiplier = qobject_cast<SettingsTableWidget *>
+                (this->wizard->wizardPages[(1 + wizardPageStep)])->getMultiplier();
+        input.calculation.log = qobject_cast<SettingsTableWidget *>
+                (this->wizard->wizardPages[(1 + wizardPageStep)])->getLogarithm();
+        input.resultOptions = qobject_cast<ResultsWidget *>
+                (this->wizard->wizardPages[(2 + wizardPageStep)])->getResultOptions();
+
+        emit closed(input);
     }
-
-    input.calculation.elementsContent = qobject_cast<ElementsTableWidget *>
-            (this->wizard->wizardPages[(0 + wizardPageStep)])->getElementsContent();
-    input.calculation.elementsWeight = qobject_cast<ElementsTableWidget *>
-            (this->wizard->wizardPages[(0 + wizardPageStep)])->getElementsWeights();
-    input.calculation.intervalsNumber = qobject_cast<SettingsTableWidget *>
-            (this->wizard->wizardPages[(1 + wizardPageStep)])->getIntervalsNumber();
-    input.calculation.decimalPrecision = qobject_cast<SettingsTableWidget *>
-            (this->wizard->wizardPages[(1 + wizardPageStep)])->getPrecision();
-    input.calculation.multiplier = qobject_cast<SettingsTableWidget *>
-            (this->wizard->wizardPages[(1 + wizardPageStep)])->getMultiplier();
-    input.calculation.log = qobject_cast<SettingsTableWidget *>
-            (this->wizard->wizardPages[(1 + wizardPageStep)])->getLogarithm();
-    input.resultsFilePath = qobject_cast<ResultsWidget *>
-            (this->wizard->wizardPages[(2 + wizardPageStep)])->getFilePath();
-    input.resultOptions = qobject_cast<ResultsWidget *>
-            (this->wizard->wizardPages[(2 + wizardPageStep)])->getResultOptions();
-
-    emit closed(input);
 }

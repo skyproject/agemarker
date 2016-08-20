@@ -122,14 +122,17 @@ Data::UserInput CalculationData::fromJson(QJsonDocument doc)
         input.calculation.elementsContent.push_back(ACL::FMath::fromStr(elementsContent[i].toString()));
     }
     input.calculation.multiplier = calculation["multiplier"].toString().toLongLong();
-    input.calculation.decimalPrecision = calculation["precision"].toString().toInt();
-    input.calculation.intervalsNumber = calculation["intervals"].toString().toInt();
+    input.calculation.decimalPrecision = calculation["precision"].toInt();
+    input.calculation.intervalsNumber = calculation["intervals"].toInt();
     input.calculation.log = (calculation["log"] == "natural") ? ACL::Data::Logarithm::Natural : ACL::Data::Logarithm::Decimal;
     input.calculation.elementsContentUnits = (calculation["content_units"] == "%") ? ACL::Data::ElementsContentUnits::MassPercent : ACL::Data::ElementsContentUnits::NumberOfAtoms;
 
     input.resultsFilePath = json["file"].toString();
 
-    QJsonObject results = json["results"].toObject();
+    QJsonObject resultOptions = json["results"].toObject();
+    input.resultOptions.includeApproximateFrequencies = resultOptions["approximate_frequencies"].toBool();
+    input.resultOptions.approximateFrequencyPrecision = resultOptions["approximate_frequency_precision"].toInt();
+    input.resultOptions.includeApproximateValues = resultOptions["approximate_values"].toBool();
 
     return input;
 }
@@ -160,8 +163,8 @@ QJsonDocument CalculationData::toJson(Data::UserInput input)
     calculation["elements_content"] = elementsContent;
     /* individual options */
     calculation["multiplier"] = QString::number(input.calculation.multiplier);
-    calculation["precision"] = QString::number(input.calculation.decimalPrecision);
-    calculation["intervals"] = QString::number(input.calculation.intervalsNumber);
+    calculation["precision"] = input.calculation.decimalPrecision;
+    calculation["intervals"] = input.calculation.intervalsNumber;
     calculation["log"] = (input.calculation.log == ACL::Data::Logarithm::Natural) ? "natural" : "decimal";
     calculation["content_units"] = (input.calculation.elementsContentUnits == ACL::Data::ElementsContentUnits::MassPercent) ? "%" : "#";
     /* put all that inside the root object */
@@ -170,6 +173,9 @@ QJsonDocument CalculationData::toJson(Data::UserInput input)
     json["file"] = input.resultsFilePath;
 
     QJsonObject resultOptions;
+    resultOptions["approximate_frequencies"] = input.resultOptions.includeApproximateFrequencies;
+    resultOptions["approximate_frequency_precision"] = input.resultOptions.approximateFrequencyPrecision;
+    resultOptions["approximate_values"] = input.resultOptions.includeApproximateValues;
     json["results"] = resultOptions;
 
     return QJsonDocument(json);
