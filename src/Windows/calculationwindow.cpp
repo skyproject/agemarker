@@ -6,12 +6,11 @@
  * For full terms see LICENSE file.
  */
 
-#include <QFileDialog>
-
 #include "Widgets/settingstablewidget.h"
 #include "Widgets/elementstablewidget.h"
 #include "Widgets/oxidestablewidget.h"
 #include "Widgets/contentunitstable.h"
+#include "Widgets/resultswidget.h"
 #include "Windows/calculationwindow.h"
 #include "ui_calculationwindow.h"
 
@@ -63,6 +62,8 @@ CalculationWindow::CalculationWindow(Data::UserInput input, QWidget *parent) :
         this->wizard->wizardPages.push_back(elements);
         this->wizard->wizardPages.push_back(settings);
     }
+    ResultsWidget *results = new ResultsWidget();
+    this->wizard->wizardPages.push_back(results);
 
     this->wizard->loadPages();
 }
@@ -105,47 +106,43 @@ void CalculationWindow::initializeWizard(ACL::Data::ElementsContentUnits content
         this->wizard->wizardPages.push_back(elements);
         this->wizard->wizardPages.push_back(settings);
     }
+    ResultsWidget *results = new ResultsWidget();
+    this->wizard->wizardPages.push_back(results);
 
     this->wizard->loadPages();
 }
 
 void CalculationWindow::wizardFinished()
 {
-    QFileDialog *fd = new QFileDialog(this, tr("Select file for saving calculation results"));
-    fd->setDefaultSuffix(".txt");
-    fd->setNameFilter("Text Documents (*.txt)");
-    fd->setAcceptMode(QFileDialog::AcceptSave);
-    if (fd->exec() == true)
+    Data::UserInput input;
+    if (this->contentUnits == ACL::Data::ElementsContentUnits::MassPercent)
     {
-        Data::UserInput input;
-        if (this->contentUnits == ACL::Data::ElementsContentUnits::MassPercent)
-        {
-            input.oxidesContent = qobject_cast<OxidesTableWidget *> (this->wizard->wizardPages[0])->getOxidesContent();
-            input.elementsContent = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[1])->getElementsContent();
-            input.elementsWeight = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[1])->getElementsWeights();
-            input.intervalsNumber = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[2])->getIntervalsNumber();
-            input.decimalPrecision = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[2])->getPrecision();
-            input.multiplier = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[2])->getMultiplier();
-            input.log = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[2])->getLogarithm();
-            input.elementsContentUnits = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[1])->getElementsContentUnits();
-        }
-        else
-        {
-            std::vector<Float> nullOxides;
-            for (short x = 0; x < OXIDES_COUNT; ++x)
-            {
-                nullOxides.push_back(0);
-            }
-            input.oxidesContent = nullOxides;
-            input.elementsContent = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[0])->getElementsContent();
-            input.elementsWeight = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[0])->getElementsWeights();
-            input.intervalsNumber = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[1])->getIntervalsNumber();
-            input.decimalPrecision = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[1])->getPrecision();
-            input.multiplier = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[1])->getMultiplier();
-            input.log = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[1])->getLogarithm();
-            input.elementsContentUnits = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[0])->getElementsContentUnits();
-        }
-        input.resultsFilePath = fd->selectedFiles().at(0);
-        emit closed(input);
+        input.oxidesContent = qobject_cast<OxidesTableWidget *> (this->wizard->wizardPages[0])->getOxidesContent();
+        input.elementsContent = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[1])->getElementsContent();
+        input.elementsWeight = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[1])->getElementsWeights();
+        input.intervalsNumber = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[2])->getIntervalsNumber();
+        input.decimalPrecision = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[2])->getPrecision();
+        input.multiplier = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[2])->getMultiplier();
+        input.log = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[2])->getLogarithm();
+        input.resultsConfiguration = qobject_cast<ResultsWidget *> (this->wizard->wizardPages[3])->getResultsConfiguration();
+        input.elementsContentUnits = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[1])->getElementsContentUnits();
     }
+    else
+    {
+        std::vector<Float> nullOxides;
+        for (short x = 0; x < OXIDES_COUNT; ++x)
+        {
+            nullOxides.push_back(0);
+        }
+        input.oxidesContent = nullOxides;
+        input.elementsContent = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[0])->getElementsContent();
+        input.elementsWeight = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[0])->getElementsWeights();
+        input.intervalsNumber = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[1])->getIntervalsNumber();
+        input.decimalPrecision = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[1])->getPrecision();
+        input.multiplier = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[1])->getMultiplier();
+        input.log = qobject_cast<SettingsTableWidget *> (this->wizard->wizardPages[1])->getLogarithm();
+        input.resultsConfiguration = qobject_cast<ResultsWidget *> (this->wizard->wizardPages[2])->getResultsConfiguration();
+        input.elementsContentUnits = qobject_cast<ElementsTableWidget *> (this->wizard->wizardPages[0])->getElementsContentUnits();
+    }
+    emit closed(input);
 }

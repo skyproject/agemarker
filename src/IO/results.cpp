@@ -175,9 +175,9 @@ void Results::run()
     }
 }
 
-QString Results::fillString(QString source, int newLength)
+QString Results::fillString(QString source, int desiredLength)
 {
-    while (source.length() < newLength)
+    while (source.length() < desiredLength)
     {
         source += " ";
     }

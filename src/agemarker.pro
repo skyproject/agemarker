@@ -38,7 +38,8 @@ SOURCES += main.cpp \
            IO\calculationdata.cpp \
            IO\results.cpp \
            initialize.cpp \
-           data.cpp
+           data.cpp \
+           Widgets\resultswidget.cpp
 
 
 HEADERS  += Windows\mainwindow.h \
@@ -57,7 +58,8 @@ HEADERS  += Windows\mainwindow.h \
             IO\results.h \
             initialize.h \
             application.h \
-            data.h
+            data.h \
+            Widgets\resultswidget.h
 
 
 FORMS    += Windows\mainwindow.ui \
@@ -71,7 +73,8 @@ FORMS    += Windows\mainwindow.ui \
             Widgets\contentunitstable.ui \
             Widgets\calculationwidget.ui \
             Widgets\multiplierwidget.ui \
-            Widgets\welcomewidget.ui
+            Widgets\welcomewidget.ui \
+            Widgets\resultswidget.ui
 
 
 RESOURCES += graphics.qrc

@@ -23,6 +23,9 @@ extern const Float ELEMENTS_ATOMIC_WEIGHTS[];
 class Data
 {
     public:
+        struct ResultsConfiguration {
+            QString path;
+        };
         struct UserInput
         {
             std::vector<Float> oxidesContent;
@@ -30,7 +33,7 @@ class Data
             std::vector<Float> elementsWeight;
             ACL::Data::Logarithm log;
             ACL::Data::ElementsContentUnits elementsContentUnits;
-            QString resultsFilePath;
+            ResultsConfiguration resultsConfiguration;
             int decimalPrecision;
             uint64_t multiplier;
             int intervalsNumber;

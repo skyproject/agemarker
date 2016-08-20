@@ -30,9 +30,9 @@ CalculationWidget::CalculationWidget(Data::UserInput input,
     CalculationData::saveUserInput(input, calculation);
     this->calculationId = calculation;
 
-    QFileInfo info(input.resultsFilePath);
+    QFileInfo info(input.resultsConfiguration.path);
     ui->labelFile->setText(info.fileName());
-    ui->labelFile->setToolTip(input.resultsFilePath);
+    ui->labelFile->setToolTip(input.resultsConfiguration.path);
 
     connect(ui->buttonPause, SIGNAL(clicked()),
             this, SLOT(pauseCalculation()));

@@ -71,7 +71,7 @@ void CalculationData::saveUserInput(Data::UserInput input, int calculation)
         {
             out += "#\n\n";
         }
-        out += QString(input.resultsFilePath);
+        out += QString(input.resultsConfiguration.path);
         QTextStream stream(&file);
         stream << out;
     }
@@ -174,7 +174,7 @@ Data::UserInput CalculationData::loadUserInput(int calculation)
                 {
                     throw 0;
                 }
-                input.resultsFilePath = data[0];
+                input.resultsConfiguration.path = data[0];
             }
         }
     }

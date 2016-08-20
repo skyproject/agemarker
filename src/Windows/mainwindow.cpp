@@ -123,7 +123,6 @@ void MainWindow::loadFromResults()
         try
         {
             Data::UserInput input = CalculationData::loadUserInputFromResults(fd->selectedFiles().at(0));
-            input.resultsFilePath = fd->selectedFiles().at(0);
             this->wizard = new CalculationWindow(input);
             this->wizard->setWindowFlags(Qt::Window);
             connect(this->wizard, SIGNAL(closed(Data::UserInput)),
@@ -132,7 +131,7 @@ void MainWindow::loadFromResults()
         }
         catch (...)
         {
-            QMessageBox::information(this, "Error", "Can't load calculation from the file you selected.",
+            QMessageBox::information(this, "Error", "Could not load calculation from the file you selected.",
                                      QMessageBox::Ok);
         }
     }
