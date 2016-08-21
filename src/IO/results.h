@@ -18,7 +18,7 @@ class Results : public QThread
     Q_OBJECT
 
     public:
-        Results(int calculation, ACL::Data::CalculationResult result, QString file);
+        Results(int calculation, ACL::Data::CalculationResult resultData, QString file);
         ~Results();
         void removeThread();
 
@@ -29,8 +29,10 @@ class Results : public QThread
         void run();
         bool remove = false;
         int calculationId;
-        ACL::Data::CalculationResult resultData;
+        ACL::Data::CalculationResult result;
         QString filePath;
+        QString sectionHeader(QString title);
+        QString statsString(QString title, ACL::Data::Types::StatisticalFloat value, int precision);
         QString fillString(QString source, int newLength);
 };
 
