@@ -96,7 +96,10 @@ void Results::run()
             }
             out += (QString::number(x + 1) + "\t" + ACL::FMath::toStr(this->result.ip[x], precision) + "\t"
                     + ACL::FMath::toStr(this->result.ipSqrt[x], precision) + "\t" + QString::number(this->result.ipFrequency[x]));
-            if (approxFreq) out += "\t" + QString::number(this->result.ipApproximateFrequency[x]);
+            if (approxFreq)
+            {
+                out += "\t" + ACL::FMath::toStr(this->result.ipApproximateFrequency[x], this->result.resultOptions.approximateFrequencyPrecision, true);
+            }
             out += "\n";
         }
         if (remove == false)
@@ -129,7 +132,10 @@ void Results::run()
                         + ACL::FMath::toStr(this->result.ipIntervalMaximum[x], precision) + "\t"
                         + ACL::FMath::toStr(this->result.ipIntervalCenter[x], precision) + "\t"
                         + QString::number(this->result.ipIntervalCount[x].sample));
-                if (approxFreq) out += "\t" + QString::number(this->result.ipIntervalCount[x].population);
+                if (approxFreq)
+                {
+                    out += "\t" + ACL::FMath::toStr(this->result.ipIntervalCount[x].population, this->result.resultOptions.approximateFrequencyPrecision, true);
+                }
                 out += "\n";
             }
             out += QString("\n[Interval minimum (Squareroot)] [Interval maximum (Squareroot)] [Interval center (Squareroot)] [Frequency (Squareroot)]%1\n")
@@ -140,7 +146,10 @@ void Results::run()
                         + ACL::FMath::toStr(this->result.ipSqrtIntervalMaximum[x], precision) + "\t"
                         + ACL::FMath::toStr(this->result.ipSqrtIntervalCenter[x], precision) + "\t"
                         + QString::number(this->result.ipSqrtIntervalCount[x].sample));
-                if (approxFreq) out += "\t" + QString::number(this->result.ipSqrtIntervalCount[x].population);
+                if (approxFreq)
+                {
+                    out += "\t" + ACL::FMath::toStr(this->result.ipSqrtIntervalCount[x].population, this->result.resultOptions.approximateFrequencyPrecision, true);
+                }
                 out += "\n";
             }
             out += sectionHeader("Calculation data");
